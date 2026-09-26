@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "334771788849",
+    "project_id": "intajiyah-9yst64",
+    "storage_bucket": "intajiyah-9yst64.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:334771788849:android:19ee2a16fe55fbfae24910",
+        "android_client_info": {
+          "package_name": "com.mycompany.intajiyah"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArY80MDEnPLm6y-OQn7L4IV-oBTWjFffw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
