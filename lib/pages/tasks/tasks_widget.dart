@@ -1,5 +1,6 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/components/section_header_widget.dart';
-import '/components/task_card_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
@@ -556,92 +557,191 @@ class _TasksWidgetState extends State<TasksWidget> {
                                   ].divide(SizedBox(width: 8.0)),
                                 ),
                               ),
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  wrapWithModel(
-                                    model: _model.sectionHeaderModel1,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: SectionHeaderWidget(
-                                      dotColor:
-                                          FlutterFlowTheme.of(context).error,
-                                      label: 'High Focus',
-                                      count: '2',
-                                    ),
-                                  ),
-                                  wrapWithModel(
-                                    model: _model.taskCardModel1,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: TaskCardWidget(
-                                      isDone: false,
-                                      title: 'Complete project proposal',
-                                      subtitle: '2/4 subtasks',
-                                    ),
-                                  ),
-                                  wrapWithModel(
-                                    model: _model.taskCardModel2,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: TaskCardWidget(
-                                      isDone: false,
-                                      title: 'Prepare presentation slides',
-                                      subtitle: '1/3 subtasks',
-                                    ),
-                                  ),
-                                ].divide(SizedBox(height: 16.0)),
+                              StreamBuilder<List<TasksRecord>>(
+                                stream: queryTasksRecord(
+                                  queryBuilder: (tasksRecord) => tasksRecord
+                                      .where(
+                                        'user_id',
+                                        isEqualTo: currentUserReference?.id,
+                                      )
+                                      .orderBy('priority'),
+                                ),
+                                builder: (context, snapshot) {
+                                  // Customize what your widget looks like when it's loading.
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 50.0,
+                                        height: 50.0,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  List<TasksRecord> columnTasksRecordList =
+                                      snapshot.data!;
+
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: List.generate(
+                                        columnTasksRecordList.length,
+                                        (columnIndex) {
+                                      final columnTasksRecord =
+                                          columnTasksRecordList[columnIndex];
+                                      return Container(
+                                        key: ValueKey(columnTasksRecord.title),
+                                        child: wrapWithModel(
+                                          model: _model.sectionHeaderModels1
+                                              .getModel(
+                                            columnTasksRecord.title,
+                                            columnIndex,
+                                          ),
+                                          updateCallback: () =>
+                                              safeSetState(() {}),
+                                          child: SectionHeaderWidget(
+                                            key: Key(
+                                              'Keyezk_${columnTasksRecord.title}',
+                                            ),
+                                            dotColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .error,
+                                            label: 'High Focus',
+                                            count: '2',
+                                          ),
+                                        ),
+                                      );
+                                    }).divide(SizedBox(height: 16.0)),
+                                  );
+                                },
                               ),
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  wrapWithModel(
-                                    model: _model.sectionHeaderModel2,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: SectionHeaderWidget(
-                                      dotColor:
-                                          FlutterFlowTheme.of(context).warning,
-                                      label: 'Medium Effort',
-                                      count: '2',
-                                    ),
-                                  ),
-                                  wrapWithModel(
-                                    model: _model.taskCardModel3,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: TaskCardWidget(
-                                      isDone: false,
-                                      title: 'Review code changes',
-                                      subtitle: '',
-                                    ),
-                                  ),
-                                  wrapWithModel(
-                                    model: _model.taskCardModel4,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: TaskCardWidget(
-                                      isDone: false,
-                                      title: 'Team meeting notes',
-                                      subtitle: '',
-                                    ),
-                                  ),
-                                ].divide(SizedBox(height: 16.0)),
+                              StreamBuilder<List<TasksRecord>>(
+                                stream: queryTasksRecord(
+                                  queryBuilder: (tasksRecord) => tasksRecord
+                                      .where(
+                                        'user_id',
+                                        isEqualTo: currentUserReference?.id,
+                                      )
+                                      .orderBy('priority'),
+                                ),
+                                builder: (context, snapshot) {
+                                  // Customize what your widget looks like when it's loading.
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 50.0,
+                                        height: 50.0,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  List<TasksRecord> columnTasksRecordList =
+                                      snapshot.data!;
+
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: List.generate(
+                                        columnTasksRecordList.length,
+                                        (columnIndex) {
+                                      final columnTasksRecord =
+                                          columnTasksRecordList[columnIndex];
+                                      return wrapWithModel(
+                                        model: _model.sectionHeaderModels2
+                                            .getModel(
+                                          columnTasksRecord.title,
+                                          columnIndex,
+                                        ),
+                                        updateCallback: () =>
+                                            safeSetState(() {}),
+                                        child: SectionHeaderWidget(
+                                          key: Key(
+                                            'Keypi7_${columnTasksRecord.title}',
+                                          ),
+                                          dotColor: FlutterFlowTheme.of(context)
+                                              .warning,
+                                          label: 'Medium Effort',
+                                          count: '2',
+                                        ),
+                                      );
+                                    }).divide(SizedBox(height: 16.0)),
+                                  );
+                                },
                               ),
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  wrapWithModel(
-                                    model: _model.sectionHeaderModel3,
-                                    updateCallback: () => safeSetState(() {}),
-                                    child: SectionHeaderWidget(
-                                      dotColor:
-                                          FlutterFlowTheme.of(context).success,
-                                      label: 'Low Effort',
-                                      count: '2',
-                                    ),
+                              StreamBuilder<List<TasksRecord>>(
+                                stream: queryTasksRecord(
+                                  queryBuilder: (tasksRecord) =>
+                                      tasksRecord.where(
+                                    'user_id',
+                                    isEqualTo: currentUserReference?.id,
                                   ),
-                                ].divide(SizedBox(height: 16.0)),
+                                ),
+                                builder: (context, snapshot) {
+                                  // Customize what your widget looks like when it's loading.
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 50.0,
+                                        height: 50.0,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  List<TasksRecord> columnTasksRecordList =
+                                      snapshot.data!;
+
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: List.generate(
+                                        columnTasksRecordList.length,
+                                        (columnIndex) {
+                                      final columnTasksRecord =
+                                          columnTasksRecordList[columnIndex];
+                                      return wrapWithModel(
+                                        model: _model.sectionHeaderModels3
+                                            .getModel(
+                                          columnTasksRecord.title,
+                                          columnIndex,
+                                        ),
+                                        updateCallback: () =>
+                                            safeSetState(() {}),
+                                        child: SectionHeaderWidget(
+                                          key: Key(
+                                            'Key5hn_${columnTasksRecord.title}',
+                                          ),
+                                          dotColor: FlutterFlowTheme.of(context)
+                                              .success,
+                                          label: 'Low Effort',
+                                          count: '2',
+                                        ),
+                                      );
+                                    }).divide(SizedBox(height: 16.0)),
+                                  );
+                                },
                               ),
                             ].divide(SizedBox(height: 24.0)),
                           ),

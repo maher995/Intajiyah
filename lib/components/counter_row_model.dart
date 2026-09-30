@@ -1,9 +1,8 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import '/index.dart';
-import 'intro3_widget.dart' show Intro3Widget;
+import 'counter_row_widget.dart' show CounterRowWidget;
 import 'package:flutter/material.dart';
 
-class Intro3Model extends FlutterFlowModel<Intro3Widget> {
+class CounterRowModel extends FlutterFlowModel<CounterRowWidget> {
   @override
   void initState(BuildContext context) {}
 

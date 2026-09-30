@@ -7,40 +7,32 @@ import 'package:flutter/material.dart';
 class TasksModel extends FlutterFlowModel<TasksWidget> {
   ///  State fields for stateful widgets in this page.
 
-  // Model for SectionHeader.
-  late SectionHeaderModel sectionHeaderModel1;
-  // Model for TaskCard.
-  late TaskCardModel taskCardModel1;
-  // Model for TaskCard.
-  late TaskCardModel taskCardModel2;
-  // Model for SectionHeader.
-  late SectionHeaderModel sectionHeaderModel2;
-  // Model for TaskCard.
-  late TaskCardModel taskCardModel3;
-  // Model for TaskCard.
-  late TaskCardModel taskCardModel4;
-  // Model for SectionHeader.
-  late SectionHeaderModel sectionHeaderModel3;
+  // Models for SectionHeader.
+  late FlutterFlowDynamicModels<SectionHeaderModel> sectionHeaderModels1;
+  // Models for TaskCard.
+  late FlutterFlowDynamicModels<TaskCardModel> taskCardModels1;
+  // Models for SectionHeader.
+  late FlutterFlowDynamicModels<SectionHeaderModel> sectionHeaderModels2;
+  // Models for TaskCard.
+  late FlutterFlowDynamicModels<TaskCardModel> taskCardModels2;
+  // Models for SectionHeader.
+  late FlutterFlowDynamicModels<SectionHeaderModel> sectionHeaderModels3;
 
   @override
   void initState(BuildContext context) {
-    sectionHeaderModel1 = createModel(context, () => SectionHeaderModel());
-    taskCardModel1 = createModel(context, () => TaskCardModel());
-    taskCardModel2 = createModel(context, () => TaskCardModel());
-    sectionHeaderModel2 = createModel(context, () => SectionHeaderModel());
-    taskCardModel3 = createModel(context, () => TaskCardModel());
-    taskCardModel4 = createModel(context, () => TaskCardModel());
-    sectionHeaderModel3 = createModel(context, () => SectionHeaderModel());
+    sectionHeaderModels1 = FlutterFlowDynamicModels(() => SectionHeaderModel());
+    taskCardModels1 = FlutterFlowDynamicModels(() => TaskCardModel());
+    sectionHeaderModels2 = FlutterFlowDynamicModels(() => SectionHeaderModel());
+    taskCardModels2 = FlutterFlowDynamicModels(() => TaskCardModel());
+    sectionHeaderModels3 = FlutterFlowDynamicModels(() => SectionHeaderModel());
   }
 
   @override
   void dispose() {
-    sectionHeaderModel1.dispose();
-    taskCardModel1.dispose();
-    taskCardModel2.dispose();
-    sectionHeaderModel2.dispose();
-    taskCardModel3.dispose();
-    taskCardModel4.dispose();
-    sectionHeaderModel3.dispose();
+    sectionHeaderModels1.dispose();
+    taskCardModels1.dispose();
+    sectionHeaderModels2.dispose();
+    taskCardModels2.dispose();
+    sectionHeaderModels3.dispose();
   }
 }

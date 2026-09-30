@@ -1,9 +1,8 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import '/index.dart';
-import 'intro3_widget.dart' show Intro3Widget;
+import 'field_group_widget.dart' show FieldGroupWidget;
 import 'package:flutter/material.dart';
 
-class Intro3Model extends FlutterFlowModel<Intro3Widget> {
+class FieldGroupModel extends FlutterFlowModel<FieldGroupWidget> {
   @override
   void initState(BuildContext context) {}
 

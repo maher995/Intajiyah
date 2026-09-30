@@ -1,4 +1,5 @@
 import '/flutter_flow/flutter_flow_util.dart';
+import '/index.dart';
 import 'intro2_widget.dart' show Intro2Widget;
 import 'package:flutter/material.dart';
 

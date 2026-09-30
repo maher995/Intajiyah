@@ -1,8 +1,10 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/components/setting_row_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'settings_model.dart';
@@ -336,31 +338,34 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Alex Smith',
-                                      style: FlutterFlowTheme.of(context)
-                                          .titleLarge
-                                          .override(
-                                            font: GoogleFonts.interTight(
+                                    AuthUserStreamWidget(
+                                      builder: (context) => Text(
+                                        currentUserDisplayName,
+                                        style: FlutterFlowTheme.of(context)
+                                            .titleLarge
+                                            .override(
+                                              font: GoogleFonts.interTight(
+                                                fontWeight: FontWeight.w600,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleLarge
+                                                        .fontStyle,
+                                              ),
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              letterSpacing: 0.0,
                                               fontWeight: FontWeight.w600,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .titleLarge
                                                       .fontStyle,
+                                              lineHeight: 1.4,
                                             ),
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w600,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .titleLarge
-                                                    .fontStyle,
-                                            lineHeight: 1.4,
-                                          ),
+                                      ),
                                     ),
                                     Text(
-                                      'alex.smith@email.com',
+                                      currentUserEmail,
                                       style: FlutterFlowTheme.of(context)
                                           .bodySmall
                                           .override(
@@ -645,38 +650,65 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                wrapWithModel(
-                                  model: _model.settingRowModel5,
-                                  updateCallback: () => safeSetState(() {}),
-                                  child: SettingRowWidget(
-                                    icon: Icon(
-                                      Icons.person_outline_rounded,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      size: 22.0,
+                                InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    context.pushNamed(
+                                        MobileNamedEditprofilePageWidget
+                                            .routeName);
+                                  },
+                                  child: wrapWithModel(
+                                    model: _model.settingRowModel5,
+                                    updateCallback: () => safeSetState(() {}),
+                                    child: SettingRowWidget(
+                                      icon: Icon(
+                                        Icons.person_outline_rounded,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        size: 22.0,
+                                      ),
+                                      color: Color(0x00000000),
+                                      label: 'Edit Profile',
+                                      isToggle: false,
+                                      value: '',
+                                      active: false,
                                     ),
-                                    color: Color(0x00000000),
-                                    label: 'Edit Profile',
-                                    isToggle: false,
-                                    value: '',
-                                    active: false,
                                   ),
                                 ),
-                                wrapWithModel(
-                                  model: _model.settingRowModel6,
-                                  updateCallback: () => safeSetState(() {}),
-                                  child: SettingRowWidget(
-                                    icon: Icon(
-                                      Icons.logout_rounded,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      size: 22.0,
+                                InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    GoRouter.of(context).prepareAuthEvent();
+                                    await authManager.signOut();
+                                    GoRouter.of(context)
+                                        .clearRedirectLocation();
+
+                                    context.goNamedAuth(
+                                        LoginScreenWidget.routeName,
+                                        context.mounted);
+                                  },
+                                  child: wrapWithModel(
+                                    model: _model.settingRowModel6,
+                                    updateCallback: () => safeSetState(() {}),
+                                    child: SettingRowWidget(
+                                      icon: Icon(
+                                        Icons.logout_rounded,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        size: 22.0,
+                                      ),
+                                      color: FlutterFlowTheme.of(context).error,
+                                      label: 'Sign Out',
+                                      isToggle: false,
+                                      value: '',
+                                      active: false,
                                     ),
-                                    color: FlutterFlowTheme.of(context).error,
-                                    label: 'Sign Out',
-                                    isToggle: false,
-                                    value: '',
-                                    active: false,
                                   ),
                                 ),
                               ],

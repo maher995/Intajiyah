@@ -1,7 +1,9 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'intro2_model.dart';
 export 'intro2_model.dart';
@@ -26,6 +28,19 @@ class _Intro2WidgetState extends State<Intro2Widget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => Intro2Model());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      context.pushNamed(
+        Intro3Widget.routeName,
+        extra: <String, dynamic>{
+          '__transition_info__': TransitionInfo(
+            hasTransition: true,
+            transitionType: PageTransitionType.rightToLeft,
+          ),
+        },
+      );
+    });
   }
 
   @override
@@ -176,8 +191,16 @@ class _Intro2WidgetState extends State<Intro2Widget> {
                       ].divide(SizedBox(width: 8.0)),
                     ),
                     FFButtonWidget(
-                      onPressed: () {
-                        print('Button pressed ...');
+                      onPressed: () async {
+                        context.pushNamed(
+                          Intro3Widget.routeName,
+                          extra: <String, dynamic>{
+                            '__transition_info__': TransitionInfo(
+                              hasTransition: true,
+                              transitionType: PageTransitionType.rightToLeft,
+                            ),
+                          },
+                        );
                       },
                       text: 'Continue',
                       icon: Icon(
@@ -215,8 +238,16 @@ class _Intro2WidgetState extends State<Intro2Widget> {
                       ),
                     ),
                     FFButtonWidget(
-                      onPressed: () {
-                        print('Button pressed ...');
+                      onPressed: () async {
+                        context.pushNamed(
+                          LoginScreenWidget.routeName,
+                          extra: <String, dynamic>{
+                            '__transition_info__': TransitionInfo(
+                              hasTransition: true,
+                              transitionType: PageTransitionType.rightToLeft,
+                            ),
+                          },
+                        );
                       },
                       text: 'Skip',
                       options: FFButtonOptions(

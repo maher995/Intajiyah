@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
+import '/main.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
@@ -76,13 +77,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? LoginScreenWidget() : Intro1Widget(),
+          appStateNotifier.loggedIn ? NavBarPage() : LoginScreenWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? LoginScreenWidget() : Intro1Widget(),
+              appStateNotifier.loggedIn ? NavBarPage() : LoginScreenWidget(),
         ),
         FFRoute(
           name: Intro1Widget.routeName,
@@ -100,21 +101,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => Intro3Widget(),
         ),
         FFRoute(
-          name: LoginScreenWidget.routeName,
-          path: LoginScreenWidget.routePath,
-          builder: (context, params) => LoginScreenWidget(),
-        ),
-        FFRoute(
-          name: TasksWidget.routeName,
-          path: TasksWidget.routePath,
-          builder: (context, params) => TasksWidget(),
-        ),
-        FFRoute(
-          name: AnalyticsStaticsWidget.routeName,
-          path: AnalyticsStaticsWidget.routePath,
-          builder: (context, params) => AnalyticsStaticsWidget(),
-        ),
-        FFRoute(
           name: AnalyticsMonthlyReportWidget.routeName,
           path: AnalyticsMonthlyReportWidget.routePath,
           builder: (context, params) => AnalyticsMonthlyReportWidget(),
@@ -130,24 +116,58 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => LibraryWidget(),
         ),
         FFRoute(
-          name: HomePageWidget.routeName,
-          path: HomePageWidget.routePath,
-          builder: (context, params) => HomePageWidget(),
+          name: HabitsWidget.routeName,
+          path: HabitsWidget.routePath,
+          builder: (context, params) => HabitsWidget(),
+        ),
+        FFRoute(
+          name: SignUpScreenWidget.routeName,
+          path: SignUpScreenWidget.routePath,
+          builder: (context, params) => SignUpScreenWidget(),
+        ),
+        FFRoute(
+          name: AnalyticsStaticsWidget.routeName,
+          path: AnalyticsStaticsWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'AnalyticsStatics')
+              : AnalyticsStaticsWidget(),
         ),
         FFRoute(
           name: JournalWidget.routeName,
           path: JournalWidget.routePath,
-          builder: (context, params) => JournalWidget(),
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Journal')
+              : JournalWidget(),
+        ),
+        FFRoute(
+          name: TasksWidget.routeName,
+          path: TasksWidget.routePath,
+          builder: (context, params) =>
+              params.isEmpty ? NavBarPage(initialPage: 'Tasks') : TasksWidget(),
+        ),
+        FFRoute(
+          name: HomePageWidget.routeName,
+          path: HomePageWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'HomePage')
+              : HomePageWidget(),
+        ),
+        FFRoute(
+          name: LoginScreenWidget.routeName,
+          path: LoginScreenWidget.routePath,
+          builder: (context, params) => LoginScreenWidget(),
         ),
         FFRoute(
           name: SettingsWidget.routeName,
           path: SettingsWidget.routePath,
-          builder: (context, params) => SettingsWidget(),
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Settings')
+              : SettingsWidget(),
         ),
         FFRoute(
-          name: HabitsWidget.routeName,
-          path: HabitsWidget.routePath,
-          builder: (context, params) => HabitsWidget(),
+          name: MobileNamedEditprofilePageWidget.routeName,
+          path: MobileNamedEditprofilePageWidget.routePath,
+          builder: (context, params) => MobileNamedEditprofilePageWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -318,7 +338,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/intro1';
+            return '/loginScreen';
           }
           return null;
         },
