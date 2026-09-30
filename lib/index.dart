@@ -14,7 +14,10 @@ export '/pages/analytics_statics/analytics_statics_widget.dart'
 export '/pages/journal/journal_widget.dart' show JournalWidget;
 export '/pages/tasks/tasks_widget.dart' show TasksWidget;
 export '/pages/home_page/home_page_widget.dart' show HomePageWidget;
-export '/pages/login_screen/login_screen_widget.dart' show LoginScreenWidget;
 export '/pages/settings/settings_widget.dart' show SettingsWidget;
+export '/pages/login_screen/login_screen_widget.dart' show LoginScreenWidget;
 export '/mobile_named_editprofile_page/mobile_named_editprofile_page_widget.dart'
     show MobileNamedEditprofilePageWidget;
+export '/forgot_my_password/forgot_my_password_widget.dart'
+    show ForgotMyPasswordWidget;
+export '/c_hangepassword/c_hangepassword_widget.dart' show CHangepasswordWidget;

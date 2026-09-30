@@ -153,11 +153,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : HomePageWidget(),
         ),
         FFRoute(
-          name: LoginScreenWidget.routeName,
-          path: LoginScreenWidget.routePath,
-          builder: (context, params) => LoginScreenWidget(),
-        ),
-        FFRoute(
           name: SettingsWidget.routeName,
           path: SettingsWidget.routePath,
           builder: (context, params) => params.isEmpty
@@ -165,9 +160,24 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : SettingsWidget(),
         ),
         FFRoute(
+          name: LoginScreenWidget.routeName,
+          path: LoginScreenWidget.routePath,
+          builder: (context, params) => LoginScreenWidget(),
+        ),
+        FFRoute(
           name: MobileNamedEditprofilePageWidget.routeName,
           path: MobileNamedEditprofilePageWidget.routePath,
           builder: (context, params) => MobileNamedEditprofilePageWidget(),
+        ),
+        FFRoute(
+          name: ForgotMyPasswordWidget.routeName,
+          path: ForgotMyPasswordWidget.routePath,
+          builder: (context, params) => ForgotMyPasswordWidget(),
+        ),
+        FFRoute(
+          name: CHangepasswordWidget.routeName,
+          path: CHangepasswordWidget.routePath,
+          builder: (context, params) => CHangepasswordWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
