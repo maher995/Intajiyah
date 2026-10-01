@@ -1,5 +1,6 @@
 import '/components/stat_card_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/index.dart';
 import 'analytics_statics_widget.dart' show AnalyticsStaticsWidget;
 import 'package:flutter/material.dart';
 

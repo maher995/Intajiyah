@@ -77,13 +77,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? NavBarPage() : LoginScreenWidget(),
+          appStateNotifier.loggedIn ? NavBarPage() : Intro1Widget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? NavBarPage() : LoginScreenWidget(),
+              appStateNotifier.loggedIn ? NavBarPage() : Intro1Widget(),
         ),
         FFRoute(
           name: Intro1Widget.routeName,
@@ -101,36 +101,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => Intro3Widget(),
         ),
         FFRoute(
-          name: AnalyticsMonthlyReportWidget.routeName,
-          path: AnalyticsMonthlyReportWidget.routePath,
-          builder: (context, params) => AnalyticsMonthlyReportWidget(),
-        ),
-        FFRoute(
-          name: FocusSessionWidget.routeName,
-          path: FocusSessionWidget.routePath,
-          builder: (context, params) => FocusSessionWidget(),
-        ),
-        FFRoute(
-          name: LibraryWidget.routeName,
-          path: LibraryWidget.routePath,
-          builder: (context, params) => LibraryWidget(),
-        ),
-        FFRoute(
-          name: HabitsWidget.routeName,
-          path: HabitsWidget.routePath,
-          builder: (context, params) => HabitsWidget(),
-        ),
-        FFRoute(
           name: SignUpScreenWidget.routeName,
           path: SignUpScreenWidget.routePath,
           builder: (context, params) => SignUpScreenWidget(),
-        ),
-        FFRoute(
-          name: AnalyticsStaticsWidget.routeName,
-          path: AnalyticsStaticsWidget.routePath,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'AnalyticsStatics')
-              : AnalyticsStaticsWidget(),
         ),
         FFRoute(
           name: JournalWidget.routeName,
@@ -144,13 +117,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           path: TasksWidget.routePath,
           builder: (context, params) =>
               params.isEmpty ? NavBarPage(initialPage: 'Tasks') : TasksWidget(),
-        ),
-        FFRoute(
-          name: HomePageWidget.routeName,
-          path: HomePageWidget.routePath,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'HomePage')
-              : HomePageWidget(),
         ),
         FFRoute(
           name: SettingsWidget.routeName,
@@ -178,6 +144,48 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: CHangepasswordWidget.routeName,
           path: CHangepasswordWidget.routePath,
           builder: (context, params) => CHangepasswordWidget(),
+        ),
+        FFRoute(
+            name: AnalyticsMonthlyReportWidget.routeName,
+            path: AnalyticsMonthlyReportWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: AnalyticsMonthlyReportWidget(),
+                )),
+        FFRoute(
+            name: FocusSessionWidget.routeName,
+            path: FocusSessionWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: FocusSessionWidget(),
+                )),
+        FFRoute(
+            name: LibraryWidget.routeName,
+            path: LibraryWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: LibraryWidget(),
+                )),
+        FFRoute(
+            name: HabitsWidget.routeName,
+            path: HabitsWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: HabitsWidget(),
+                )),
+        FFRoute(
+          name: AnalyticsStaticsWidget.routeName,
+          path: AnalyticsStaticsWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'AnalyticsStatics')
+              : AnalyticsStaticsWidget(),
+        ),
+        FFRoute(
+          name: HomePageWidget.routeName,
+          path: HomePageWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'HomePage')
+              : HomePageWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -348,7 +356,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/loginScreen';
+            return '/intro1';
           }
           return null;
         },

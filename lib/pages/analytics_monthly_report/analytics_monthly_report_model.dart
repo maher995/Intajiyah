@@ -1,6 +1,7 @@
 import '/components/achievement_item_widget.dart';
 import '/components/insight_li_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/index.dart';
 import 'analytics_monthly_report_widget.dart' show AnalyticsMonthlyReportWidget;
 import 'package:flutter/material.dart';
 

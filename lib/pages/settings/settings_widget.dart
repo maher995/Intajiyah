@@ -689,8 +689,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                     GoRouter.of(context)
                                         .clearRedirectLocation();
 
-                                    context.goNamedAuth(
-                                        LoginScreenWidget.routeName,
+                                    context.goNamedAuth(Intro1Widget.routeName,
                                         context.mounted);
                                   },
                                   child: wrapWithModel(
