@@ -1,13 +1,6 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /tasks/{document} {
-      allow create: if request.auth != null;
-      allow read: if request.auth.uid == resource.data.user_id;
-      allow write: if request.auth.uid == resource.data.user_id;
-      allow delete: if request.auth.uid == resource.data.user_id;
-    }
-
     match /habits/{document} {
       allow create: if request.auth != null;
       allow read: if request.auth.uid == resource.data.user_id;
@@ -88,6 +81,25 @@ service cloud.firestore {
       allow read: if request.auth != null;
       allow write: if request.auth != null;
       allow delete: if false;
+    }
+
+    match /tasks/{parent}/subtasks/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /{path=**}/subtasks/{document} {
+      allow read: if true;
+    }
+
+
+    match /tasks/{document} {
+      allow create: if request.auth != null;
+      allow read: if request.auth.uid == resource.data.user_id;
+      allow write: if request.auth.uid == resource.data.user_id;
+      allow delete: if request.auth.uid == resource.data.user_id;
     }
   }
 }

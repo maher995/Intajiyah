@@ -9,7 +9,29 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "due_date",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "tasks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user_id",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "priority",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "is_deleted",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "due_date",
           "order": "ASCENDING"
         }
       ]

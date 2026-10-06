@@ -1,6 +1,9 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/backend/schema/enums/enums.dart';
+import '/components/add_task_sheet_widget.dart';
 import '/components/section_header_widget.dart';
+import '/components/task_item_card_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
@@ -450,380 +453,598 @@ class _TasksWidgetState extends State<TasksWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        body: Stack(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: FlutterFlowTheme.of(context).secondaryBackground,
-                shape: BoxShape.rectangle,
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Container(
-                child: SingleChildScrollView(
-                  primary: false,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+            SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
                     children: [
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            20.0, 20.0, 0.0, 0.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Text(
-                              'Tasks',
-                              style: FlutterFlowTheme.of(context)
-                                  .headlineMedium
-                                  .override(
-                                    font: GoogleFonts.interTight(
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .headlineMedium
-                                          .fontStyle,
-                                    ),
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .headlineMedium
-                                        .fontStyle,
-                                    lineHeight: 1.4,
-                                  ),
+                      Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              shape: BoxShape.rectangle,
                             ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(24.0),
-                        child: Container(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: 56.0,
-                                decoration: BoxDecoration(
-                                  color: Color(0x0D4B39EF),
-                                  borderRadius: BorderRadius.circular(24.0),
-                                  shape: BoxShape.rectangle,
-                                  border: Border.all(
-                                    color: Color(0x4D4B39EF),
-                                    width: 2.0,
-                                  ),
-                                ),
-                                alignment: AlignmentDirectional(0.0, 0.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.add_rounded,
-                                      color:
-                                          FlutterFlowTheme.of(context).primary,
-                                      size: 24.0,
-                                    ),
-                                    Text(
-                                      'Add New Task',
-                                      style: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .override(
-                                            font: GoogleFonts.interTight(
-                                              fontWeight: FontWeight.w600,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      20.0, 20.0, 0.0, 0.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Text(
+                                        'Tasks',
+                                        style: FlutterFlowTheme.of(context)
+                                            .headlineMedium
+                                            .override(
+                                              font: GoogleFonts.interTight(
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .headlineMedium
+                                                        .fontStyle,
+                                              ),
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.bold,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
-                                                      .titleSmall
+                                                      .headlineMedium
                                                       .fontStyle,
+                                              lineHeight: 1.4,
                                             ),
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w600,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .titleSmall
-                                                    .fontStyle,
-                                          ),
-                                    ),
-                                  ].divide(SizedBox(width: 8.0)),
-                                ),
-                              ),
-                              StreamBuilder<List<TasksRecord>>(
-                                stream: queryTasksRecord(
-                                  queryBuilder: (tasksRecord) => tasksRecord
-                                      .where(
-                                        'user_id',
-                                        isEqualTo: currentUserReference?.id,
-                                      )
-                                      .orderBy('priority'),
-                                ),
-                                builder: (context, snapshot) {
-                                  // Customize what your widget looks like when it's loading.
-                                  if (!snapshot.hasData) {
-                                    return Center(
-                                      child: SizedBox(
-                                        width: 50.0,
-                                        height: 50.0,
-                                        child: CircularProgressIndicator(
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                            FlutterFlowTheme.of(context)
-                                                .primary,
-                                          ),
-                                        ),
                                       ),
-                                    );
-                                  }
-                                  List<TasksRecord> columnTasksRecordList =
-                                      snapshot.data!;
-
-                                  return Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: List.generate(
-                                        columnTasksRecordList.length,
-                                        (columnIndex) {
-                                      final columnTasksRecord =
-                                          columnTasksRecordList[columnIndex];
-                                      return Container(
-                                        key: ValueKey(columnTasksRecord.title),
-                                        child: wrapWithModel(
-                                          model: _model.sectionHeaderModels1
-                                              .getModel(
-                                            columnTasksRecord.title,
-                                            columnIndex,
-                                          ),
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
-                                          child: SectionHeaderWidget(
-                                            key: Key(
-                                              'Keyezk_${columnTasksRecord.title}',
-                                            ),
-                                            dotColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .error,
-                                            label: 'High Focus',
-                                            count: '2',
-                                          ),
-                                        ),
-                                      );
-                                    }).divide(SizedBox(height: 16.0)),
-                                  );
-                                },
-                              ),
-                              StreamBuilder<List<TasksRecord>>(
-                                stream: queryTasksRecord(
-                                  queryBuilder: (tasksRecord) => tasksRecord
-                                      .where(
-                                        'user_id',
-                                        isEqualTo: currentUserReference?.id,
-                                      )
-                                      .orderBy('priority'),
-                                ),
-                                builder: (context, snapshot) {
-                                  // Customize what your widget looks like when it's loading.
-                                  if (!snapshot.hasData) {
-                                    return Center(
-                                      child: SizedBox(
-                                        width: 50.0,
-                                        height: 50.0,
-                                        child: CircularProgressIndicator(
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                            FlutterFlowTheme.of(context)
-                                                .primary,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                  List<TasksRecord> columnTasksRecordList =
-                                      snapshot.data!;
-
-                                  return Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: List.generate(
-                                        columnTasksRecordList.length,
-                                        (columnIndex) {
-                                      final columnTasksRecord =
-                                          columnTasksRecordList[columnIndex];
-                                      return wrapWithModel(
-                                        model: _model.sectionHeaderModels2
-                                            .getModel(
-                                          columnTasksRecord.title,
-                                          columnIndex,
-                                        ),
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: SectionHeaderWidget(
-                                          key: Key(
-                                            'Keypi7_${columnTasksRecord.title}',
-                                          ),
-                                          dotColor: FlutterFlowTheme.of(context)
-                                              .warning,
-                                          label: 'Medium Effort',
-                                          count: '2',
-                                        ),
-                                      );
-                                    }).divide(SizedBox(height: 16.0)),
-                                  );
-                                },
-                              ),
-                              StreamBuilder<List<TasksRecord>>(
-                                stream: queryTasksRecord(
-                                  queryBuilder: (tasksRecord) =>
-                                      tasksRecord.where(
-                                    'user_id',
-                                    isEqualTo: currentUserReference?.id,
+                                    ],
                                   ),
                                 ),
-                                builder: (context, snapshot) {
-                                  // Customize what your widget looks like when it's loading.
-                                  if (!snapshot.hasData) {
-                                    return Center(
-                                      child: SizedBox(
-                                        width: 50.0,
-                                        height: 50.0,
-                                        child: CircularProgressIndicator(
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                            FlutterFlowTheme.of(context)
-                                                .primary,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                  List<TasksRecord> columnTasksRecordList =
-                                      snapshot.data!;
-
-                                  return Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: List.generate(
-                                        columnTasksRecordList.length,
-                                        (columnIndex) {
-                                      final columnTasksRecord =
-                                          columnTasksRecordList[columnIndex];
-                                      return wrapWithModel(
-                                        model: _model.sectionHeaderModels3
-                                            .getModel(
-                                          columnTasksRecord.title,
-                                          columnIndex,
-                                        ),
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: SectionHeaderWidget(
-                                          key: Key(
-                                            'Key5hn_${columnTasksRecord.title}',
-                                          ),
-                                          dotColor: FlutterFlowTheme.of(context)
-                                              .success,
-                                          label: 'Low Effort',
-                                          count: '2',
-                                        ),
-                                      );
-                                    }).divide(SizedBox(height: 16.0)),
-                                  );
-                                },
-                              ),
-                            ].divide(SizedBox(height: 24.0)),
-                          ),
-                        ),
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Align(
-                            alignment: AlignmentDirectional(-1.0, 1.0),
-                            child: Container(
-                              decoration: BoxDecoration(),
-                              child: Padding(
-                                padding: EdgeInsets.all(24.0),
-                                child: Container(
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      20.0, 20.0, 20.0, 80.0),
                                   child: Container(
-                                    width: 40.0,
-                                    height: 40.0,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFF9333EA),
-                                      borderRadius:
-                                          BorderRadius.circular(9999.0),
-                                      shape: BoxShape.rectangle,
-                                    ),
-                                    alignment: AlignmentDirectional(0.0, 0.0),
-                                    child: Icon(
-                                      Icons.mic_rounded,
-                                      size: 24.0,
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 0.0, 0.0, 80.0),
+                                      child: SingleChildScrollView(
+                                        primary: false,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Builder(
+                                              builder: (context) => InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  await showDialog(
+                                                    barrierColor:
+                                                        Color(0x64000000),
+                                                    context: context,
+                                                    builder: (dialogContext) {
+                                                      return Dialog(
+                                                        elevation: 0,
+                                                        insetPadding:
+                                                            EdgeInsets.zero,
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                    0.0, 0.0)
+                                                                .resolve(
+                                                                    Directionality.of(
+                                                                        context)),
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            FocusScope.of(
+                                                                    dialogContext)
+                                                                .unfocus();
+                                                            FocusManager
+                                                                .instance
+                                                                .primaryFocus
+                                                                ?.unfocus();
+                                                          },
+                                                          child:
+                                                              AddTaskSheetWidget(),
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                child: Container(
+                                                  height: 56.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0x0DFFFFFF),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            24.0),
+                                                    shape: BoxShape.rectangle,
+                                                    border: Border.all(
+                                                      color: Color(0x4D4B39EF),
+                                                      width: 2.0,
+                                                    ),
+                                                  ),
+                                                  alignment:
+                                                      AlignmentDirectional(
+                                                          0.0, 0.0),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.add_rounded,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primary,
+                                                        size: 24.0,
+                                                      ),
+                                                      Text(
+                                                        'Add New Task',
+                                                        style:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .titleSmall
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .interTight(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .titleSmall
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primary,
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .titleSmall
+                                                                      .fontStyle,
+                                                                ),
+                                                      ),
+                                                    ].divide(
+                                                        SizedBox(width: 8.0)),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: [
+                                                wrapWithModel(
+                                                  model: _model
+                                                      .sectionHeaderModel1,
+                                                  updateCallback: () =>
+                                                      safeSetState(() {}),
+                                                  child: SectionHeaderWidget(
+                                                    dotColor: Color(0xFFEF4444),
+                                                  ),
+                                                ),
+                                                StreamBuilder<
+                                                    List<TasksRecord>>(
+                                                  stream: queryTasksRecord(
+                                                    queryBuilder:
+                                                        (tasksRecord) =>
+                                                            tasksRecord
+                                                                .where(
+                                                                  'user_id',
+                                                                  isEqualTo:
+                                                                      currentUserUid,
+                                                                )
+                                                                .where(
+                                                                  'priority',
+                                                                  isEqualTo: TaskPriority
+                                                                      .highFocus
+                                                                      .serialize(),
+                                                                )
+                                                                .where(
+                                                                  'is_deleted',
+                                                                  isEqualTo:
+                                                                      false,
+                                                                )
+                                                                .orderBy(
+                                                                    'due_date'),
+                                                  ),
+                                                  builder: (context, snapshot) {
+                                                    // Customize what your widget looks like when it's loading.
+                                                    if (!snapshot.hasData) {
+                                                      return Center(
+                                                        child: SizedBox(
+                                                          width: 50.0,
+                                                          height: 50.0,
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            valueColor:
+                                                                AlwaysStoppedAnimation<
+                                                                    Color>(
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .primary,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }
+                                                    List<TasksRecord>
+                                                        listViewTasksRecordList =
+                                                        snapshot.data!;
+
+                                                    return ListView.builder(
+                                                      padding: EdgeInsets.zero,
+                                                      shrinkWrap: true,
+                                                      scrollDirection:
+                                                          Axis.vertical,
+                                                      physics:
+                                                          const NeverScrollableScrollPhysics(),
+                                                      itemCount:
+                                                          listViewTasksRecordList
+                                                              .length,
+                                                      itemBuilder: (context,
+                                                          listViewIndex) {
+                                                        final listViewTasksRecord =
+                                                            listViewTasksRecordList[
+                                                                listViewIndex];
+                                                        return TaskItemCardWidget(
+                                                          key: Key(
+                                                              'Keyg4y_${listViewIndex}_of_${listViewTasksRecordList.length}'),
+                                                          task:
+                                                              listViewTasksRecord,
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                ),
+                                              ].divide(SizedBox(height: 16.0)),
+                                            ),
+                                            Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: [
+                                                wrapWithModel(
+                                                  model: _model
+                                                      .sectionHeaderModel2,
+                                                  updateCallback: () =>
+                                                      safeSetState(() {}),
+                                                  child: SectionHeaderWidget(
+                                                    dotColor:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .warning,
+                                                    label: 'Medium Effort',
+                                                    count: '2',
+                                                  ),
+                                                ),
+                                                StreamBuilder<
+                                                    List<TasksRecord>>(
+                                                  stream: queryTasksRecord(
+                                                    queryBuilder:
+                                                        (tasksRecord) =>
+                                                            tasksRecord
+                                                                .where(
+                                                                  'user_id',
+                                                                  isEqualTo:
+                                                                      currentUserUid,
+                                                                )
+                                                                .where(
+                                                                  'priority',
+                                                                  isEqualTo: TaskPriority
+                                                                      .mediumEffort
+                                                                      .serialize(),
+                                                                )
+                                                                .where(
+                                                                  'is_deleted',
+                                                                  isEqualTo:
+                                                                      false,
+                                                                )
+                                                                .orderBy(
+                                                                    'due_date'),
+                                                  ),
+                                                  builder: (context, snapshot) {
+                                                    // Customize what your widget looks like when it's loading.
+                                                    if (!snapshot.hasData) {
+                                                      return Center(
+                                                        child: SizedBox(
+                                                          width: 50.0,
+                                                          height: 50.0,
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            valueColor:
+                                                                AlwaysStoppedAnimation<
+                                                                    Color>(
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .primary,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }
+                                                    List<TasksRecord>
+                                                        listViewTasksRecordList =
+                                                        snapshot.data!;
+
+                                                    return ListView.builder(
+                                                      padding: EdgeInsets.zero,
+                                                      shrinkWrap: true,
+                                                      scrollDirection:
+                                                          Axis.vertical,
+                                                      physics:
+                                                          const NeverScrollableScrollPhysics(),
+                                                      itemCount:
+                                                          listViewTasksRecordList
+                                                              .length,
+                                                      itemBuilder: (context,
+                                                          listViewIndex) {
+                                                        final listViewTasksRecord =
+                                                            listViewTasksRecordList[
+                                                                listViewIndex];
+                                                        return TaskItemCardWidget(
+                                                          key: Key(
+                                                              'Keyh45_${listViewIndex}_of_${listViewTasksRecordList.length}'),
+                                                          task:
+                                                              listViewTasksRecord,
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                ),
+                                              ].divide(SizedBox(height: 16.0)),
+                                            ),
+                                            Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: [
+                                                wrapWithModel(
+                                                  model: _model
+                                                      .sectionHeaderModel3,
+                                                  updateCallback: () =>
+                                                      safeSetState(() {}),
+                                                  child: SectionHeaderWidget(
+                                                    dotColor:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .success,
+                                                    label: 'Low Effort',
+                                                    count: '2',
+                                                  ),
+                                                ),
+                                                StreamBuilder<
+                                                    List<TasksRecord>>(
+                                                  stream: queryTasksRecord(
+                                                    queryBuilder:
+                                                        (tasksRecord) =>
+                                                            tasksRecord
+                                                                .where(
+                                                                  'user_id',
+                                                                  isEqualTo:
+                                                                      currentUserUid,
+                                                                )
+                                                                .where(
+                                                                  'priority',
+                                                                  isEqualTo: TaskPriority
+                                                                      .lowEffort
+                                                                      .serialize(),
+                                                                )
+                                                                .where(
+                                                                  'is_deleted',
+                                                                  isEqualTo:
+                                                                      false,
+                                                                )
+                                                                .orderBy(
+                                                                    'due_date'),
+                                                  ),
+                                                  builder: (context, snapshot) {
+                                                    // Customize what your widget looks like when it's loading.
+                                                    if (!snapshot.hasData) {
+                                                      return Center(
+                                                        child: SizedBox(
+                                                          width: 50.0,
+                                                          height: 50.0,
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            valueColor:
+                                                                AlwaysStoppedAnimation<
+                                                                    Color>(
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .primary,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }
+                                                    List<TasksRecord>
+                                                        listViewTasksRecordList =
+                                                        snapshot.data!;
+
+                                                    return ListView.builder(
+                                                      padding: EdgeInsets.zero,
+                                                      shrinkWrap: true,
+                                                      scrollDirection:
+                                                          Axis.vertical,
+                                                      physics:
+                                                          const NeverScrollableScrollPhysics(),
+                                                      itemCount:
+                                                          listViewTasksRecordList
+                                                              .length,
+                                                      itemBuilder: (context,
+                                                          listViewIndex) {
+                                                        final listViewTasksRecord =
+                                                            listViewTasksRecordList[
+                                                                listViewIndex];
+                                                        return TaskItemCardWidget(
+                                                          key: Key(
+                                                              'Keyn2r_${listViewIndex}_of_${listViewTasksRecordList.length}'),
+                                                          task:
+                                                              listViewTasksRecord,
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                ),
+                                              ].divide(SizedBox(height: 16.0)),
+                                            ),
+                                          ].divide(SizedBox(height: 24.0)),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
+                                Align(
+                                  alignment: AlignmentDirectional(1.0, 1.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                210.0, 0.0, 0.0, 0.0),
+                          Align(
+                            alignment: AlignmentDirectional(0.0, 1.0),
                             child: Container(
-                              decoration: BoxDecoration(),
-                              child: Padding(
-                                padding: EdgeInsets.all(24.0),
-                                child: Container(
-                                  child: Container(
-                                    width: 40.0,
-                                    height: 40.0,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          FlutterFlowTheme.of(context).primary,
-                                      borderRadius:
-                                          BorderRadius.circular(9999.0),
-                                      shape: BoxShape.rectangle,
-                                    ),
-                                    alignment: AlignmentDirectional(0.0, 0.0),
-                                    child: Icon(
-                                      Icons.add_rounded,
-                                      color: Colors.white,
-                                      size: 28.0,
-                                    ),
-                                  ),
-                                ),
+                              child: Container(
+                                width: 0.0,
+                                height: 0.0,
                               ),
                             ),
                           ),
                         ],
                       ),
-                      Align(
-                        alignment: AlignmentDirectional(1.0, 1.0),
-                        child: Container(
-                          decoration: BoxDecoration(),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Align(
+              alignment: AlignmentDirectional(-1.0, 1.0),
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 100.0),
+                child: Container(
+                  decoration: BoxDecoration(),
+                  child: Padding(
+                    padding: EdgeInsets.all(24.0),
+                    child: Container(
+                      child: Container(
+                        width: 40.0,
+                        height: 40.0,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF9333EA),
+                          borderRadius: BorderRadius.circular(9999.0),
+                          shape: BoxShape.rectangle,
+                        ),
+                        alignment: AlignmentDirectional(0.0, 0.0),
+                        child: Icon(
+                          Icons.mic_rounded,
+                          size: 24.0,
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),
             ),
             Align(
-              alignment: AlignmentDirectional(0.0, 1.0),
-              child: Container(
+              alignment: AlignmentDirectional(1.0, 1.0),
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 20.0, 100.0),
                 child: Container(
-                  width: 0.0,
-                  height: 0.0,
+                  decoration: BoxDecoration(),
+                  child: Padding(
+                    padding: EdgeInsets.all(24.0),
+                    child: Container(
+                      child: Builder(
+                        builder: (context) => InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            await showDialog(
+                              barrierColor: Color(0x67000000),
+                              context: context,
+                              builder: (dialogContext) {
+                                return Dialog(
+                                  elevation: 0,
+                                  insetPadding: EdgeInsets.zero,
+                                  backgroundColor: Colors.transparent,
+                                  alignment: AlignmentDirectional(0.0, 0.0)
+                                      .resolve(Directionality.of(context)),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      FocusScope.of(dialogContext).unfocus();
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                    },
+                                    child: AddTaskSheetWidget(),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            width: 40.0,
+                            height: 40.0,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context).primary,
+                              borderRadius: BorderRadius.circular(9999.0),
+                              shape: BoxShape.rectangle,
+                            ),
+                            alignment: AlignmentDirectional(0.0, 0.0),
+                            child: Icon(
+                              Icons.add_rounded,
+                              color: Colors.white,
+                              size: 28.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),

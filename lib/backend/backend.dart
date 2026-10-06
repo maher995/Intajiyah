@@ -5,7 +5,6 @@ import '../auth/firebase_auth/auth_util.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import 'schema/util/firestore_util.dart';
 
-import 'schema/tasks_record.dart';
 import 'schema/habits_record.dart';
 import 'schema/energy_logs_record.dart';
 import 'schema/mood_logs_record.dart';
@@ -17,6 +16,8 @@ import 'schema/resources_record.dart';
 import 'schema/streaks_record.dart';
 import 'schema/habit_logs_record.dart';
 import 'schema/users_record.dart';
+import 'schema/subtasks_record.dart';
+import 'schema/tasks_record.dart';
 
 export 'dart:async' show StreamSubscription;
 export 'package:cloud_firestore/cloud_firestore.dart' hide Order;
@@ -25,7 +26,6 @@ export 'schema/index.dart';
 export 'schema/util/firestore_util.dart';
 export 'schema/util/schema_util.dart';
 
-export 'schema/tasks_record.dart';
 export 'schema/habits_record.dart';
 export 'schema/energy_logs_record.dart';
 export 'schema/mood_logs_record.dart';
@@ -37,43 +37,8 @@ export 'schema/resources_record.dart';
 export 'schema/streaks_record.dart';
 export 'schema/habit_logs_record.dart';
 export 'schema/users_record.dart';
-
-/// Functions to query TasksRecords (as a Stream and as a Future).
-Future<int> queryTasksRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      TasksRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<TasksRecord>> queryTasksRecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      TasksRecord.collection,
-      TasksRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<TasksRecord>> queryTasksRecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      TasksRecord.collection,
-      TasksRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
+export 'schema/subtasks_record.dart';
+export 'schema/tasks_record.dart';
 
 /// Functions to query HabitsRecords (as a Stream and as a Future).
 Future<int> queryHabitsRecordCount({
@@ -480,6 +445,83 @@ Future<List<UsersRecord>> queryUsersRecordOnce({
     queryCollectionOnce(
       UsersRecord.collection,
       UsersRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query SubtasksRecords (as a Stream and as a Future).
+Future<int> querySubtasksRecordCount({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      SubtasksRecord.collection(parent),
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<SubtasksRecord>> querySubtasksRecord({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      SubtasksRecord.collection(parent),
+      SubtasksRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<SubtasksRecord>> querySubtasksRecordOnce({
+  DocumentReference? parent,
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      SubtasksRecord.collection(parent),
+      SubtasksRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query TasksRecords (as a Stream and as a Future).
+Future<int> queryTasksRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      TasksRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<TasksRecord>> queryTasksRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      TasksRecord.collection,
+      TasksRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<TasksRecord>> queryTasksRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      TasksRecord.collection,
+      TasksRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,

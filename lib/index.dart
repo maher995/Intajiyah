@@ -5,7 +5,6 @@ export '/pages/intro3/intro3_widget.dart' show Intro3Widget;
 export '/pages/sign_up_screen/sign_up_screen_widget.dart'
     show SignUpScreenWidget;
 export '/pages/journal/journal_widget.dart' show JournalWidget;
-export '/pages/tasks/tasks_widget.dart' show TasksWidget;
 export '/pages/settings/settings_widget.dart' show SettingsWidget;
 export '/pages/login_screen/login_screen_widget.dart' show LoginScreenWidget;
 export '/mobile_named_editprofile_page/mobile_named_editprofile_page_widget.dart'
@@ -21,3 +20,4 @@ export '/pages/habits/habits_widget.dart' show HabitsWidget;
 export '/pages/analytics_statics/analytics_statics_widget.dart'
     show AnalyticsStaticsWidget;
 export '/pages/home_page/home_page_widget.dart' show HomePageWidget;
+export '/pages/tasks/tasks_widget.dart' show TasksWidget;
