@@ -78,8 +78,7 @@ class AiReportsRecord extends FirestoreRecord {
 
   @override
   bool operator ==(other) =>
-      other is AiReportsRecord &&
-      reference.path.hashCode == other.reference.path.hashCode;
+      other is AiReportsRecord && reference.path == other.reference.path;
 }
 
 Map<String, dynamic> createAiReportsRecordData({

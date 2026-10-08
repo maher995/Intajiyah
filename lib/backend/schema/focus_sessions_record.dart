@@ -84,8 +84,7 @@ class FocusSessionsRecord extends FirestoreRecord {
 
   @override
   bool operator ==(other) =>
-      other is FocusSessionsRecord &&
-      reference.path.hashCode == other.reference.path.hashCode;
+      other is FocusSessionsRecord && reference.path == other.reference.path;
 }
 
 Map<String, dynamic> createFocusSessionsRecordData({

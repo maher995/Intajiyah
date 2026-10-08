@@ -72,8 +72,7 @@ class MoodLogsRecord extends FirestoreRecord {
 
   @override
   bool operator ==(other) =>
-      other is MoodLogsRecord &&
-      reference.path.hashCode == other.reference.path.hashCode;
+      other is MoodLogsRecord && reference.path == other.reference.path;
 }
 
 Map<String, dynamic> createMoodLogsRecordData({

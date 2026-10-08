@@ -19,6 +19,8 @@ class SettingsModel extends FlutterFlowModel<SettingsWidget> {
   late SettingRowModel settingRowModel5;
   // Model for SettingRow.
   late SettingRowModel settingRowModel6;
+  // Model for SettingRow.
+  late SettingRowModel settingRowModel7;
 
   @override
   void initState(BuildContext context) {
@@ -28,6 +30,7 @@ class SettingsModel extends FlutterFlowModel<SettingsWidget> {
     settingRowModel4 = createModel(context, () => SettingRowModel());
     settingRowModel5 = createModel(context, () => SettingRowModel());
     settingRowModel6 = createModel(context, () => SettingRowModel());
+    settingRowModel7 = createModel(context, () => SettingRowModel());
   }
 
   @override
@@ -38,5 +41,6 @@ class SettingsModel extends FlutterFlowModel<SettingsWidget> {
     settingRowModel4.dispose();
     settingRowModel5.dispose();
     settingRowModel6.dispose();
+    settingRowModel7.dispose();
   }
 }

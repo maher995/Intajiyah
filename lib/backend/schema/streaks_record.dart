@@ -78,8 +78,7 @@ class StreaksRecord extends FirestoreRecord {
 
   @override
   bool operator ==(other) =>
-      other is StreaksRecord &&
-      reference.path.hashCode == other.reference.path.hashCode;
+      other is StreaksRecord && reference.path == other.reference.path;
 }
 
 Map<String, dynamic> createStreaksRecordData({

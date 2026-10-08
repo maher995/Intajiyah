@@ -671,7 +671,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                         size: 22.0,
                                       ),
                                       color: Color(0x00000000),
-                                      label: 'Edit Profile',
+                                      label: 'Edit Account',
                                       isToggle: false,
                                       value: '',
                                       active: false,
@@ -705,6 +705,73 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                                       color: FlutterFlowTheme.of(context).error,
                                       label: 'Sign Out',
                                       isToggle: false,
+                                      value: '',
+                                      active: false,
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    Function() _navigate = () {};
+                                    var confirmDialogResponse =
+                                        await showDialog<bool>(
+                                              context: context,
+                                              builder: (alertDialogContext) {
+                                                return AlertDialog(
+                                                  title: Text('Are you sure ?'),
+                                                  content: Text(
+                                                      'This action will permanetly delete your account'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              alertDialogContext,
+                                                              false),
+                                                      child: Text('Cancel'),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              alertDialogContext,
+                                                              true),
+                                                      child: Text('Confirm'),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            ) ??
+                                            false;
+                                    if (confirmDialogResponse) {
+                                      await currentUserReference!.delete();
+                                      await authManager.deleteUser(context);
+                                      GoRouter.of(context).prepareAuthEvent();
+                                      await authManager.signOut();
+                                      GoRouter.of(context)
+                                          .clearRedirectLocation();
+
+                                      _navigate = () => context.goNamedAuth(
+                                          Intro1Widget.routeName,
+                                          context.mounted);
+                                    }
+
+                                    _navigate();
+                                  },
+                                  child: wrapWithModel(
+                                    model: _model.settingRowModel7,
+                                    updateCallback: () => safeSetState(() {}),
+                                    child: SettingRowWidget(
+                                      icon: Icon(
+                                        Icons.cancel,
+                                        color: Color(0xFFB81C1C),
+                                        size: 22.0,
+                                      ),
+                                      color: Color(0xFFA91616),
+                                      label: 'Delete Account',
+                                      isToggle: true,
                                       value: '',
                                       active: false,
                                     ),

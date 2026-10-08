@@ -73,8 +73,7 @@ class SubtasksRecord extends FirestoreRecord {
 
   @override
   bool operator ==(other) =>
-      other is SubtasksRecord &&
-      reference.path.hashCode == other.reference.path.hashCode;
+      other is SubtasksRecord && reference.path == other.reference.path;
 }
 
 Map<String, dynamic> createSubtasksRecordData({

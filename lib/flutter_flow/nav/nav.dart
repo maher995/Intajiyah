@@ -87,21 +87,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               appStateNotifier.loggedIn ? NavBarPage() : Intro1Widget(),
         ),
         FFRoute(
-          name: Intro1Widget.routeName,
-          path: Intro1Widget.routePath,
-          builder: (context, params) => Intro1Widget(),
-        ),
-        FFRoute(
-          name: Intro2Widget.routeName,
-          path: Intro2Widget.routePath,
-          builder: (context, params) => Intro2Widget(),
-        ),
-        FFRoute(
-          name: Intro3Widget.routeName,
-          path: Intro3Widget.routePath,
-          builder: (context, params) => Intro3Widget(),
-        ),
-        FFRoute(
           name: SignUpScreenWidget.routeName,
           path: SignUpScreenWidget.routePath,
           builder: (context, params) => SignUpScreenWidget(),
@@ -114,21 +99,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : JournalWidget(),
         ),
         FFRoute(
-          name: SettingsWidget.routeName,
-          path: SettingsWidget.routePath,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'Settings')
-              : SettingsWidget(),
-        ),
-        FFRoute(
           name: LoginScreenWidget.routeName,
           path: LoginScreenWidget.routePath,
           builder: (context, params) => LoginScreenWidget(),
-        ),
-        FFRoute(
-          name: MobileNamedEditprofilePageWidget.routeName,
-          path: MobileNamedEditprofilePageWidget.routePath,
-          builder: (context, params) => MobileNamedEditprofilePageWidget(),
         ),
         FFRoute(
           name: ForgotMyPasswordWidget.routeName,
@@ -187,6 +160,33 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           path: TasksWidget.routePath,
           builder: (context, params) =>
               params.isEmpty ? NavBarPage(initialPage: 'Tasks') : TasksWidget(),
+        ),
+        FFRoute(
+          name: Intro1Widget.routeName,
+          path: Intro1Widget.routePath,
+          builder: (context, params) => Intro1Widget(),
+        ),
+        FFRoute(
+          name: Intro2Widget.routeName,
+          path: Intro2Widget.routePath,
+          builder: (context, params) => Intro2Widget(),
+        ),
+        FFRoute(
+          name: Intro3Widget.routeName,
+          path: Intro3Widget.routePath,
+          builder: (context, params) => Intro3Widget(),
+        ),
+        FFRoute(
+          name: SettingsWidget.routeName,
+          path: SettingsWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Settings')
+              : SettingsWidget(),
+        ),
+        FFRoute(
+          name: MobileNamedEditprofilePageWidget.routeName,
+          path: MobileNamedEditprofilePageWidget.routePath,
+          builder: (context, params) => MobileNamedEditprofilePageWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -398,6 +398,10 @@ class FFRoute {
                     duration: transitionInfo.duration,
                     reverseDuration: transitionInfo.duration,
                     alignment: transitionInfo.alignment,
+                    curve: transitionInfo.transitionType ==
+                            PageTransitionType.scale
+                        ? const Interval(0.0, 0.5)
+                        : Curves.linear,
                     child: child,
                   ).buildTransitions(
                     context,
