@@ -118,9 +118,8 @@ This section documents what each team member contributed to the FlutterFlow proj
 
 ### Abdulmalik
 
--
-
----
+**Settings**
+- Established the **Delete Account** feature from the Settings page
 
 ## Summary Table
 
@@ -130,4 +129,4 @@ This section documents what each team member contributed to the FlutterFlow proj
 | Hassan     |                                                                                                                |
 | Mishari    |                                                                                                                |
 | Ahmed      |                                                                                                                |
-| Abdulmalik |                                                                                                                |
+| Abdulmalik | Delete Account feature in Settings                                                                             |
