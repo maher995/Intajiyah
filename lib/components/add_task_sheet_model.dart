@@ -1,3 +1,5 @@
+import '/backend/backend.dart';
+import '/backend/custom_cloud_functions/custom_cloud_function_response_manager.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'add_task_sheet_widget.dart' show AddTaskSheetWidget;
@@ -14,6 +16,10 @@ class AddTaskSheetModel extends FlutterFlowModel<AddTaskSheetWidget> {
   FocusNode? titleFieldFocusNode;
   TextEditingController? titleFieldTextController;
   String? Function(BuildContext, String?)? titleFieldTextControllerValidator;
+  // Stores action output result for [Cloud Function - categorizeTask] action in TitleField widget.
+  CategorizeTaskCloudFunctionCallResponse? categorizeResult;
+  // Stores action output result for [Cloud Function - categorizeTask] action in TitleField widget.
+  CategorizeTaskCloudFunctionCallResponse? categorizeResultCopy;
   // State field(s) for Priority widget.
   String? priorityValue;
   FormFieldController<String>? priorityValueController;
@@ -24,6 +30,10 @@ class AddTaskSheetModel extends FlutterFlowModel<AddTaskSheetWidget> {
   String? categoryValue;
   FormFieldController<String>? categoryValueController;
   DateTime? datePicked;
+  // Stores action output result for [Cloud Function - categorizeTask] action in SaveButton widget.
+  CategorizeTaskCloudFunctionCallResponse? aiResult;
+  // Stores action output result for [Backend Call - Create Document] action in SaveButton widget.
+  TasksRecord? createdTask;
 
   @override
   void initState(BuildContext context) {}

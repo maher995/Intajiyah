@@ -156,12 +156,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : HomePageWidget(),
         ),
         FFRoute(
-          name: TasksWidget.routeName,
-          path: TasksWidget.routePath,
-          builder: (context, params) =>
-              params.isEmpty ? NavBarPage(initialPage: 'Tasks') : TasksWidget(),
-        ),
-        FFRoute(
           name: Intro1Widget.routeName,
           path: Intro1Widget.routePath,
           builder: (context, params) => Intro1Widget(),
@@ -187,7 +181,25 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: MobileNamedEditprofilePageWidget.routeName,
           path: MobileNamedEditprofilePageWidget.routePath,
           builder: (context, params) => MobileNamedEditprofilePageWidget(),
-        )
+        ),
+        FFRoute(
+          name: TasksWidget.routeName,
+          path: TasksWidget.routePath,
+          builder: (context, params) =>
+              params.isEmpty ? NavBarPage(initialPage: 'Tasks') : TasksWidget(),
+        ),
+        FFRoute(
+          name: TaskCompletionWidget.routeName,
+          path: TaskCompletionWidget.routePath,
+          builder: (context, params) => TaskCompletionWidget(),
+        ),
+        FFRoute(
+            name: MobileNamedTaskcompletiontrackingPageWidget.routeName,
+            path: MobileNamedTaskcompletiontrackingPageWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: MobileNamedTaskcompletiontrackingPageWidget(),
+                ))
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
 

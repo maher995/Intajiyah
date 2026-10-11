@@ -1,5 +1,6 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/backend/custom_cloud_functions/custom_cloud_function_response_manager.dart';
 import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
@@ -8,6 +9,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,6 +39,65 @@ class _AddTaskSheetWidgetState extends State<AddTaskSheetWidget> {
 
     _model.titleFieldTextController ??= TextEditingController();
     _model.titleFieldFocusNode ??= FocusNode();
+    _model.titleFieldFocusNode!.addListener(
+      () async {
+        if (_model.titleFieldTextController.text != '') {
+          try {
+            final result = await FirebaseFunctions.instance
+                .httpsCallable('categorizeTask')
+                .call({
+              "taskTitle": _model.titleFieldTextController.text,
+            });
+            _model.categorizeResult = CategorizeTaskCloudFunctionCallResponse(
+              data: result.data,
+              succeeded: true,
+              resultAsString: result.data.toString(),
+              jsonBody: result.data,
+            );
+          } on FirebaseFunctionsException catch (error) {
+            _model.categorizeResult = CategorizeTaskCloudFunctionCallResponse(
+              errorCode: error.code,
+              succeeded: false,
+            );
+          }
+
+          if (_model.categorizeResult?.succeeded == true) {
+            safeSetState(() {
+              _model.priorityValueController?.value = getJsonField(
+                _model.categorizeResult!.jsonBody,
+                r'''$.priority''',
+              ).toString();
+              _model.priorityValue = getJsonField(
+                _model.categorizeResult!.jsonBody,
+                r'''$.priority''',
+              ).toString();
+            });
+            safeSetState(() {
+              _model.effortLevelValueController?.value = getJsonField(
+                _model.categorizeResult!.jsonBody,
+                r'''$.effort_level''',
+              ).toString();
+              _model.effortLevelValue = getJsonField(
+                _model.categorizeResult!.jsonBody,
+                r'''$.effort_level''',
+              ).toString();
+            });
+            safeSetState(() {
+              _model.categoryValueController?.value = getJsonField(
+                _model.categorizeResult!.jsonBody,
+                r'''$.category''',
+              ).toString();
+              _model.categoryValue = getJsonField(
+                _model.categorizeResult!.jsonBody,
+                r'''$.category''',
+              ).toString();
+            });
+          }
+        }
+
+        safeSetState(() {});
+      },
+    );
   }
 
   @override
@@ -82,6 +143,68 @@ class _AddTaskSheetWidgetState extends State<AddTaskSheetWidget> {
                     child: TextFormField(
                       controller: _model.titleFieldTextController,
                       focusNode: _model.titleFieldFocusNode,
+                      onFieldSubmitted: (_) async {
+                        if (_model.titleFieldTextController.text != '') {
+                          try {
+                            final result = await FirebaseFunctions.instance
+                                .httpsCallable('categorizeTask')
+                                .call({
+                              "taskTitle": _model.titleFieldTextController.text,
+                            });
+                            _model.categorizeResultCopy =
+                                CategorizeTaskCloudFunctionCallResponse(
+                              data: result.data,
+                              succeeded: true,
+                              resultAsString: result.data.toString(),
+                              jsonBody: result.data,
+                            );
+                          } on FirebaseFunctionsException catch (error) {
+                            _model.categorizeResultCopy =
+                                CategorizeTaskCloudFunctionCallResponse(
+                              errorCode: error.code,
+                              succeeded: false,
+                            );
+                          }
+
+                          if (_model.categorizeResultCopy?.succeeded == true) {
+                            safeSetState(() {
+                              _model.priorityValueController?.value =
+                                  getJsonField(
+                                _model.categorizeResultCopy!.jsonBody,
+                                r'''$.priority''',
+                              ).toString();
+                              _model.priorityValue = getJsonField(
+                                _model.categorizeResultCopy!.jsonBody,
+                                r'''$.priority''',
+                              ).toString();
+                            });
+                            safeSetState(() {
+                              _model.effortLevelValueController?.value =
+                                  getJsonField(
+                                _model.categorizeResultCopy!.jsonBody,
+                                r'''$.effort_level''',
+                              ).toString();
+                              _model.effortLevelValue = getJsonField(
+                                _model.categorizeResultCopy!.jsonBody,
+                                r'''$.effort_level''',
+                              ).toString();
+                            });
+                            safeSetState(() {
+                              _model.categoryValueController?.value =
+                                  getJsonField(
+                                _model.categorizeResultCopy!.jsonBody,
+                                r'''$.category''',
+                              ).toString();
+                              _model.categoryValue = getJsonField(
+                                _model.categorizeResultCopy!.jsonBody,
+                                r'''$.category''',
+                              ).toString();
+                            });
+                          }
+                        }
+
+                        safeSetState(() {});
+                      },
                       autofocus: false,
                       enabled: true,
                       obscureText: false,
@@ -432,21 +555,54 @@ class _AddTaskSheetWidgetState extends State<AddTaskSheetWidget> {
                   onPressed: () async {
                     if (functions
                         .isNotBlank(_model.titleFieldTextController.text)!) {
-                      await TasksRecord.collection
-                          .doc()
-                          .set(createTasksRecordData(
+                      try {
+                        final result = await FirebaseFunctions.instance
+                            .httpsCallable('categorizeTask')
+                            .call({
+                          "taskTitle": _model.titleFieldTextController.text,
+                        });
+                        _model.aiResult =
+                            CategorizeTaskCloudFunctionCallResponse(
+                          data: result.data,
+                          succeeded: true,
+                          resultAsString: result.data.toString(),
+                          jsonBody: result.data,
+                        );
+                      } on FirebaseFunctionsException catch (error) {
+                        _model.aiResult =
+                            CategorizeTaskCloudFunctionCallResponse(
+                          errorCode: error.code,
+                          succeeded: false,
+                        );
+                      }
+
+                      var tasksRecordReference = TasksRecord.collection.doc();
+                      await tasksRecordReference.set(createTasksRecordData(
+                        userId: currentUserUid,
+                        title: _model.titleFieldTextController.text,
+                        dueDate: _model.dueDate,
+                        effortLevel:
+                            functions.toEffortLevel(_model.effortLevelValue),
+                        category:
+                            functions.toTaskCategory(_model.categoryValue),
+                        status: TaskStatus.pending,
+                        isDeleted: false,
+                        priority: TaskPriority.highFocus,
+                      ));
+                      _model.createdTask = TasksRecord.getDocumentFromData(
+                          createTasksRecordData(
                             userId: currentUserUid,
                             title: _model.titleFieldTextController.text,
                             dueDate: _model.dueDate,
-                            priority:
-                                functions.toTaskPriority(_model.priorityValue),
                             effortLevel: functions
                                 .toEffortLevel(_model.effortLevelValue),
                             category:
                                 functions.toTaskCategory(_model.categoryValue),
                             status: TaskStatus.pending,
                             isDeleted: false,
-                          ));
+                            priority: TaskPriority.highFocus,
+                          ),
+                          tasksRecordReference);
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -476,6 +632,8 @@ class _AddTaskSheetWidgetState extends State<AddTaskSheetWidget> {
                         ),
                       );
                     }
+
+                    safeSetState(() {});
                   },
                   text: 'Save',
                   options: FFButtonOptions(

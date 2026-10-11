@@ -11,3 +11,4 @@ export '/custom_code/functions/progress_text.dart';
 export '/custom_code/functions/start_of_tomorrow.dart';
 export '/custom_code/functions/start_of_today.dart';
 export '/custom_code/functions/sort_tasks_by_priority.dart';
+export '/custom_code/functions/title_long_enough.dart';

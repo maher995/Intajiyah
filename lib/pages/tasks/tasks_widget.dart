@@ -6,6 +6,7 @@ import '/components/section_header_widget.dart';
 import '/components/task_item_card_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'tasks_model.dart';
@@ -1040,6 +1041,46 @@ class _TasksWidgetState extends State<TasksWidget> {
                               color: Colors.white,
                               size: 28.0,
                             ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Align(
+              alignment: AlignmentDirectional(1.0, 1.0),
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 80.0, 100.0),
+                child: Container(
+                  decoration: BoxDecoration(),
+                  child: Padding(
+                    padding: EdgeInsets.all(24.0),
+                    child: Container(
+                      child: InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () async {
+                          context.pushNamed(
+                              MobileNamedTaskcompletiontrackingPageWidget
+                                  .routeName);
+                        },
+                        child: Container(
+                          width: 40.0,
+                          height: 40.0,
+                          decoration: BoxDecoration(
+                            color: Color(0xFF3988EF),
+                            borderRadius: BorderRadius.circular(9999.0),
+                            shape: BoxShape.rectangle,
+                          ),
+                          alignment: AlignmentDirectional(0.0, 0.0),
+                          child: Icon(
+                            Icons.chevron_right,
+                            color: Colors.white,
+                            size: 28.0,
                           ),
                         ),
                       ),
