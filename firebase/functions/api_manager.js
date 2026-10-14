@@ -11,8 +11,7 @@ async function _transcribeAudioCall(context, ffVariables) {
   var url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent`;
   var headers = {
     "Content-Type": `application/json`,
-    "x-goog-api-key": `AQ.Ab8RN6LPVW_wsf82GKtSnSzIRqvFbA8RA-fPIdgTzsamN3UzeQ`,
-  };
+"x-goog-api-key": process.env.GEMINI_API_KEY,  };
   var params = {};
   var ffApiRequestBody = `
 {
