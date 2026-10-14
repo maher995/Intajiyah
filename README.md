@@ -112,7 +112,7 @@ This section documents what each team member contributed to the FlutterFlow proj
 
 ### Ahmed
 
-**Tasks (voice input)
+**Tasks (voice input)**
 - Established voice input on the Tasks screen, so the name of a task can be added by speaking instead of typing.
 
 ### Abdulmalik
