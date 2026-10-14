@@ -34,6 +34,8 @@ class _CounterRowWidgetState extends State<CounterRowWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => CounterRowModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

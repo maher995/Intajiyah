@@ -41,6 +41,8 @@ class _StatCardWidgetState extends State<StatCardWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => StatCardModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

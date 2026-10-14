@@ -211,6 +211,8 @@ class _FocusSessionWidgetState extends State<FocusSessionWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => FocusSessionModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

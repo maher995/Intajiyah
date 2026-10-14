@@ -1,4 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/backend/schema/enums/enums.dart';
 import '/components/add_task_sheet_widget.dart';
@@ -6,9 +7,11 @@ import '/components/section_header_widget.dart';
 import '/components/task_item_card_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:record/record.dart';
 import 'tasks_model.dart';
 export 'tasks_model.dart';
 
@@ -435,6 +438,8 @@ class _TasksWidgetState extends State<TasksWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => TasksModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -948,6 +953,7 @@ class _TasksWidgetState extends State<TasksWidget> {
                           Align(
                             alignment: AlignmentDirectional(0.0, 1.0),
                             child: Container(
+                              decoration: BoxDecoration(),
                               child: Container(
                                 width: 0.0,
                                 height: 0.0,
@@ -970,18 +976,113 @@ class _TasksWidgetState extends State<TasksWidget> {
                   child: Padding(
                     padding: EdgeInsets.all(24.0),
                     child: Container(
-                      child: Container(
-                        width: 40.0,
-                        height: 40.0,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF9333EA),
-                          borderRadius: BorderRadius.circular(9999.0),
-                          shape: BoxShape.rectangle,
-                        ),
-                        alignment: AlignmentDirectional(0.0, 0.0),
-                        child: Icon(
-                          Icons.mic_rounded,
-                          size: 24.0,
+                      child: Builder(
+                        builder: (context) => InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            if (_model.isRecording) {
+                              await stopAudioRecording(
+                                audioRecorder: _model.audioRecorder,
+                                audioName: 'recordedFileBytes',
+                                onRecordingComplete:
+                                    (audioFilePath, audioBytes) {
+                                  _model.recordedAudio = audioFilePath;
+                                  _model.recordedFileBytes = audioBytes;
+                                },
+                              );
+
+                              _model.isRecording = false;
+                              safeSetState(() {});
+                              _model.preparedaudio =
+                                  await actions.prepareAudioForTranscription(
+                                _model.recordedFileBytes,
+                              );
+                              _model.transscript =
+                                  await TranscribeAudioCall.call(
+                                audioBase64: getJsonField(
+                                  _model.preparedaudio,
+                                  r'''$.audioBase64''',
+                                ).toString(),
+                                audioMimeType: getJsonField(
+                                  _model.preparedaudio,
+                                  r'''$.audioMimeType''',
+                                ).toString(),
+                              );
+
+                              _model.voiceTaskTest = getJsonField(
+                                (_model.transscript?.jsonBody ?? ''),
+                                r'''$.candidates[0].content.parts[0].text''',
+                              ).toString();
+                              safeSetState(() {});
+                              await showDialog(
+                                context: context,
+                                builder: (dialogContext) {
+                                  return Dialog(
+                                    elevation: 0,
+                                    insetPadding: EdgeInsets.zero,
+                                    backgroundColor: Colors.transparent,
+                                    alignment: AlignmentDirectional(0.0, 0.0)
+                                        .resolve(Directionality.of(context)),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        FocusScope.of(dialogContext).unfocus();
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
+                                      },
+                                      child: AddTaskSheetWidget(
+                                        initialTaskText: _model.voiceTaskTest,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            } else {
+                              await startAudioRecording(
+                                context,
+                                audioRecorder: _model.audioRecorder ??=
+                                    AudioRecorder(),
+                              );
+
+                              _model.isRecording = true;
+                              safeSetState(() {});
+                            }
+
+                            safeSetState(() {});
+                          },
+                          child: Container(
+                            width: 40.0,
+                            height: 40.0,
+                            decoration: BoxDecoration(
+                              color: Color(0xFF9333EA),
+                              borderRadius: BorderRadius.circular(9999.0),
+                              shape: BoxShape.rectangle,
+                            ),
+                            alignment: AlignmentDirectional(0.0, 0.0),
+                            child: Stack(
+                              children: [
+                                if (_model.isRecording ? false : true)
+                                  Align(
+                                    alignment: AlignmentDirectional(0.0, 0.0),
+                                    child: Icon(
+                                      Icons.mic_rounded,
+                                      size: 24.0,
+                                    ),
+                                  ),
+                                if (_model.isRecording)
+                                  Align(
+                                    alignment: AlignmentDirectional(0.0, 0.0),
+                                    child: Icon(
+                                      Icons.stop_rounded,
+                                      color: Color(0xFFFF0000),
+                                      size: 24.0,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -1021,7 +1122,9 @@ class _TasksWidgetState extends State<TasksWidget> {
                                       FocusManager.instance.primaryFocus
                                           ?.unfocus();
                                     },
-                                    child: AddTaskSheetWidget(),
+                                    child: AddTaskSheetWidget(
+                                      initialTaskText: '',
+                                    ),
                                   ),
                                 );
                               },

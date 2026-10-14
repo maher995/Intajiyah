@@ -574,6 +574,8 @@ class _AnalyticsStaticsWidgetState extends State<AnalyticsStaticsWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AnalyticsStaticsModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

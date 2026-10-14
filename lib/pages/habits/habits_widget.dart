@@ -464,6 +464,8 @@ class _HabitsWidgetState extends State<HabitsWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => HabitsModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

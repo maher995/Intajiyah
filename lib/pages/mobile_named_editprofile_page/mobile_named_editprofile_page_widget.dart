@@ -103,6 +103,8 @@ class _MobileNamedEditprofilePageWidgetState
   void initState() {
     super.initState();
     _model = createModel(context, () => MobileNamedEditprofilePageModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

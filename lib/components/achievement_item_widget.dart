@@ -41,6 +41,8 @@ class _AchievementItemWidgetState extends State<AchievementItemWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AchievementItemModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

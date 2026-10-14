@@ -34,6 +34,8 @@ class _InsightLiWidgetState extends State<InsightLiWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => InsightLiModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

@@ -36,6 +36,8 @@ class _CustomFieldWidgetState extends State<CustomFieldWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => CustomFieldModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

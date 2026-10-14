@@ -38,6 +38,8 @@ class _FieldGroupWidgetState extends State<FieldGroupWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => FieldGroupModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

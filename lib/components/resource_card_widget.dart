@@ -43,6 +43,8 @@ class _ResourceCardWidgetState extends State<ResourceCardWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ResourceCardModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

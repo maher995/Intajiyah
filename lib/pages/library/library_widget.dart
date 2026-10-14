@@ -1544,6 +1544,8 @@ class _LibraryWidgetState extends State<LibraryWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => LibraryModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

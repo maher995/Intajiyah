@@ -44,6 +44,8 @@ class _SettingRowWidgetState extends State<SettingRowWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => SettingRowModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

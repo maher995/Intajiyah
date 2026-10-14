@@ -27,6 +27,8 @@ class _Intro3WidgetState extends State<Intro3Widget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => Intro3Model());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

@@ -33,6 +33,8 @@ class _MoodButtonWidgetState extends State<MoodButtonWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => MoodButtonModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

@@ -33,6 +33,8 @@ class _PresetChipWidgetState extends State<PresetChipWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => PresetChipModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

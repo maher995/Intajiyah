@@ -58,6 +58,8 @@ class _MobileNamedTaskcompletiontrackingPageWidgetState
     super.initState();
     _model = createModel(
         context, () => MobileNamedTaskcompletiontrackingPageModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

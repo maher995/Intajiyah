@@ -27,6 +27,8 @@ class _Intro1WidgetState extends State<Intro1Widget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => Intro1Model());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

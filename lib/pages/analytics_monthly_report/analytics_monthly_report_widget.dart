@@ -222,6 +222,8 @@ class _AnalyticsMonthlyReportWidgetState
   void initState() {
     super.initState();
     _model = createModel(context, () => AnalyticsMonthlyReportModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

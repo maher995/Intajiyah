@@ -600,6 +600,8 @@ class _JournalWidgetState extends State<JournalWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => JournalModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

@@ -36,6 +36,8 @@ class _HistoryItem2WidgetState extends State<HistoryItem2Widget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => HistoryItem2Model());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

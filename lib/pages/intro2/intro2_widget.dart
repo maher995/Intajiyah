@@ -41,6 +41,8 @@ class _Intro2WidgetState extends State<Intro2Widget> {
         },
       );
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

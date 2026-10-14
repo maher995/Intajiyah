@@ -42,6 +42,8 @@ class _TaskCard2WidgetState extends State<TaskCard2Widget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => TaskCard2Model());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

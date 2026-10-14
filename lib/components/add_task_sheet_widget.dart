@@ -17,7 +17,12 @@ import 'add_task_sheet_model.dart';
 export 'add_task_sheet_model.dart';
 
 class AddTaskSheetWidget extends StatefulWidget {
-  const AddTaskSheetWidget({super.key});
+  const AddTaskSheetWidget({
+    super.key,
+    this.initialTaskText,
+  });
+
+  final String? initialTaskText;
 
   @override
   State<AddTaskSheetWidget> createState() => _AddTaskSheetWidgetState();
@@ -37,7 +42,8 @@ class _AddTaskSheetWidgetState extends State<AddTaskSheetWidget> {
     super.initState();
     _model = createModel(context, () => AddTaskSheetModel());
 
-    _model.titleFieldTextController ??= TextEditingController();
+    _model.titleFieldTextController ??=
+        TextEditingController(text: widget.initialTaskText);
     _model.titleFieldFocusNode ??= FocusNode();
     _model.titleFieldFocusNode!.addListener(
       () async {
@@ -98,6 +104,7 @@ class _AddTaskSheetWidgetState extends State<AddTaskSheetWidget> {
         safeSetState(() {});
       },
     );
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

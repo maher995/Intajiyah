@@ -34,6 +34,8 @@ class _TimerDisplayWidgetState extends State<TimerDisplayWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => TimerDisplayModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

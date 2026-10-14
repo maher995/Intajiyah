@@ -1,4 +1,6 @@
 import 'dart:convert';
+import '../cloud_functions/cloud_functions.dart';
+
 import 'package:flutter/foundation.dart';
 
 import '/flutter_flow/flutter_flow_util.dart';
@@ -68,6 +70,31 @@ class CategorizeCall {
         response,
         r'''$.candidates[0].content.parts[0].text''',
       );
+}
+
+class TranscribeAudioCall {
+  static Future<ApiCallResponse> call({
+    String? audioBase64 = '',
+    String? audioMimeType = '',
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'TranscribeAudioCall',
+        'variables': {
+          'audioBase64': audioBase64,
+          'audioMimeType': audioMimeType,
+        },
+      },
+    );
+    return ApiCallResponse.fromCloudCallResponse(response);
+  }
+
+  static String? transcript(dynamic response) =>
+      castToType<String>(getJsonField(
+        response,
+        r'''$.candidates[0].content.parts[0].text''',
+      ));
 }
 
 class ApiPagingParams {

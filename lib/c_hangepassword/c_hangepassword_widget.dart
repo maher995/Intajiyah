@@ -33,6 +33,8 @@ class _CHangepasswordWidgetState extends State<CHangepasswordWidget> {
 
     _model.confirmPasswordTextController ??= TextEditingController();
     _model.textFieldFocusNode2 ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override

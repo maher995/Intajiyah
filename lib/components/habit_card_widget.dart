@@ -42,6 +42,8 @@ class _HabitCardWidgetState extends State<HabitCardWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => HabitCardModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
