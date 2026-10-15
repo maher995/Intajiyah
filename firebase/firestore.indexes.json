@@ -1,28 +1,6 @@
 {
   "indexes": [
     {
-      "collectionGroup": "tasks",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "user_id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "priority",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "is_deleted",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "due_date",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
       "collectionGroup": "energy_logs",
       "queryScope": "COLLECTION",
       "fields": [
@@ -75,6 +53,28 @@
         {
           "fieldPath": "log_date",
           "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "tasks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user_id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "priority",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "is_deleted",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "due_date",
+          "order": "ASCENDING"
         }
       ]
     },

@@ -1167,9 +1167,7 @@ class _TasksWidgetState extends State<TasksWidget> {
                         hoverColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onTap: () async {
-                          context.pushNamed(
-                              MobileNamedTaskcompletiontrackingPageWidget
-                                  .routeName);
+                          context.pushNamed(ToBuildAPageWidget.routeName);
                         },
                         child: Container(
                           width: 40.0,

@@ -169,23 +169,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => MobileNamedEditprofilePageWidget(),
         ),
         FFRoute(
-          name: TasksWidget.routeName,
-          path: TasksWidget.routePath,
-          builder: (context, params) =>
-              params.isEmpty ? NavBarPage(initialPage: 'Tasks') : TasksWidget(),
-        ),
-        FFRoute(
           name: TaskCompletionWidget.routeName,
           path: TaskCompletionWidget.routePath,
           builder: (context, params) => TaskCompletionWidget(),
         ),
-        FFRoute(
-            name: MobileNamedTaskcompletiontrackingPageWidget.routeName,
-            path: MobileNamedTaskcompletiontrackingPageWidget.routePath,
-            builder: (context, params) => NavBarPage(
-                  initialPage: '',
-                  page: MobileNamedTaskcompletiontrackingPageWidget(),
-                )),
         FFRoute(
           name: JournalWidget.routeName,
           path: JournalWidget.routePath,
@@ -199,6 +186,24 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => params.isEmpty
               ? NavBarPage(initialPage: 'HomePage')
               : HomePageWidget(),
+        ),
+        FFRoute(
+          name: TasksWidget.routeName,
+          path: TasksWidget.routePath,
+          builder: (context, params) =>
+              params.isEmpty ? NavBarPage(initialPage: 'Tasks') : TasksWidget(),
+        ),
+        FFRoute(
+            name: MobileNamedTaskcompletiontrackingPageWidget.routeName,
+            path: MobileNamedTaskcompletiontrackingPageWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: MobileNamedTaskcompletiontrackingPageWidget(),
+                )),
+        FFRoute(
+          name: ToBuildAPageWidget.routeName,
+          path: ToBuildAPageWidget.routePath,
+          builder: (context, params) => ToBuildAPageWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
