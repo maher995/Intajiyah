@@ -829,6 +829,31 @@ class _AnalyticsStaticsWidgetState extends State<AnalyticsStaticsWidget> {
                             positive: false,
                           ),
                         ),
+                        InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed(MoodTrackingWidget.routeName);
+                          },
+                          child: wrapWithModel(
+                            model: _model.statCardModel5,
+                            updateCallback: () => safeSetState(() {}),
+                            child: StatCardWidget(
+                              icon: Icon(
+                                Icons.sentiment_very_satisfied,
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
+                                size: 16.0,
+                              ),
+                              label: 'Mood Tracking',
+                              value: 'Track Mood',
+                              trend: 'View Insights',
+                              positive: true,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     Container(

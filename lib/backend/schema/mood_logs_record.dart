@@ -35,11 +35,17 @@ class MoodLogsRecord extends FirestoreRecord {
   DateTime? get logDate => _logDate;
   bool hasLogDate() => _logDate != null;
 
+  // "mood_score" field.
+  int? _moodScore;
+  int get moodScore => _moodScore ?? 0;
+  bool hasMoodScore() => _moodScore != null;
+
   void _initializeFields() {
     _userId = snapshotData['user_id'] as String?;
     _mood = snapshotData['mood'] as String?;
     _note = snapshotData['note'] as String?;
     _logDate = snapshotData['log_date'] as DateTime?;
+    _moodScore = castToType<int>(snapshotData['mood_score']);
   }
 
   static CollectionReference get collection =>
@@ -80,6 +86,7 @@ Map<String, dynamic> createMoodLogsRecordData({
   String? mood,
   String? note,
   DateTime? logDate,
+  int? moodScore,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -87,6 +94,7 @@ Map<String, dynamic> createMoodLogsRecordData({
       'mood': mood,
       'note': note,
       'log_date': logDate,
+      'mood_score': moodScore,
     }.withoutNulls,
   );
 
@@ -101,12 +109,13 @@ class MoodLogsRecordDocumentEquality implements Equality<MoodLogsRecord> {
     return e1?.userId == e2?.userId &&
         e1?.mood == e2?.mood &&
         e1?.note == e2?.note &&
-        e1?.logDate == e2?.logDate;
+        e1?.logDate == e2?.logDate &&
+        e1?.moodScore == e2?.moodScore;
   }
 
   @override
-  int hash(MoodLogsRecord? e) =>
-      const ListEquality().hash([e?.userId, e?.mood, e?.note, e?.logDate]);
+  int hash(MoodLogsRecord? e) => const ListEquality()
+      .hash([e?.userId, e?.mood, e?.note, e?.logDate, e?.moodScore]);
 
   @override
   bool isValidKey(Object? o) => o is MoodLogsRecord;

@@ -22,6 +22,6 @@ export '/task_completion/task_completion_widget.dart' show TaskCompletionWidget;
 export '/pages/journal/journal_widget.dart' show JournalWidget;
 export '/pages/home_page/home_page_widget.dart' show HomePageWidget;
 export '/pages/tasks/tasks_widget.dart' show TasksWidget;
-export '/pages/mobile_named_taskcompletiontracking_page/mobile_named_taskcompletiontracking_page_widget.dart'
-    show MobileNamedTaskcompletiontrackingPageWidget;
-export '/to_build_a_page/to_build_a_page_widget.dart' show ToBuildAPageWidget;
+export '/pages/to_build_a_page/to_build_a_page_widget.dart'
+    show ToBuildAPageWidget;
+export '/pages/mood_tracking/mood_tracking_widget.dart' show MoodTrackingWidget;

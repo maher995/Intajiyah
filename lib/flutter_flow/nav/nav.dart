@@ -194,16 +194,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               params.isEmpty ? NavBarPage(initialPage: 'Tasks') : TasksWidget(),
         ),
         FFRoute(
-            name: MobileNamedTaskcompletiontrackingPageWidget.routeName,
-            path: MobileNamedTaskcompletiontrackingPageWidget.routePath,
-            builder: (context, params) => NavBarPage(
-                  initialPage: '',
-                  page: MobileNamedTaskcompletiontrackingPageWidget(),
-                )),
-        FFRoute(
           name: ToBuildAPageWidget.routeName,
           path: ToBuildAPageWidget.routePath,
           builder: (context, params) => ToBuildAPageWidget(),
+        ),
+        FFRoute(
+          name: MoodTrackingWidget.routeName,
+          path: MoodTrackingWidget.routePath,
+          builder: (context, params) => MoodTrackingWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

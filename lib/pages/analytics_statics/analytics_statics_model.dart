@@ -15,6 +15,8 @@ class AnalyticsStaticsModel extends FlutterFlowModel<AnalyticsStaticsWidget> {
   late StatCardModel statCardModel3;
   // Model for StatCard.
   late StatCardModel statCardModel4;
+  // Model for StatCard.
+  late StatCardModel statCardModel5;
 
   @override
   void initState(BuildContext context) {
@@ -22,6 +24,7 @@ class AnalyticsStaticsModel extends FlutterFlowModel<AnalyticsStaticsWidget> {
     statCardModel2 = createModel(context, () => StatCardModel());
     statCardModel3 = createModel(context, () => StatCardModel());
     statCardModel4 = createModel(context, () => StatCardModel());
+    statCardModel5 = createModel(context, () => StatCardModel());
   }
 
   @override
@@ -30,5 +33,6 @@ class AnalyticsStaticsModel extends FlutterFlowModel<AnalyticsStaticsWidget> {
     statCardModel2.dispose();
     statCardModel3.dispose();
     statCardModel4.dispose();
+    statCardModel5.dispose();
   }
 }
