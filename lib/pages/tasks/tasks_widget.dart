@@ -1,6 +1,6 @@
 import '/auth/firebase_auth/auth_util.dart';
-import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
+import '/backend/custom_cloud_functions/custom_cloud_function_response_manager.dart';
 import '/backend/schema/enums/enums.dart';
 import '/components/add_task_sheet_widget.dart';
 import '/components/section_header_widget.dart';
@@ -9,6 +9,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:record/record.dart';
@@ -1000,21 +1001,37 @@ class _TasksWidgetState extends State<TasksWidget> {
                                   await actions.prepareAudioForTranscription(
                                 _model.recordedFileBytes,
                               );
-                              _model.transscript =
-                                  await TranscribeAudioCall.call(
-                                audioBase64: getJsonField(
-                                  _model.preparedaudio,
-                                  r'''$.audioBase64''',
-                                ).toString(),
-                                audioMimeType: getJsonField(
-                                  _model.preparedaudio,
-                                  r'''$.audioMimeType''',
-                                ).toString(),
-                              );
+                              try {
+                                final result = await FirebaseFunctions.instance
+                                    .httpsCallable('transcribeAudio')
+                                    .call({
+                                  "audioBase64": getJsonField(
+                                    _model.preparedaudio,
+                                    r'''$.audioBase64''',
+                                  ).toString(),
+                                  "audioMimeType": getJsonField(
+                                    _model.preparedaudio,
+                                    r'''$.audioMimeType''',
+                                  ).toString(),
+                                });
+                                _model.transcriptResult =
+                                    TranscribeAudioCloudFunctionCallResponse(
+                                  data: result.data,
+                                  succeeded: true,
+                                  resultAsString: result.data.toString(),
+                                  jsonBody: result.data,
+                                );
+                              } on FirebaseFunctionsException catch (error) {
+                                _model.transcriptResult =
+                                    TranscribeAudioCloudFunctionCallResponse(
+                                  errorCode: error.code,
+                                  succeeded: false,
+                                );
+                              }
 
                               _model.voiceTaskTest = getJsonField(
-                                (_model.transscript?.jsonBody ?? ''),
-                                r'''$.candidates[0].content.parts[0].text''',
+                                _model.transcriptResult!.jsonBody,
+                                r'''$.transcript''',
                               ).toString();
                               safeSetState(() {});
                               await showDialog(

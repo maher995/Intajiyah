@@ -1,4 +1,4 @@
-import '/backend/api_requests/api_calls.dart';
+import '/backend/custom_cloud_functions/custom_cloud_function_response_manager.dart';
 import '/components/section_header_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
@@ -26,8 +26,8 @@ class TasksModel extends FlutterFlowModel<TasksWidget> {
       FFUploadedFile(bytes: Uint8List.fromList([]), originalFilename: '');
   // Stores action output result for [Custom Action - prepareAudioForTranscription] action in Container widget.
   dynamic preparedaudio;
-  // Stores action output result for [Backend Call - API (TranscribeAudio)] action in Container widget.
-  ApiCallResponse? transscript;
+  // Stores action output result for [Cloud Function - transcribeAudio] action in Container widget.
+  TranscribeAudioCloudFunctionCallResponse? transcriptResult;
   AudioRecorder? audioRecorder;
 
   @override
