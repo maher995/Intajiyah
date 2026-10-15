@@ -171,128 +171,290 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 16.0, 0.0, 16.0, 0.0),
-                            child: Container(
-                              width: double.infinity,
-                              height: 120.0,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Color(0xFF5B21B6),
-                                    Color(0xFF7C3AED)
-                                  ],
-                                  stops: [0.0, 1.0],
-                                  begin: AlignmentDirectional(1.0, 0.0),
-                                  end: AlignmentDirectional(-1.0, 0),
-                                ),
-                                borderRadius: BorderRadius.circular(16.0),
+                            child: FutureBuilder<List<EnergyLogsRecord>>(
+                              future: queryEnergyLogsRecordOnce(
+                                queryBuilder: (energyLogsRecord) =>
+                                    energyLogsRecord
+                                        .where(
+                                          'user_id',
+                                          isEqualTo: currentUserUid,
+                                        )
+                                        .orderBy('log_date', descending: true),
                               ),
-                              child: Padding(
-                                padding: EdgeInsets.all(16.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Icon(
-                                          Icons.bolt,
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                          size: 16.0,
+                              builder: (context, snapshot) {
+                                // Customize what your widget looks like when it's loading.
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: SizedBox(
+                                      width: 50.0,
+                                      height: 50.0,
+                                      child: CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                          FlutterFlowTheme.of(context).primary,
                                         ),
-                                        Text(
-                                          'Energy Level',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.inter(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
+                                      ),
+                                    ),
+                                  );
+                                }
+                                List<EnergyLogsRecord>
+                                    containerEnergyLogsRecordList =
+                                    snapshot.data!;
+
+                                return InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    context.pushNamed(JournalWidget.routeName);
+                                  },
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 132.0,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xFF5B21B6),
+                                          Color(0xFF7C3AED)
+                                        ],
+                                        stops: [0.0, 1.0],
+                                        begin: AlignmentDirectional(1.0, 0.0),
+                                        end: AlignmentDirectional(-1.0, 0),
+                                      ),
+                                      borderRadius: BorderRadius.circular(16.0),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(16.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Icon(
+                                                Icons.bolt,
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .secondaryBackground,
-                                                fontSize: 14.0,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.normal,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
+                                                size: 16.0,
                                               ),
-                                        ),
-                                      ].divide(SizedBox(width: 8.0)),
-                                    ),
-                                    Align(
-                                      alignment: AlignmentDirectional(0.0, 0.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Align(
-                                            alignment:
-                                                AlignmentDirectional(0.0, 0.0),
-                                            child: Text(
-                                              '75%',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineLarge
-                                                  .override(
-                                                    font:
-                                                        GoogleFonts.interTight(
+                                              Text(
+                                                'Energy Level',
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .bodyMedium
+                                                    .override(
+                                                      font: GoogleFonts.inter(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontStyle,
+                                                      ),
+                                                      color: FlutterFlowTheme
+                                                              .of(context)
+                                                          .secondaryBackground,
+                                                      fontSize: 14.0,
+                                                      letterSpacing: 0.0,
                                                       fontWeight:
                                                           FontWeight.normal,
                                                       fontStyle:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .headlineLarge
+                                                              .bodyMedium
                                                               .fontStyle,
                                                     ),
-                                                    color: FlutterFlowTheme.of(
+                                              ),
+                                            ].divide(SizedBox(width: 8.0)),
+                                          ),
+                                          Align(
+                                            alignment:
+                                                AlignmentDirectional(0.0, 0.0),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Align(
+                                                  alignment:
+                                                      AlignmentDirectional(
+                                                          0.0, 0.0),
+                                                  child: Text(
+                                                    valueOrDefault<String>(
+                                                      formatNumber(
+                                                        containerEnergyLogsRecordList
+                                                            .firstOrNull
+                                                            ?.energyLevelValue,
+                                                        formatType:
+                                                            FormatType.percent,
+                                                      ),
+                                                      '0.75',
+                                                    ),
+                                                    style: FlutterFlowTheme.of(
                                                             context)
-                                                        .secondaryBackground,
-                                                    fontSize: 48.0,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .headlineLarge
-                                                            .fontStyle,
+                                                        .headlineLarge
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .interTight(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .headlineLarge
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .secondaryBackground,
+                                                          fontSize: 48.0,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .headlineLarge
+                                                                  .fontStyle,
+                                                        ),
                                                   ),
+                                                ),
+                                                StreamBuilder<
+                                                    List<MoodLogsRecord>>(
+                                                  stream: queryMoodLogsRecord(
+                                                    queryBuilder:
+                                                        (moodLogsRecord) =>
+                                                            moodLogsRecord
+                                                                .where(
+                                                                  'user_id',
+                                                                  isEqualTo:
+                                                                      currentUserUid,
+                                                                )
+                                                                .orderBy(
+                                                                    'log_date',
+                                                                    descending:
+                                                                        true),
+                                                    singleRecord: true,
+                                                  ),
+                                                  builder: (context, snapshot) {
+                                                    // Customize what your widget looks like when it's loading.
+                                                    if (!snapshot.hasData) {
+                                                      return Center(
+                                                        child: SizedBox(
+                                                          width: 50.0,
+                                                          height: 50.0,
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            valueColor:
+                                                                AlwaysStoppedAnimation<
+                                                                    Color>(
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .primary,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }
+                                                    List<MoodLogsRecord>
+                                                        textMoodLogsRecordList =
+                                                        snapshot.data!;
+                                                    // Return an empty Container when the item does not exist.
+                                                    if (snapshot
+                                                        .data!.isEmpty) {
+                                                      return Container();
+                                                    }
+                                                    final textMoodLogsRecord =
+                                                        textMoodLogsRecordList
+                                                                .isNotEmpty
+                                                            ? textMoodLogsRecordList
+                                                                .first
+                                                            : null;
+
+                                                    return Text(
+                                                      () {
+                                                        if (textMoodLogsRecord
+                                                                ?.mood ==
+                                                            'great') {
+                                                          return '😊';
+                                                        } else if (textMoodLogsRecord
+                                                                ?.mood ==
+                                                            'good') {
+                                                          return '😄';
+                                                        } else if (textMoodLogsRecord
+                                                                ?.mood ==
+                                                            'neutral') {
+                                                          return '😐';
+                                                        } else if (textMoodLogsRecord
+                                                                ?.mood ==
+                                                            'low') {
+                                                          return '😔';
+                                                        } else if (textMoodLogsRecord
+                                                                ?.mood ==
+                                                            'very_low') {
+                                                          return '😣';
+                                                        } else {
+                                                          return '😊';
+                                                        }
+                                                      }(),
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font:
+                                                                    GoogleFonts
+                                                                        .inter(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                              ),
+                                                    );
+                                                  },
+                                                ),
+                                              ].divide(SizedBox(width: 12.0)),
                                             ),
                                           ),
-                                          Icon(
-                                            Icons.sentiment_satisfied_alt,
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryBackground,
-                                            size: 28.0,
+                                          LinearPercentIndicator(
+                                            percent: 0.75,
+                                            lineHeight: 6.0,
+                                            animation: true,
+                                            animateFromLastPercent: true,
+                                            progressColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .secondaryBackground,
+                                            backgroundColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .secondaryBackground,
+                                            barRadius: Radius.circular(4.0),
+                                            padding: EdgeInsets.zero,
                                           ),
-                                        ].divide(SizedBox(width: 12.0)),
+                                        ].divide(SizedBox(height: 8.0)),
                                       ),
                                     ),
-                                    LinearPercentIndicator(
-                                      percent: 0.75,
-                                      lineHeight: 6.0,
-                                      animation: true,
-                                      animateFromLastPercent: true,
-                                      progressColor:
-                                          FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                      backgroundColor:
-                                          FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                      barRadius: Radius.circular(4.0),
-                                      padding: EdgeInsets.zero,
-                                    ),
-                                  ].divide(SizedBox(height: 8.0)),
-                                ),
-                              ),
+                                  ),
+                                );
+                              },
                             ),
                           ),
                           Padding(

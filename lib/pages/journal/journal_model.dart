@@ -5,8 +5,14 @@ import 'journal_widget.dart' show JournalWidget;
 import 'package:flutter/material.dart';
 
 class JournalModel extends FlutterFlowModel<JournalWidget> {
+  ///  Local state fields for this page.
+
+  String? selectedMood;
+
   ///  State fields for stateful widgets in this page.
 
+  // State field(s) for Slider widget.
+  double? sliderValue;
   // Model for MoodButton.
   late MoodButtonModel moodButtonModel1;
   // Model for MoodButton.
@@ -17,6 +23,8 @@ class JournalModel extends FlutterFlowModel<JournalWidget> {
   late MoodButtonModel moodButtonModel4;
   // Model for MoodButton.
   late MoodButtonModel moodButtonModel5;
+  // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
+  int? completedTodayCount;
   // Model for HistoryItem.
   late HistoryItemModel historyItemModel1;
   // Model for HistoryItem.

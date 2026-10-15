@@ -92,13 +92,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => SignUpScreenWidget(),
         ),
         FFRoute(
-          name: JournalWidget.routeName,
-          path: JournalWidget.routePath,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'Journal')
-              : JournalWidget(),
-        ),
-        FFRoute(
           name: LoginScreenWidget.routeName,
           path: LoginScreenWidget.routePath,
           builder: (context, params) => LoginScreenWidget(),
@@ -149,13 +142,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : AnalyticsStaticsWidget(),
         ),
         FFRoute(
-          name: HomePageWidget.routeName,
-          path: HomePageWidget.routePath,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'HomePage')
-              : HomePageWidget(),
-        ),
-        FFRoute(
           name: Intro1Widget.routeName,
           path: Intro1Widget.routePath,
           builder: (context, params) => Intro1Widget(),
@@ -199,7 +185,21 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             builder: (context, params) => NavBarPage(
                   initialPage: '',
                   page: MobileNamedTaskcompletiontrackingPageWidget(),
-                ))
+                )),
+        FFRoute(
+          name: JournalWidget.routeName,
+          path: JournalWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Journal')
+              : JournalWidget(),
+        ),
+        FFRoute(
+          name: HomePageWidget.routeName,
+          path: HomePageWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'HomePage')
+              : HomePageWidget(),
+        )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
 

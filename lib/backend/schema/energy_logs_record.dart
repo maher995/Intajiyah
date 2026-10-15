@@ -35,11 +35,24 @@ class EnergyLogsRecord extends FirestoreRecord {
   int get energyLevel => _energyLevel ?? 0;
   bool hasEnergyLevel() => _energyLevel != null;
 
+  // "energy_level_value" field.
+  double? _energyLevelValue;
+  double get energyLevelValue => _energyLevelValue ?? 0.0;
+  bool hasEnergyLevelValue() => _energyLevelValue != null;
+
+  // "completed_tasks_count" field.
+  int? _completedTasksCount;
+  int get completedTasksCount => _completedTasksCount ?? 0;
+  bool hasCompletedTasksCount() => _completedTasksCount != null;
+
   void _initializeFields() {
     _userId = snapshotData['user_id'] as String?;
     _timeOfDay = snapshotData['time_of_day'] as String?;
     _logDate = snapshotData['log_date'] as DateTime?;
     _energyLevel = castToType<int>(snapshotData['energy_level']);
+    _energyLevelValue = castToType<double>(snapshotData['energy_level_value']);
+    _completedTasksCount =
+        castToType<int>(snapshotData['completed_tasks_count']);
   }
 
   static CollectionReference get collection =>
@@ -80,6 +93,8 @@ Map<String, dynamic> createEnergyLogsRecordData({
   String? timeOfDay,
   DateTime? logDate,
   int? energyLevel,
+  double? energyLevelValue,
+  int? completedTasksCount,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -87,6 +102,8 @@ Map<String, dynamic> createEnergyLogsRecordData({
       'time_of_day': timeOfDay,
       'log_date': logDate,
       'energy_level': energyLevel,
+      'energy_level_value': energyLevelValue,
+      'completed_tasks_count': completedTasksCount,
     }.withoutNulls,
   );
 
@@ -101,12 +118,20 @@ class EnergyLogsRecordDocumentEquality implements Equality<EnergyLogsRecord> {
     return e1?.userId == e2?.userId &&
         e1?.timeOfDay == e2?.timeOfDay &&
         e1?.logDate == e2?.logDate &&
-        e1?.energyLevel == e2?.energyLevel;
+        e1?.energyLevel == e2?.energyLevel &&
+        e1?.energyLevelValue == e2?.energyLevelValue &&
+        e1?.completedTasksCount == e2?.completedTasksCount;
   }
 
   @override
-  int hash(EnergyLogsRecord? e) => const ListEquality()
-      .hash([e?.userId, e?.timeOfDay, e?.logDate, e?.energyLevel]);
+  int hash(EnergyLogsRecord? e) => const ListEquality().hash([
+        e?.userId,
+        e?.timeOfDay,
+        e?.logDate,
+        e?.energyLevel,
+        e?.energyLevelValue,
+        e?.completedTasksCount
+      ]);
 
   @override
   bool isValidKey(Object? o) => o is EnergyLogsRecord;

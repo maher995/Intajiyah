@@ -8,13 +8,6 @@ service cloud.firestore {
       allow delete: if request.auth.uid == resource.data.user_id;
     }
 
-    match /energy_logs/{document} {
-      allow create: if request.auth != null;
-      allow read: if request.auth.uid == resource.data.user_id;
-      allow write: if request.auth.uid == resource.data.user_id;
-      allow delete: if request.auth.uid == resource.data.user_id;
-    }
-
     match /mood_logs/{document} {
       allow create: if request.auth != null;
       allow read: if request.auth.uid == resource.data.user_id;
@@ -96,6 +89,13 @@ service cloud.firestore {
 
 
     match /tasks/{document} {
+      allow create: if request.auth != null;
+      allow read: if request.auth.uid == resource.data.user_id;
+      allow write: if request.auth.uid == resource.data.user_id;
+      allow delete: if request.auth.uid == resource.data.user_id;
+    }
+
+    match /energy_logs/{document} {
       allow create: if request.auth != null;
       allow read: if request.auth.uid == resource.data.user_id;
       allow write: if request.auth.uid == resource.data.user_id;

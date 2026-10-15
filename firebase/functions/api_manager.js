@@ -1,9 +1,5 @@
 const axios = require("axios").default;
 const qs = require("qs");
-const { defineSecret } = require("firebase-functions/params");
-
-// Define the secret matching the name you set in the terminal
-const geminiApiKey = defineSecret("GEMINI_API_KEY");
 
 async function _transcribeAudioCall(context, ffVariables) {
   if (!context.auth) {
@@ -12,13 +8,10 @@ async function _transcribeAudioCall(context, ffVariables) {
   var audioBase64 = ffVariables["audioBase64"];
   var audioMimeType = ffVariables["audioMimeType"];
 
-  // Retrieve the secret securely at runtime
-  const apiKey = geminiApiKey.value();
-
-  var url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`;
+  var url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent`;
   var headers = {
     "Content-Type": `application/json`,
-    "x-goog-api-key": apiKey,
+    "x-goog-api-key": `AQ.Ab8RN6I1CWw7mglfUdf4PfXf4qh_IWqc-ex9kIguybJeKOXSVA`,
   };
   var params = {};
   var ffApiRequestBody = `
@@ -40,7 +33,10 @@ async function _transcribeAudioCall(context, ffVariables) {
     }
   ],
   "generationConfig": {
-    "maxOutputTokens": 2048
+    "maxOutputTokens": 2048,
+    "thinkingConfig": {
+      "thinkingLevel": "low"
+    }
   }
 }`;
 
@@ -137,7 +133,6 @@ function createBody({ headers, params, body, bodyType }) {
       return qs.stringify(params);
   }
 }
-
 function escapeStringForJson(val) {
   if (typeof val !== "string") {
     return val;
@@ -145,4 +140,4 @@ function escapeStringForJson(val) {
   return JSON.stringify(val).slice(1, -1);
 }
 
-module.exports = { makeApiCall, geminiApiKey };
+module.exports = { makeApiCall };

@@ -1,3 +1,6 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/backend/schema/enums/enums.dart';
 import '/components/history_item_widget.dart';
 import '/components/mood_button_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
@@ -5,6 +8,7 @@ import '/flutter_flow/flutter_flow_charts.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'journal_model.dart';
@@ -1369,7 +1373,14 @@ class _JournalWidgetState extends State<JournalWidget> {
                                               CrossAxisAlignment.center,
                                           children: [
                                             Text(
-                                              '75%',
+                                              valueOrDefault<String>(
+                                                formatNumber(
+                                                  _model.sliderValue,
+                                                  formatType:
+                                                      FormatType.percent,
+                                                ),
+                                                '0.75',
+                                              ),
                                               style: FlutterFlowTheme.of(
                                                       context)
                                                   .bodyMedium
@@ -1398,7 +1409,30 @@ class _JournalWidgetState extends State<JournalWidget> {
                                                   ),
                                             ),
                                             Text(
-                                              '😊',
+                                              () {
+                                                if (_model.selectedMood ==
+                                                    'great') {
+                                                  return '😊';
+                                                } else if (_model
+                                                        .selectedMood ==
+                                                    'good') {
+                                                  return '😄';
+                                                } else if (_model
+                                                        .selectedMood ==
+                                                    'neutral') {
+                                                  return '😐';
+                                                } else if (_model
+                                                        .selectedMood ==
+                                                    'low') {
+                                                  return '😔';
+                                                } else if (_model
+                                                        .selectedMood ==
+                                                    'very_low') {
+                                                  return '😣';
+                                                } else {
+                                                  return '😊';
+                                                }
+                                              }(),
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -1431,6 +1465,23 @@ class _JournalWidgetState extends State<JournalWidget> {
                                                       ),
                                             ),
                                           ].divide(SizedBox(height: 4.0)),
+                                        ),
+                                        Slider(
+                                          activeColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .primary,
+                                          inactiveColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .alternate,
+                                          min: 0.0,
+                                          max: 1.0,
+                                          value: _model.sliderValue ??= 0.75,
+                                          onChanged: (newValue) {
+                                            newValue = double.parse(
+                                                newValue.toStringAsFixed(2));
+                                            safeSetState(() =>
+                                                _model.sliderValue = newValue);
+                                          },
                                         ),
                                       ].divide(SizedBox(height: 24.0)),
                                     ),
@@ -1490,53 +1541,121 @@ class _JournalWidgetState extends State<JournalWidget> {
                                         Row(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                              (FFMainAxisAlignment.spaceEvenly)
+                                                  .flutterValue,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            wrapWithModel(
-                                              model: _model.moodButtonModel1,
-                                              updateCallback: () =>
-                                                  safeSetState(() {}),
-                                              child: MoodButtonWidget(
-                                                active: true,
-                                                emoji: '😊',
+                                            InkWell(
+                                              splashColor: Colors.transparent,
+                                              focusColor: Colors.transparent,
+                                              hoverColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
+                                              onTap: () async {
+                                                _model.selectedMood = 'great ';
+                                                safeSetState(() {});
+                                              },
+                                              child: wrapWithModel(
+                                                model: _model.moodButtonModel1,
+                                                updateCallback: () =>
+                                                    safeSetState(() {}),
+                                                child: MoodButtonWidget(
+                                                  active: _model.selectedMood ==
+                                                      'great',
+                                                  emoji: '😊',
+                                                ),
                                               ),
                                             ),
-                                            wrapWithModel(
-                                              model: _model.moodButtonModel2,
-                                              updateCallback: () =>
-                                                  safeSetState(() {}),
-                                              child: MoodButtonWidget(
-                                                active: false,
-                                                emoji: '😄',
+                                            InkWell(
+                                              splashColor: Colors.transparent,
+                                              focusColor: Colors.transparent,
+                                              hoverColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
+                                              onTap: () async {
+                                                _model.selectedMood = 'good';
+                                                safeSetState(() {});
+                                              },
+                                              child: wrapWithModel(
+                                                model: _model.moodButtonModel2,
+                                                updateCallback: () =>
+                                                    safeSetState(() {}),
+                                                child: MoodButtonWidget(
+                                                  active: _model.selectedMood ==
+                                                      'good',
+                                                  emoji: '😄',
+                                                ),
                                               ),
                                             ),
-                                            wrapWithModel(
-                                              model: _model.moodButtonModel3,
-                                              updateCallback: () =>
-                                                  safeSetState(() {}),
-                                              child: MoodButtonWidget(
-                                                active: false,
-                                                emoji: '😐',
+                                            InkWell(
+                                              splashColor: Colors.transparent,
+                                              focusColor: Colors.transparent,
+                                              hoverColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
+                                              onTap: () async {
+                                                _model.selectedMood = 'neutral';
+                                                safeSetState(() {});
+                                              },
+                                              child: wrapWithModel(
+                                                model: _model.moodButtonModel3,
+                                                updateCallback: () =>
+                                                    safeSetState(() {}),
+                                                child: MoodButtonWidget(
+                                                  active: _model.selectedMood ==
+                                                      'neutral',
+                                                  emoji: '😐',
+                                                ),
                                               ),
                                             ),
-                                            wrapWithModel(
-                                              model: _model.moodButtonModel4,
-                                              updateCallback: () =>
-                                                  safeSetState(() {}),
-                                              child: MoodButtonWidget(
-                                                active: false,
-                                                emoji: '😔',
+                                            InkWell(
+                                              splashColor: Colors.transparent,
+                                              focusColor: Colors.transparent,
+                                              hoverColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
+                                              onTap: () async {
+                                                _model.selectedMood = 'low';
+                                                safeSetState(() {});
+                                              },
+                                              child: wrapWithModel(
+                                                model: _model.moodButtonModel4,
+                                                updateCallback: () =>
+                                                    safeSetState(() {}),
+                                                child: MoodButtonWidget(
+                                                  active: _model.selectedMood ==
+                                                      'low',
+                                                  emoji: '😔',
+                                                ),
                                               ),
                                             ),
-                                            wrapWithModel(
-                                              model: _model.moodButtonModel5,
-                                              updateCallback: () =>
-                                                  safeSetState(() {}),
-                                              child: MoodButtonWidget(
-                                                active: false,
-                                                emoji: '😠',
+                                            Align(
+                                              alignment: AlignmentDirectional(
+                                                  1.0, 0.0),
+                                              child: InkWell(
+                                                splashColor: Colors.transparent,
+                                                focusColor: Colors.transparent,
+                                                hoverColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                onTap: () async {
+                                                  _model.selectedMood =
+                                                      'very_low';
+                                                  safeSetState(() {});
+                                                },
+                                                child: wrapWithModel(
+                                                  model:
+                                                      _model.moodButtonModel5,
+                                                  updateCallback: () =>
+                                                      safeSetState(() {}),
+                                                  child: MoodButtonWidget(
+                                                    active:
+                                                        _model.selectedMood ==
+                                                            'very_low',
+                                                    emoji: '😠',
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -1618,102 +1737,132 @@ class _JournalWidgetState extends State<JournalWidget> {
                                         ),
                                         Container(
                                           height: 180.0,
-                                          child: Container(
-                                            height: 180.0,
-                                            child: FlutterFlowLineChart(
-                                              data: [
-                                                FFLineChartData(
-                                                  xData: ([
-                                                    0.0,
-                                                    1.0,
-                                                    2.0,
-                                                    3.0,
-                                                    4.0,
-                                                    5.0,
-                                                    6.0
-                                                  ]),
-                                                  yData: ([
-                                                    60.0,
-                                                    75.0,
-                                                    80.0,
-                                                    65.0,
-                                                    90.0,
-                                                    70.0,
-                                                    70.0
-                                                  ]),
-                                                  settings: LineChartBarData(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primary,
-                                                    barWidth: 2.0,
-                                                    isCurved: true,
+                                          child: StreamBuilder<
+                                              List<EnergyLogsRecord>>(
+                                            stream: queryEnergyLogsRecord(
+                                              queryBuilder:
+                                                  (energyLogsRecord) =>
+                                                      energyLogsRecord
+                                                          .where(
+                                                            'user_id',
+                                                            isEqualTo:
+                                                                currentUserUid,
+                                                          )
+                                                          .orderBy('log_date'),
+                                            ),
+                                            builder: (context, snapshot) {
+                                              // Customize what your widget looks like when it's loading.
+                                              if (!snapshot.hasData) {
+                                                return Center(
+                                                  child: SizedBox(
+                                                    width: 50.0,
+                                                    height: 50.0,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation<
+                                                              Color>(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .primary,
+                                                      ),
+                                                    ),
                                                   ),
-                                                )
-                                              ],
-                                              chartStylingInfo:
-                                                  ChartStylingInfo(
-                                                backgroundColor:
-                                                    Colors.transparent,
-                                                showGrid: true,
-                                                showBorder: false,
-                                              ),
-                                              axisBounds: AxisBounds(
-                                                minX: 0.0,
-                                                minY: 0.0,
-                                                maxX: 6.0,
-                                                maxY: 108.0,
-                                              ),
-                                              xLabels: ([
-                                                'M',
-                                                'T',
-                                                'W',
-                                                'T',
-                                                'F',
-                                                'S',
-                                                'S'
-                                              ]),
-                                              xAxisLabelInfo: AxisLabelInfo(
-                                                showLabels: true,
-                                                labelTextStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodySmall
-                                                        .override(
-                                                          font:
-                                                              GoogleFonts.inter(
-                                                            fontWeight:
-                                                                FlutterFlowTheme.of(
+                                                );
+                                              }
+                                              List<EnergyLogsRecord>
+                                                  lineChartEnergyLogsRecordList =
+                                                  snapshot.data!;
+
+                                              return Container(
+                                                height: 180.0,
+                                                child: FlutterFlowLineChart(
+                                                  data: [
+                                                    FFLineChartData(
+                                                      xData:
+                                                          lineChartEnergyLogsRecordList
+                                                              .map((d) =>
+                                                                  d.logDate)
+                                                              .toList(),
+                                                      yData: lineChartEnergyLogsRecordList
+                                                          .map((d) => d
+                                                              .energyLevelValue)
+                                                          .toList(),
+                                                      settings:
+                                                          LineChartBarData(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primary,
+                                                        barWidth: 2.0,
+                                                        isCurved: true,
+                                                      ),
+                                                    )
+                                                  ],
+                                                  chartStylingInfo:
+                                                      ChartStylingInfo(
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    showGrid: true,
+                                                    showBorder: false,
+                                                  ),
+                                                  axisBounds: AxisBounds(
+                                                    minY: 0.0,
+                                                    maxY: 1.0,
+                                                  ),
+                                                  xLabels: ([
+                                                    'M',
+                                                    'T',
+                                                    'W',
+                                                    'T',
+                                                    'F',
+                                                    'S',
+                                                    'S'
+                                                  ]),
+                                                  xAxisLabelInfo: AxisLabelInfo(
+                                                    showLabels: true,
+                                                    labelTextStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodySmall
+                                                            .override(
+                                                              font: GoogleFonts
+                                                                  .inter(
+                                                                fontWeight: FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodySmall
                                                                     .fontWeight,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
+                                                                fontStyle: FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodySmall
                                                                     .fontStyle,
-                                                          ),
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryText,
-                                                          fontSize: 10.0,
-                                                          letterSpacing: 0.0,
-                                                          fontWeight:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodySmall
-                                                                  .fontWeight,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodySmall
-                                                                  .fontStyle,
-                                                          lineHeight: 1.0,
-                                                        ),
-                                                reservedSize: 28.0,
-                                              ),
-                                              yAxisLabelInfo: AxisLabelInfo(
-                                                reservedSize: 0.0,
-                                              ),
-                                            ),
+                                                              ),
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .secondaryText,
+                                                              fontSize: 10.0,
+                                                              letterSpacing:
+                                                                  0.0,
+                                                              fontWeight:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodySmall
+                                                                      .fontWeight,
+                                                              fontStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodySmall
+                                                                      .fontStyle,
+                                                              lineHeight: 1.0,
+                                                            ),
+                                                    reservedSize: 28.0,
+                                                  ),
+                                                  yAxisLabelInfo: AxisLabelInfo(
+                                                    reservedSize: 0.0,
+                                                  ),
+                                                ),
+                                              );
+                                            },
                                           ),
                                         ),
                                       ].divide(SizedBox(height: 16.0)),
@@ -1852,6 +2001,101 @@ class _JournalWidgetState extends State<JournalWidget> {
                                       ].divide(SizedBox(width: 8.0)),
                                     ),
                                   ),
+                                ),
+                              ),
+                              FFButtonWidget(
+                                onPressed: () async {
+                                  _model.completedTodayCount =
+                                      await queryTasksRecordCount(
+                                    queryBuilder: (tasksRecord) => tasksRecord
+                                        .where(
+                                          'user_id',
+                                          isEqualTo: currentUserUid,
+                                        )
+                                        .where(
+                                          'status',
+                                          isEqualTo:
+                                              TaskStatus.completed.serialize(),
+                                        )
+                                        .where(
+                                          'completed_at',
+                                          isGreaterThanOrEqualTo:
+                                              functions.startOfToday(),
+                                        )
+                                        .where(
+                                          'completed_at',
+                                          isLessThan:
+                                              functions.startOfTomorrow(),
+                                        ),
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Saved',
+                                        style: TextStyle(
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                        ),
+                                      ),
+                                      duration: Duration(milliseconds: 4000),
+                                      backgroundColor:
+                                          FlutterFlowTheme.of(context)
+                                              .secondary,
+                                    ),
+                                  );
+
+                                  await EnergyLogsRecord.collection
+                                      .doc()
+                                      .set(createEnergyLogsRecordData(
+                                        userId: currentUserUid,
+                                        logDate: getCurrentTimestamp,
+                                        energyLevelValue: _model.sliderValue,
+                                        completedTasksCount:
+                                            _model.completedTodayCount,
+                                      ));
+
+                                  await MoodLogsRecord.collection
+                                      .doc()
+                                      .set(createMoodLogsRecordData(
+                                        userId: currentUserUid,
+                                        mood: _model.selectedMood,
+                                        logDate: getCurrentTimestamp,
+                                      ));
+
+                                  safeSetState(() {});
+                                },
+                                text: 'Save Energy Log',
+                                options: FFButtonOptions(
+                                  height: 50.0,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      16.0, 0.0, 16.0, 0.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        font: GoogleFonts.interTight(
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmall
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmall
+                                                  .fontStyle,
+                                        ),
+                                        color: Colors.white,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .fontStyle,
+                                      ),
+                                  elevation: 0.0,
+                                  borderRadius: BorderRadius.circular(14.0),
                                 ),
                               ),
                               Column(
