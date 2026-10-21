@@ -297,8 +297,9 @@ class _CHangepasswordWidgetState extends State<CHangepasswordWidget> {
                                                     .passwordVisibility1 =
                                                 !_model.passwordVisibility1);
                                           },
-                                          focusNode:
-                                              FocusNode(skipTraversal: true),
+                                          focusNode: _model
+                                              .textFieldPasswordVisibilityFocusNode1
+                                            ..skipTraversal = !(false),
                                           child: Icon(
                                             _model.passwordVisibility1
                                                 ? Icons.visibility_outlined
@@ -443,8 +444,9 @@ class _CHangepasswordWidgetState extends State<CHangepasswordWidget> {
                                               _model.passwordVisibility2 =
                                                   !_model.passwordVisibility2);
                                         },
-                                        focusNode:
-                                            FocusNode(skipTraversal: true),
+                                        focusNode: _model
+                                            .textFieldPasswordVisibilityFocusNode2
+                                          ..skipTraversal = !(false),
                                         child: Icon(
                                           _model.passwordVisibility2
                                               ? Icons.visibility_outlined

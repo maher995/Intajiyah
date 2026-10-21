@@ -1,6 +1,8 @@
+import '/backend/backend.dart';
 import '/components/resource_card_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'library_model.dart';
@@ -1793,7 +1795,7 @@ class _LibraryWidgetState extends State<LibraryWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                                   Text(
-                                    'Productivity & Time Management',
+                                    'Productivity and Time Management',
                                     style: FlutterFlowTheme.of(context)
                                         .titleMedium
                                         .override(
@@ -1813,109 +1815,68 @@ class _LibraryWidgetState extends State<LibraryWidget> {
                                           lineHeight: 1.4,
                                         ),
                                   ),
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel1,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'Deep Work',
-                                          author: 'Cal Newport',
-                                          pages: '296',
-                                          size: '3.2 MB',
-                                          rating: '4.8',
-                                        ),
+                                  StreamBuilder<List<ResourcesRecord>>(
+                                    stream: queryResourcesRecord(
+                                      queryBuilder: (resourcesRecord) =>
+                                          resourcesRecord.where(
+                                        'category',
+                                        isEqualTo:
+                                            'Productivity and time management',
                                       ),
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel2,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'Getting Things Done',
-                                          author: 'David Allen',
-                                          pages: '352',
-                                          size: '2.8 MB',
-                                          rating: '4.6',
-                                        ),
-                                      ),
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel3,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'The Productivity Project',
-                                          author: 'Chris Bailey',
-                                          pages: '304',
-                                          size: '3.5 MB',
-                                          rating: '4.5',
-                                        ),
-                                      ),
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel4,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'Eat That Frog!',
-                                          author: 'Brian Tracy',
-                                          pages: '144',
-                                          size: '1.9 MB',
-                                          rating: '4.7',
-                                        ),
-                                      ),
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel5,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'The One Thing',
-                                          author: 'Gary Keller',
-                                          pages: '240',
-                                          size: '2.4 MB',
-                                          rating: '4.6',
-                                        ),
-                                      ),
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel6,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'Make Time',
-                                          author: 'Jake Knapp',
-                                          pages: '304',
-                                          size: '2.6 MB',
-                                          rating: '4.4',
-                                        ),
-                                      ),
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel7,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'Essentialism',
-                                          author: 'Greg McKeown',
-                                          pages: '272',
-                                          size: '2.2 MB',
-                                          rating: '4.7',
-                                        ),
-                                      ),
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel8,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: '168 Hours',
-                                          author: 'Laura Vanderkam',
-                                          pages: '272',
-                                          size: '2.1 MB',
-                                          rating: '4.3',
-                                        ),
-                                      ),
-                                    ].divide(SizedBox(height: 8.0)),
+                                    ),
+                                    builder: (context, snapshot) {
+                                      // Customize what your widget looks like when it's loading.
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: SizedBox(
+                                            width: 50.0,
+                                            height: 50.0,
+                                            child: CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      List<ResourcesRecord>
+                                          columnResourcesRecordList =
+                                          snapshot.data!;
+
+                                      return Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: List.generate(
+                                            columnResourcesRecordList.length,
+                                            (columnIndex) {
+                                          final columnResourcesRecord =
+                                              columnResourcesRecordList[
+                                                  columnIndex];
+                                          return ResourceCardWidget(
+                                            key: Key(
+                                                'Keyipj_${columnIndex}_of_${columnResourcesRecordList.length}'),
+                                            title: columnResourcesRecord.title,
+                                            author:
+                                                columnResourcesRecord.author,
+                                            pages: columnResourcesRecord.pages
+                                                .toString(),
+                                            size: functions.formatSizeMB(
+                                                columnResourcesRecord.sizeMb),
+                                            rating:
+                                                columnResourcesRecord.rating,
+                                            fileUrl:
+                                                columnResourcesRecord.fileUrl,
+                                            resourceId: columnResourcesRecord
+                                                .reference.id,
+                                          );
+                                        }).divide(SizedBox(height: 8.0)),
+                                      );
+                                    },
                                   ),
                                 ].divide(SizedBox(height: 16.0)),
                               ),
@@ -1945,73 +1906,67 @@ class _LibraryWidgetState extends State<LibraryWidget> {
                                           lineHeight: 1.4,
                                         ),
                                   ),
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel9,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'Atomic Habits',
-                                          author: 'James Clear',
-                                          pages: '320',
-                                          size: '3.1 MB',
-                                          rating: '4.9',
-                                        ),
+                                  StreamBuilder<List<ResourcesRecord>>(
+                                    stream: queryResourcesRecord(
+                                      queryBuilder: (resourcesRecord) =>
+                                          resourcesRecord.where(
+                                        'category',
+                                        isEqualTo: 'Habits & Behavior Change',
                                       ),
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel10,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'The Power of Habit',
-                                          author: 'Charles Duhigg',
-                                          pages: '416',
-                                          size: '3.4 MB',
-                                          rating: '4.6',
-                                        ),
-                                      ),
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel11,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'Tiny Habits',
-                                          author: 'BJ Fogg',
-                                          pages: '320',
-                                          size: '2.7 MB',
-                                          rating: '4.5',
-                                        ),
-                                      ),
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel12,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'Better Than Before',
-                                          author: 'Gretchen Rubin',
-                                          pages: '336',
-                                          size: '2.9 MB',
-                                          rating: '4.4',
-                                        ),
-                                      ),
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel13,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'Mini Habits',
-                                          author: 'Stephen Guise',
-                                          pages: '128',
-                                          size: '1.5 MB',
-                                          rating: '4.6',
-                                        ),
-                                      ),
-                                    ].divide(SizedBox(height: 8.0)),
+                                    ),
+                                    builder: (context, snapshot) {
+                                      // Customize what your widget looks like when it's loading.
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: SizedBox(
+                                            width: 50.0,
+                                            height: 50.0,
+                                            child: CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      List<ResourcesRecord>
+                                          columnResourcesRecordList =
+                                          snapshot.data!;
+
+                                      return Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: List.generate(
+                                            columnResourcesRecordList.length,
+                                            (columnIndex) {
+                                          final columnResourcesRecord =
+                                              columnResourcesRecordList[
+                                                  columnIndex];
+                                          return ResourceCardWidget(
+                                            key: Key(
+                                                'Keys2c_${columnIndex}_of_${columnResourcesRecordList.length}'),
+                                            title: columnResourcesRecord.title,
+                                            author:
+                                                columnResourcesRecord.author,
+                                            pages: columnResourcesRecord.pages
+                                                .toString(),
+                                            size: functions.formatSizeMB(
+                                                columnResourcesRecord.sizeMb),
+                                            rating:
+                                                columnResourcesRecord.rating,
+                                            fileUrl:
+                                                columnResourcesRecord.fileUrl,
+                                            resourceId: columnResourcesRecord
+                                                .reference.id,
+                                          );
+                                        }).divide(SizedBox(height: 8.0)),
+                                      );
+                                    },
                                   ),
                                 ].divide(SizedBox(height: 16.0)),
                               ),
@@ -2041,73 +1996,163 @@ class _LibraryWidgetState extends State<LibraryWidget> {
                                           lineHeight: 1.4,
                                         ),
                                   ),
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel14,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'Flow',
-                                          author: 'Mihaly Csikszentmihalyi',
-                                          pages: '336',
-                                          size: '3.8 MB',
-                                          rating: '4.7',
+                                  StreamBuilder<List<ResourcesRecord>>(
+                                    stream: queryResourcesRecord(
+                                      queryBuilder: (resourcesRecord) =>
+                                          resourcesRecord.where(
+                                        'category',
+                                        isEqualTo: 'Focus & Deep Thinking',
+                                      ),
+                                    ),
+                                    builder: (context, snapshot) {
+                                      // Customize what your widget looks like when it's loading.
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: SizedBox(
+                                            width: 50.0,
+                                            height: 50.0,
+                                            child: CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      List<ResourcesRecord>
+                                          columnResourcesRecordList =
+                                          snapshot.data!;
+
+                                      return Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: List.generate(
+                                            columnResourcesRecordList.length,
+                                            (columnIndex) {
+                                          final columnResourcesRecord =
+                                              columnResourcesRecordList[
+                                                  columnIndex];
+                                          return ResourceCardWidget(
+                                            key: Key(
+                                                'Keypmq_${columnIndex}_of_${columnResourcesRecordList.length}'),
+                                            title: columnResourcesRecord.title,
+                                            author:
+                                                columnResourcesRecord.author,
+                                            pages: columnResourcesRecord.pages
+                                                .toString(),
+                                            size: functions.formatSizeMB(
+                                                columnResourcesRecord.sizeMb),
+                                            rating:
+                                                columnResourcesRecord.rating,
+                                            fileUrl:
+                                                columnResourcesRecord.fileUrl,
+                                            resourceId: columnResourcesRecord
+                                                .reference.id,
+                                          );
+                                        }).divide(SizedBox(height: 8.0)),
+                                      );
+                                    },
+                                  ),
+                                ].divide(SizedBox(height: 16.0)),
+                              ),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    'Energy & Performance',
+                                    style: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .override(
+                                          font: GoogleFonts.interTight(
+                                            fontWeight: FontWeight.bold,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleMedium
+                                                    .fontStyle,
+                                          ),
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.bold,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleMedium
+                                                  .fontStyle,
+                                          lineHeight: 1.4,
+                                        ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 180.0),
+                                    child: StreamBuilder<List<ResourcesRecord>>(
+                                      stream: queryResourcesRecord(
+                                        queryBuilder: (resourcesRecord) =>
+                                            resourcesRecord.where(
+                                          'category',
+                                          isEqualTo: 'Energy & Performance',
                                         ),
                                       ),
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel15,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'Hyperfocus',
-                                          author: 'Chris Bailey',
-                                          pages: '288',
-                                          size: '2.5 MB',
-                                          rating: '4.5',
-                                        ),
-                                      ),
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel16,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'The Distracted Mind',
-                                          author: 'Adam Gazzaley',
-                                          pages: '304',
-                                          size: '2.8 MB',
-                                          rating: '4.3',
-                                        ),
-                                      ),
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel17,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'Indistractable',
-                                          author: 'Nir Eyal',
-                                          pages: '256',
-                                          size: '2.6 MB',
-                                          rating: '4.6',
-                                        ),
-                                      ),
-                                      wrapWithModel(
-                                        model: _model.resourceCardModel18,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: ResourceCardWidget(
-                                          title: 'Digital Minimalism',
-                                          author: 'Cal Newport',
-                                          pages: '304',
-                                          size: '2.3 MB',
-                                          rating: '4.5',
-                                        ),
-                                      ),
-                                    ].divide(SizedBox(height: 8.0)),
+                                      builder: (context, snapshot) {
+                                        // Customize what your widget looks like when it's loading.
+                                        if (!snapshot.hasData) {
+                                          return Center(
+                                            child: SizedBox(
+                                              width: 50.0,
+                                              height: 50.0,
+                                              child: CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                        List<ResourcesRecord>
+                                            columnResourcesRecordList =
+                                            snapshot.data!;
+
+                                        return Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: List.generate(
+                                              columnResourcesRecordList.length,
+                                              (columnIndex) {
+                                            final columnResourcesRecord =
+                                                columnResourcesRecordList[
+                                                    columnIndex];
+                                            return ResourceCardWidget(
+                                              key: Key(
+                                                  'Key0fd_${columnIndex}_of_${columnResourcesRecordList.length}'),
+                                              title:
+                                                  columnResourcesRecord.title,
+                                              author:
+                                                  columnResourcesRecord.author,
+                                              pages: columnResourcesRecord.pages
+                                                  .toString(),
+                                              size: functions.formatSizeMB(
+                                                  columnResourcesRecord.sizeMb),
+                                              rating:
+                                                  columnResourcesRecord.rating,
+                                              fileUrl:
+                                                  columnResourcesRecord.fileUrl,
+                                              resourceId: columnResourcesRecord
+                                                  .reference.id,
+                                            );
+                                          }).divide(SizedBox(height: 8.0)),
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ].divide(SizedBox(height: 16.0)),
                               ),

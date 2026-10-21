@@ -11,11 +11,15 @@ class CounterRowWidget extends StatefulWidget {
     super.key,
     String? label,
     String? value,
+    required this.onIncrement,
+    required this.onDecrement,
   })  : this.label = label ?? 'Daily focus time',
         this.value = value ?? '4.0 hrs';
 
   final String label;
   final String value;
+  final Future Function()? onIncrement;
+  final Future Function()? onDecrement;
 
   @override
   State<CounterRowWidget> createState() => _CounterRowWidgetState();
@@ -84,8 +88,8 @@ class _CounterRowWidgetState extends State<CounterRowWidget> {
                 color: Color(0xFF6366F1),
                 size: 24.0,
               ),
-              onPressed: () {
-                print('IconButton pressed ...');
+              onPressed: () async {
+                await widget.onDecrement?.call();
               },
             ),
             Text(
@@ -116,8 +120,8 @@ class _CounterRowWidgetState extends State<CounterRowWidget> {
                 color: Color(0xFF6366F1),
                 size: 24.0,
               ),
-              onPressed: () {
-                print('IconButton pressed ...');
+              onPressed: () async {
+                await widget.onIncrement?.call();
               },
             ),
           ].divide(SizedBox(width: 16.0)),

@@ -7,7 +7,24 @@ import 'package:flutter/material.dart';
 
 class MobileNamedEditprofilePageModel
     extends FlutterFlowModel<MobileNamedEditprofilePageWidget> {
+  ///  Local state fields for this page.
+
+  double? dailyFocusTime = 4.0;
+
+  String peakEnergy = 'Morning';
+
+  String pomodoroLength = '25 min';
+
+  int? tasksPerDay = 5;
+
+  String? newPhotoUrl = ' ';
+
   ///  State fields for stateful widgets in this page.
+
+  bool isDataUploading_uploadDataQro = false;
+  FFUploadedFile uploadedLocalFile_uploadDataQro =
+      FFUploadedFile(bytes: Uint8List.fromList([]), originalFilename: '');
+  String uploadedFileUrl_uploadDataQro = '';
 
   // Model for CounterRow.
   late CounterRowModel counterRowModel1;

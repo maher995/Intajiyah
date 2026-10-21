@@ -15,11 +15,13 @@ class SignUpScreenModel extends FlutterFlowModel<SignUpScreenWidget> {
   TextEditingController? emailTextController;
   String? Function(BuildContext, String?)? emailTextControllerValidator;
   // State field(s) for Password widget.
+  late FocusNode passwordPasswordVisibilityFocusNode;
   FocusNode? passwordFocusNode;
   TextEditingController? passwordTextController;
   late bool passwordVisibility;
   String? Function(BuildContext, String?)? passwordTextControllerValidator;
   // State field(s) for ConfirmPassword widget.
+  late FocusNode confirmPasswordPasswordVisibilityFocusNode;
   FocusNode? confirmPasswordFocusNode;
   TextEditingController? confirmPasswordTextController;
   late bool confirmPasswordVisibility;
@@ -28,7 +30,9 @@ class SignUpScreenModel extends FlutterFlowModel<SignUpScreenWidget> {
 
   @override
   void initState(BuildContext context) {
+    passwordPasswordVisibilityFocusNode = FocusNode();
     passwordVisibility = false;
+    confirmPasswordPasswordVisibilityFocusNode = FocusNode();
     confirmPasswordVisibility = false;
   }
 
@@ -42,8 +46,9 @@ class SignUpScreenModel extends FlutterFlowModel<SignUpScreenWidget> {
 
     passwordFocusNode?.dispose();
     passwordTextController?.dispose();
-
+    passwordPasswordVisibilityFocusNode.dispose();
     confirmPasswordFocusNode?.dispose();
     confirmPasswordTextController?.dispose();
+    confirmPasswordPasswordVisibilityFocusNode.dispose();
   }
 }

@@ -53,14 +53,17 @@ class _TimerDisplayWidgetState extends State<TimerDisplayWidget> {
       child: Stack(
         alignment: AlignmentDirectional(0.0, 0.0),
         children: [
-          CircularPercentIndicator(
-            percent: 1.0,
-            radius: 140.0,
-            lineWidth: 8.0,
-            animation: true,
-            animateFromLastPercent: true,
-            progressColor: FlutterFlowTheme.of(context).alternate,
-            backgroundColor: FlutterFlowTheme.of(context).alternate,
+          Align(
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: CircularPercentIndicator(
+              percent: 1.0,
+              radius: 140.0,
+              lineWidth: 8.0,
+              animation: true,
+              animateFromLastPercent: true,
+              progressColor: FlutterFlowTheme.of(context).alternate,
+              backgroundColor: FlutterFlowTheme.of(context).alternate,
+            ),
           ),
           CircularPercentIndicator(
             percent: valueOrDefault<double>(

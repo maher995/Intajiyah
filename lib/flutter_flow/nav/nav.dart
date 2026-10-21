@@ -114,33 +114,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   page: AnalyticsMonthlyReportWidget(),
                 )),
         FFRoute(
-            name: FocusSessionWidget.routeName,
-            path: FocusSessionWidget.routePath,
-            builder: (context, params) => NavBarPage(
-                  initialPage: '',
-                  page: FocusSessionWidget(),
-                )),
-        FFRoute(
-            name: LibraryWidget.routeName,
-            path: LibraryWidget.routePath,
-            builder: (context, params) => NavBarPage(
-                  initialPage: '',
-                  page: LibraryWidget(),
-                )),
-        FFRoute(
             name: HabitsWidget.routeName,
             path: HabitsWidget.routePath,
             builder: (context, params) => NavBarPage(
                   initialPage: '',
                   page: HabitsWidget(),
                 )),
-        FFRoute(
-          name: AnalyticsStaticsWidget.routeName,
-          path: AnalyticsStaticsWidget.routePath,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'AnalyticsStatics')
-              : AnalyticsStaticsWidget(),
-        ),
         FFRoute(
           name: Intro1Widget.routeName,
           path: Intro1Widget.routePath,
@@ -162,11 +141,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => params.isEmpty
               ? NavBarPage(initialPage: 'Settings')
               : SettingsWidget(),
-        ),
-        FFRoute(
-          name: MobileNamedEditprofilePageWidget.routeName,
-          path: MobileNamedEditprofilePageWidget.routePath,
-          builder: (context, params) => MobileNamedEditprofilePageWidget(),
         ),
         FFRoute(
           name: TaskCompletionWidget.routeName,
@@ -199,9 +173,45 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => ToBuildAPageWidget(),
         ),
         FFRoute(
+            name: FocusSessionWidget.routeName,
+            path: FocusSessionWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: FocusSessionWidget(),
+                )),
+        FFRoute(
+          name: AnalyticsStaticsWidget.routeName,
+          path: AnalyticsStaticsWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'AnalyticsStatics')
+              : AnalyticsStaticsWidget(),
+        ),
+        FFRoute(
           name: MoodTrackingWidget.routeName,
           path: MoodTrackingWidget.routePath,
           builder: (context, params) => MoodTrackingWidget(),
+        ),
+        FFRoute(
+            name: LibraryWidget.routeName,
+            path: LibraryWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: LibraryWidget(),
+                )),
+        FFRoute(
+          name: PDFViewerWidget.routeName,
+          path: PDFViewerWidget.routePath,
+          builder: (context, params) => PDFViewerWidget(
+            filePath: params.getParam(
+              'filePath',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: MobileNamedEditprofilePageWidget.routeName,
+          path: MobileNamedEditprofilePageWidget.routePath,
+          builder: (context, params) => MobileNamedEditprofilePageWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

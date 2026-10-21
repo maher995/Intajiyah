@@ -50,6 +50,11 @@ class ResourcesRecord extends FirestoreRecord {
   double get sizeMb => _sizeMb ?? 0.0;
   bool hasSizeMb() => _sizeMb != null;
 
+  // "rating" field.
+  String? _rating;
+  String get rating => _rating ?? '';
+  bool hasRating() => _rating != null;
+
   void _initializeFields() {
     _title = snapshotData['title'] as String?;
     _category = snapshotData['category'] as String?;
@@ -58,6 +63,7 @@ class ResourcesRecord extends FirestoreRecord {
     _author = snapshotData['author'] as String?;
     _pages = castToType<int>(snapshotData['pages']);
     _sizeMb = castToType<double>(snapshotData['size_mb']);
+    _rating = snapshotData['rating'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -101,6 +107,7 @@ Map<String, dynamic> createResourcesRecordData({
   String? author,
   int? pages,
   double? sizeMb,
+  String? rating,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -111,6 +118,7 @@ Map<String, dynamic> createResourcesRecordData({
       'author': author,
       'pages': pages,
       'size_mb': sizeMb,
+      'rating': rating,
     }.withoutNulls,
   );
 
@@ -128,7 +136,8 @@ class ResourcesRecordDocumentEquality implements Equality<ResourcesRecord> {
         e1?.description == e2?.description &&
         e1?.author == e2?.author &&
         e1?.pages == e2?.pages &&
-        e1?.sizeMb == e2?.sizeMb;
+        e1?.sizeMb == e2?.sizeMb &&
+        e1?.rating == e2?.rating;
   }
 
   @override
@@ -139,7 +148,8 @@ class ResourcesRecordDocumentEquality implements Equality<ResourcesRecord> {
         e?.description,
         e?.author,
         e?.pages,
-        e?.sizeMb
+        e?.sizeMb,
+        e?.rating
       ]);
 
   @override

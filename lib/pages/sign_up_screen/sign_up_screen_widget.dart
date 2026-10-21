@@ -448,7 +448,9 @@ class _SignUpScreenWidgetState extends State<SignUpScreenWidget> {
                                 safeSetState(() => _model.passwordVisibility =
                                     !_model.passwordVisibility);
                               },
-                              focusNode: FocusNode(skipTraversal: true),
+                              focusNode:
+                                  _model.passwordPasswordVisibilityFocusNode
+                                    ..skipTraversal = !(false),
                               child: Icon(
                                 _model.passwordVisibility
                                     ? Icons.visibility_outlined
@@ -577,7 +579,9 @@ class _SignUpScreenWidgetState extends State<SignUpScreenWidget> {
                                       _model.confirmPasswordVisibility =
                                           !_model.confirmPasswordVisibility);
                                 },
-                                focusNode: FocusNode(skipTraversal: true),
+                                focusNode: _model
+                                    .confirmPasswordPasswordVisibilityFocusNode
+                                  ..skipTraversal = !(false),
                                 child: Icon(
                                   _model.confirmPasswordVisibility
                                       ? Icons.visibility_outlined

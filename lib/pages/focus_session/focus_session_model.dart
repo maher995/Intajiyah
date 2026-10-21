@@ -1,9 +1,15 @@
-import '/components/timer_display_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/pages/timer_display/timer_display_widget.dart';
 import 'focus_session_widget.dart' show FocusSessionWidget;
 import 'package:flutter/material.dart';
 
 class FocusSessionModel extends FlutterFlowModel<FocusSessionWidget> {
+  ///  Local state fields for this page.
+
+  int? remainingSeconds;
+
+  bool isRunning = false;
+
   ///  State fields for stateful widgets in this page.
 
   // Model for TimerDisplay.

@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' hide Type;
 import 'package:firebase_auth/firebase_auth.dart';
 import '../auth/firebase_auth/auth_util.dart';
 
@@ -6,39 +6,39 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'schema/util/firestore_util.dart';
 
 import 'schema/habits_record.dart';
-import 'schema/mood_logs_record.dart';
 import 'schema/focus_sessions_record.dart';
 import 'schema/journal_entries_record.dart';
 import 'schema/notifications_record.dart';
 import 'schema/ai_reports_record.dart';
-import 'schema/resources_record.dart';
 import 'schema/streaks_record.dart';
 import 'schema/habit_logs_record.dart';
 import 'schema/users_record.dart';
 import 'schema/subtasks_record.dart';
 import 'schema/tasks_record.dart';
 import 'schema/energy_logs_record.dart';
+import 'schema/mood_logs_record.dart';
+import 'schema/resources_record.dart';
 
 export 'dart:async' show StreamSubscription;
-export 'package:cloud_firestore/cloud_firestore.dart' hide Order;
+export 'package:cloud_firestore/cloud_firestore.dart' hide Order, Type;
 export 'package:firebase_core/firebase_core.dart';
 export 'schema/index.dart';
 export 'schema/util/firestore_util.dart';
 export 'schema/util/schema_util.dart';
 
 export 'schema/habits_record.dart';
-export 'schema/mood_logs_record.dart';
 export 'schema/focus_sessions_record.dart';
 export 'schema/journal_entries_record.dart';
 export 'schema/notifications_record.dart';
 export 'schema/ai_reports_record.dart';
-export 'schema/resources_record.dart';
 export 'schema/streaks_record.dart';
 export 'schema/habit_logs_record.dart';
 export 'schema/users_record.dart';
 export 'schema/subtasks_record.dart';
 export 'schema/tasks_record.dart';
 export 'schema/energy_logs_record.dart';
+export 'schema/mood_logs_record.dart';
+export 'schema/resources_record.dart';
 
 /// Functions to query HabitsRecords (as a Stream and as a Future).
 Future<int> queryHabitsRecordCount({
@@ -72,43 +72,6 @@ Future<List<HabitsRecord>> queryHabitsRecordOnce({
     queryCollectionOnce(
       HabitsRecord.collection,
       HabitsRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-/// Functions to query MoodLogsRecords (as a Stream and as a Future).
-Future<int> queryMoodLogsRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      MoodLogsRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<MoodLogsRecord>> queryMoodLogsRecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      MoodLogsRecord.collection,
-      MoodLogsRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<MoodLogsRecord>> queryMoodLogsRecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      MoodLogsRecord.collection,
-      MoodLogsRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,
@@ -257,43 +220,6 @@ Future<List<AiReportsRecord>> queryAiReportsRecordOnce({
     queryCollectionOnce(
       AiReportsRecord.collection,
       AiReportsRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-/// Functions to query ResourcesRecords (as a Stream and as a Future).
-Future<int> queryResourcesRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      ResourcesRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<ResourcesRecord>> queryResourcesRecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      ResourcesRecord.collection,
-      ResourcesRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<ResourcesRecord>> queryResourcesRecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      ResourcesRecord.collection,
-      ResourcesRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,
@@ -522,6 +448,80 @@ Future<List<EnergyLogsRecord>> queryEnergyLogsRecordOnce({
     queryCollectionOnce(
       EnergyLogsRecord.collection,
       EnergyLogsRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query MoodLogsRecords (as a Stream and as a Future).
+Future<int> queryMoodLogsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      MoodLogsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<MoodLogsRecord>> queryMoodLogsRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      MoodLogsRecord.collection,
+      MoodLogsRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<MoodLogsRecord>> queryMoodLogsRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      MoodLogsRecord.collection,
+      MoodLogsRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query ResourcesRecords (as a Stream and as a Future).
+Future<int> queryResourcesRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      ResourcesRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<ResourcesRecord>> queryResourcesRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      ResourcesRecord.collection,
+      ResourcesRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<ResourcesRecord>> queryResourcesRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      ResourcesRecord.collection,
+      ResourcesRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,

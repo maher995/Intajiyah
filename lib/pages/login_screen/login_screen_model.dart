@@ -11,6 +11,7 @@ class LoginScreenModel extends FlutterFlowModel<LoginScreenWidget> {
   TextEditingController? emailTextController;
   String? Function(BuildContext, String?)? emailTextControllerValidator;
   // State field(s) for Password widget.
+  late FocusNode passwordPasswordVisibilityFocusNode;
   FocusNode? passwordFocusNode;
   TextEditingController? passwordTextController;
   late bool passwordVisibility;
@@ -18,6 +19,7 @@ class LoginScreenModel extends FlutterFlowModel<LoginScreenWidget> {
 
   @override
   void initState(BuildContext context) {
+    passwordPasswordVisibilityFocusNode = FocusNode();
     passwordVisibility = false;
   }
 
@@ -28,5 +30,6 @@ class LoginScreenModel extends FlutterFlowModel<LoginScreenWidget> {
 
     passwordFocusNode?.dispose();
     passwordTextController?.dispose();
+    passwordPasswordVisibilityFocusNode.dispose();
   }
 }
