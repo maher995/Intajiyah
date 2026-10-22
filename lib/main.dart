@@ -7,6 +7,7 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
 
+import 'backend/push_notifications/push_notifications_util.dart';
 import 'backend/firebase/firebase_config.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
@@ -70,6 +71,14 @@ class _MyAppState extends State<MyApp> {
   late Stream<BaseAuthUser> userStream;
 
   final authUserSub = authenticatedUserStream.listen((_) {});
+  final fcmTokenSub = fcmTokenUserStream.listen(
+    (_) {},
+    // Registering a token can fail for reasons outside the app's control (a
+    // browser without the Notification API, a revoked permission, a blocked
+    // cloud call). Swallow it here so it can't surface as an unhandled zone
+    // error and take down the app on login.
+    onError: (e) => print('Error registering FCM token: $e'),
+  );
 
   @override
   void initState() {
@@ -91,7 +100,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     authUserSub.cancel();
-
+    fcmTokenSub.cancel();
     super.dispose();
   }
 

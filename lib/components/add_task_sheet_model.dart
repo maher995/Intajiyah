@@ -10,6 +10,8 @@ class AddTaskSheetModel extends FlutterFlowModel<AddTaskSheetWidget> {
 
   DateTime? dueDate;
 
+  int? loadedVersion;
+
   ///  State fields for stateful widgets in this component.
 
   // State field(s) for TitleField widget.
@@ -34,6 +36,8 @@ class AddTaskSheetModel extends FlutterFlowModel<AddTaskSheetWidget> {
   CategorizeTaskCloudFunctionCallResponse? aiResult;
   // Stores action output result for [Backend Call - Create Document] action in SaveButton widget.
   TasksRecord? createdTask;
+  // Stores action output result for [Custom Action - getLatestVersion] action in SaveEditButton widget.
+  int? latestVersion;
 
   @override
   void initState(BuildContext context) {}

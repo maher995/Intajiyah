@@ -55,13 +55,6 @@ service cloud.firestore {
     }
 
 
-    match /users/{document} {
-      allow create: if request.auth != null;
-      allow read: if request.auth != null;
-      allow write: if request.auth != null;
-      allow delete: if false;
-    }
-
     match /tasks/{parent}/subtasks/{document} {
       allow create: if true;
       allow read: if true;
@@ -73,13 +66,6 @@ service cloud.firestore {
       allow read: if true;
     }
 
-
-    match /tasks/{document} {
-      allow create: if request.auth != null;
-      allow read: if request.auth.uid == resource.data.user_id;
-      allow write: if request.auth.uid == resource.data.user_id;
-      allow delete: if request.auth.uid == resource.data.user_id;
-    }
 
     match /energy_logs/{document} {
       allow create: if request.auth != null;
@@ -100,6 +86,20 @@ service cloud.firestore {
       allow read: if request.auth != null;
       allow write: if false;
       allow delete: if false;
+    }
+
+    match /users/{document} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+      allow delete: if false;
+    }
+
+    match /tasks/{document} {
+      allow create: if request.auth != null;
+      allow read: if request.auth.uid == resource.data.user_id;
+      allow write: if request.auth.uid == resource.data.user_id;
+      allow delete: if request.auth.uid == resource.data.user_id;
     }
   }
 }

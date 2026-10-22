@@ -730,11 +730,73 @@ class _TasksWidgetState extends State<TasksWidget> {
                                                         final listViewTasksRecord =
                                                             listViewTasksRecordList[
                                                                 listViewIndex];
-                                                        return TaskItemCardWidget(
-                                                          key: Key(
-                                                              'Keyg4y_${listViewIndex}_of_${listViewTasksRecordList.length}'),
-                                                          task:
-                                                              listViewTasksRecord,
+                                                        return Builder(
+                                                          builder: (context) =>
+                                                              InkWell(
+                                                            splashColor: Colors
+                                                                .transparent,
+                                                            focusColor: Colors
+                                                                .transparent,
+                                                            hoverColor: Colors
+                                                                .transparent,
+                                                            highlightColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            onTap: () async {
+                                                              await showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (dialogContext) {
+                                                                  return Dialog(
+                                                                    elevation:
+                                                                        0,
+                                                                    insetPadding:
+                                                                        EdgeInsets
+                                                                            .zero,
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    alignment: AlignmentDirectional(
+                                                                            0.0,
+                                                                            0.0)
+                                                                        .resolve(
+                                                                            Directionality.of(context)),
+                                                                    child:
+                                                                        GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        FocusScope.of(dialogContext)
+                                                                            .unfocus();
+                                                                        FocusManager
+                                                                            .instance
+                                                                            .primaryFocus
+                                                                            ?.unfocus();
+                                                                      },
+                                                                      child:
+                                                                          AddTaskSheetWidget(
+                                                                        initialTaskText:
+                                                                            listViewTasksRecord.title,
+                                                                        taskRecord:
+                                                                            listViewTasksRecord,
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                            child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(),
+                                                              child:
+                                                                  TaskItemCardWidget(
+                                                                key: Key(
+                                                                    'Keyg4y_${listViewIndex}_of_${listViewTasksRecordList.length}'),
+                                                                task:
+                                                                    listViewTasksRecord,
+                                                              ),
+                                                            ),
+                                                          ),
                                                         );
                                                       },
                                                     );
@@ -827,11 +889,73 @@ class _TasksWidgetState extends State<TasksWidget> {
                                                         final listViewTasksRecord =
                                                             listViewTasksRecordList[
                                                                 listViewIndex];
-                                                        return TaskItemCardWidget(
-                                                          key: Key(
-                                                              'Keyh45_${listViewIndex}_of_${listViewTasksRecordList.length}'),
-                                                          task:
-                                                              listViewTasksRecord,
+                                                        return Builder(
+                                                          builder: (context) =>
+                                                              InkWell(
+                                                            splashColor: Colors
+                                                                .transparent,
+                                                            focusColor: Colors
+                                                                .transparent,
+                                                            hoverColor: Colors
+                                                                .transparent,
+                                                            highlightColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            onTap: () async {
+                                                              await showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (dialogContext) {
+                                                                  return Dialog(
+                                                                    elevation:
+                                                                        0,
+                                                                    insetPadding:
+                                                                        EdgeInsets
+                                                                            .zero,
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    alignment: AlignmentDirectional(
+                                                                            0.0,
+                                                                            0.0)
+                                                                        .resolve(
+                                                                            Directionality.of(context)),
+                                                                    child:
+                                                                        GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        FocusScope.of(dialogContext)
+                                                                            .unfocus();
+                                                                        FocusManager
+                                                                            .instance
+                                                                            .primaryFocus
+                                                                            ?.unfocus();
+                                                                      },
+                                                                      child:
+                                                                          AddTaskSheetWidget(
+                                                                        initialTaskText:
+                                                                            listViewTasksRecord.title,
+                                                                        taskRecord:
+                                                                            listViewTasksRecord,
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                            child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(),
+                                                              child:
+                                                                  TaskItemCardWidget(
+                                                                key: Key(
+                                                                    'Keyh45_${listViewIndex}_of_${listViewTasksRecordList.length}'),
+                                                                task:
+                                                                    listViewTasksRecord,
+                                                              ),
+                                                            ),
+                                                          ),
                                                         );
                                                       },
                                                     );
@@ -924,11 +1048,73 @@ class _TasksWidgetState extends State<TasksWidget> {
                                                         final listViewTasksRecord =
                                                             listViewTasksRecordList[
                                                                 listViewIndex];
-                                                        return TaskItemCardWidget(
-                                                          key: Key(
-                                                              'Keyn2r_${listViewIndex}_of_${listViewTasksRecordList.length}'),
-                                                          task:
-                                                              listViewTasksRecord,
+                                                        return Builder(
+                                                          builder: (context) =>
+                                                              InkWell(
+                                                            splashColor: Colors
+                                                                .transparent,
+                                                            focusColor: Colors
+                                                                .transparent,
+                                                            hoverColor: Colors
+                                                                .transparent,
+                                                            highlightColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            onTap: () async {
+                                                              await showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (dialogContext) {
+                                                                  return Dialog(
+                                                                    elevation:
+                                                                        0,
+                                                                    insetPadding:
+                                                                        EdgeInsets
+                                                                            .zero,
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    alignment: AlignmentDirectional(
+                                                                            0.0,
+                                                                            0.0)
+                                                                        .resolve(
+                                                                            Directionality.of(context)),
+                                                                    child:
+                                                                        GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        FocusScope.of(dialogContext)
+                                                                            .unfocus();
+                                                                        FocusManager
+                                                                            .instance
+                                                                            .primaryFocus
+                                                                            ?.unfocus();
+                                                                      },
+                                                                      child:
+                                                                          AddTaskSheetWidget(
+                                                                        initialTaskText:
+                                                                            listViewTasksRecord.title,
+                                                                        taskRecord:
+                                                                            listViewTasksRecord,
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                            child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(),
+                                                              child:
+                                                                  TaskItemCardWidget(
+                                                                key: Key(
+                                                                    'Keyn2r_${listViewIndex}_of_${listViewTasksRecordList.length}'),
+                                                                task:
+                                                                    listViewTasksRecord,
+                                                              ),
+                                                            ),
+                                                          ),
                                                         );
                                                       },
                                                     );

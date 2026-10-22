@@ -76,6 +76,21 @@ class TasksRecord extends FirestoreRecord {
   int get subtaskDone => _subtaskDone ?? 0;
   bool hasSubtaskDone() => _subtaskDone != null;
 
+  // "updated_at" field.
+  DateTime? _updatedAt;
+  DateTime? get updatedAt => _updatedAt;
+  bool hasUpdatedAt() => _updatedAt != null;
+
+  // "updated_by_device" field.
+  String? _updatedByDevice;
+  String get updatedByDevice => _updatedByDevice ?? '';
+  bool hasUpdatedByDevice() => _updatedByDevice != null;
+
+  // "version" field.
+  int? _version;
+  int get version => _version ?? 0;
+  bool hasVersion() => _version != null;
+
   void _initializeFields() {
     _userId = snapshotData['user_id'] as String?;
     _title = snapshotData['title'] as String?;
@@ -97,6 +112,9 @@ class TasksRecord extends FirestoreRecord {
     _deletedAt = snapshotData['deleted_at'] as DateTime?;
     _subtaskTotal = castToType<int>(snapshotData['subtask_total']);
     _subtaskDone = castToType<int>(snapshotData['subtask_done']);
+    _updatedAt = snapshotData['updated_at'] as DateTime?;
+    _updatedByDevice = snapshotData['updated_by_device'] as String?;
+    _version = castToType<int>(snapshotData['version']);
   }
 
   static CollectionReference get collection =>
@@ -144,6 +162,9 @@ Map<String, dynamic> createTasksRecordData({
   DateTime? deletedAt,
   int? subtaskTotal,
   int? subtaskDone,
+  DateTime? updatedAt,
+  String? updatedByDevice,
+  int? version,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -159,6 +180,9 @@ Map<String, dynamic> createTasksRecordData({
       'deleted_at': deletedAt,
       'subtask_total': subtaskTotal,
       'subtask_done': subtaskDone,
+      'updated_at': updatedAt,
+      'updated_by_device': updatedByDevice,
+      'version': version,
     }.withoutNulls,
   );
 
@@ -181,7 +205,10 @@ class TasksRecordDocumentEquality implements Equality<TasksRecord> {
         e1?.isDeleted == e2?.isDeleted &&
         e1?.deletedAt == e2?.deletedAt &&
         e1?.subtaskTotal == e2?.subtaskTotal &&
-        e1?.subtaskDone == e2?.subtaskDone;
+        e1?.subtaskDone == e2?.subtaskDone &&
+        e1?.updatedAt == e2?.updatedAt &&
+        e1?.updatedByDevice == e2?.updatedByDevice &&
+        e1?.version == e2?.version;
   }
 
   @override
@@ -197,7 +224,10 @@ class TasksRecordDocumentEquality implements Equality<TasksRecord> {
         e?.isDeleted,
         e?.deletedAt,
         e?.subtaskTotal,
-        e?.subtaskDone
+        e?.subtaskDone,
+        e?.updatedAt,
+        e?.updatedByDevice,
+        e?.version
       ]);
 
   @override

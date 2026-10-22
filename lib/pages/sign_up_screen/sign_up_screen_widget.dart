@@ -650,6 +650,12 @@ class _SignUpScreenWidgetState extends State<SignUpScreenWidget> {
                             displayName: _model.nameTextController.text,
                           ));
 
+                      await currentUserReference!.update(createUsersRecordData(
+                        updatedAt: getCurrentTimestamp,
+                        updatedByDevice: 'web',
+                        version: 1,
+                      ));
+
                       context.goNamedAuth(
                           HomePageWidget.routeName, context.mounted);
                     },

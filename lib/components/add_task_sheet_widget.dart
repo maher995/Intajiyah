@@ -8,9 +8,11 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'add_task_sheet_model.dart';
@@ -20,9 +22,11 @@ class AddTaskSheetWidget extends StatefulWidget {
   const AddTaskSheetWidget({
     super.key,
     this.initialTaskText,
+    this.taskRecord,
   });
 
   final String? initialTaskText;
+  final TasksRecord? taskRecord;
 
   @override
   State<AddTaskSheetWidget> createState() => _AddTaskSheetWidgetState();
@@ -41,6 +45,14 @@ class _AddTaskSheetWidgetState extends State<AddTaskSheetWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => AddTaskSheetModel());
+
+    // On component load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      if (widget.taskRecord != null) {
+        _model.loadedVersion = _model.createdTask?.version;
+        safeSetState(() {});
+      }
+    });
 
     _model.titleFieldTextController ??=
         TextEditingController(text: widget.initialTaskText);
@@ -558,120 +570,234 @@ class _AddTaskSheetWidgetState extends State<AddTaskSheetWidget> {
                     ),
                   ),
                 ),
-                FFButtonWidget(
-                  onPressed: () async {
-                    if (functions
-                        .isNotBlank(_model.titleFieldTextController.text)!) {
-                      try {
-                        final result = await FirebaseFunctions.instance
-                            .httpsCallable('categorizeTask')
-                            .call({
-                          "taskTitle": _model.titleFieldTextController.text,
+                if (!(widget.taskRecord != null))
+                  FFButtonWidget(
+                    onPressed: () async {
+                      if (functions
+                          .isNotBlank(_model.titleFieldTextController.text)!) {
+                        try {
+                          final result = await FirebaseFunctions.instance
+                              .httpsCallable('categorizeTask')
+                              .call({
+                            "taskTitle": _model.titleFieldTextController.text,
+                          });
+                          _model.aiResult =
+                              CategorizeTaskCloudFunctionCallResponse(
+                            data: result.data,
+                            succeeded: true,
+                            resultAsString: result.data.toString(),
+                            jsonBody: result.data,
+                          );
+                        } on FirebaseFunctionsException catch (error) {
+                          _model.aiResult =
+                              CategorizeTaskCloudFunctionCallResponse(
+                            errorCode: error.code,
+                            succeeded: false,
+                          );
+                        }
+
+                        var tasksRecordReference = TasksRecord.collection.doc();
+                        await tasksRecordReference.set(createTasksRecordData(
+                          userId: currentUserUid,
+                          title: _model.titleFieldTextController.text,
+                          dueDate: _model.dueDate,
+                          effortLevel:
+                              functions.toEffortLevel(_model.effortLevelValue),
+                          category:
+                              functions.toTaskCategory(_model.categoryValue),
+                          status: TaskStatus.pending,
+                          isDeleted: false,
+                          priority: TaskPriority.highFocus,
+                          updatedAt: getCurrentTimestamp,
+                          updatedByDevice: 'web',
+                          version: 1,
+                        ));
+                        _model.createdTask = TasksRecord.getDocumentFromData(
+                            createTasksRecordData(
+                              userId: currentUserUid,
+                              title: _model.titleFieldTextController.text,
+                              dueDate: _model.dueDate,
+                              effortLevel: functions
+                                  .toEffortLevel(_model.effortLevelValue),
+                              category: functions
+                                  .toTaskCategory(_model.categoryValue),
+                              status: TaskStatus.pending,
+                              isDeleted: false,
+                              priority: TaskPriority.highFocus,
+                              updatedAt: getCurrentTimestamp,
+                              updatedByDevice: 'web',
+                              version: 1,
+                            ),
+                            tasksRecordReference);
+
+                        await currentUserReference!.update({
+                          ...mapToFirestore(
+                            {
+                              'version': FieldValue.increment(1),
+                            },
+                          ),
                         });
-                        _model.aiResult =
-                            CategorizeTaskCloudFunctionCallResponse(
-                          data: result.data,
-                          succeeded: true,
-                          resultAsString: result.data.toString(),
-                          jsonBody: result.data,
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Task added',
+                              style: TextStyle(
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
+                            ),
+                            duration: Duration(milliseconds: 4000),
+                            backgroundColor:
+                                FlutterFlowTheme.of(context).secondary,
+                          ),
                         );
-                      } on FirebaseFunctionsException catch (error) {
-                        _model.aiResult =
-                            CategorizeTaskCloudFunctionCallResponse(
-                          errorCode: error.code,
-                          succeeded: false,
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Please enter a title',
+                              style: TextStyle(
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
+                            ),
+                            duration: Duration(milliseconds: 4000),
+                            backgroundColor:
+                                FlutterFlowTheme.of(context).secondary,
+                          ),
                         );
                       }
 
-                      var tasksRecordReference = TasksRecord.collection.doc();
-                      await tasksRecordReference.set(createTasksRecordData(
-                        userId: currentUserUid,
-                        title: _model.titleFieldTextController.text,
-                        dueDate: _model.dueDate,
-                        effortLevel:
-                            functions.toEffortLevel(_model.effortLevelValue),
-                        category:
-                            functions.toTaskCategory(_model.categoryValue),
-                        status: TaskStatus.pending,
-                        isDeleted: false,
-                        priority: TaskPriority.highFocus,
-                      ));
-                      _model.createdTask = TasksRecord.getDocumentFromData(
-                          createTasksRecordData(
-                            userId: currentUserUid,
-                            title: _model.titleFieldTextController.text,
-                            dueDate: _model.dueDate,
-                            effortLevel: functions
-                                .toEffortLevel(_model.effortLevelValue),
-                            category:
-                                functions.toTaskCategory(_model.categoryValue),
-                            status: TaskStatus.pending,
-                            isDeleted: false,
-                            priority: TaskPriority.highFocus,
-                          ),
-                          tasksRecordReference);
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Task added',
-                            style: TextStyle(
-                              color: FlutterFlowTheme.of(context).primaryText,
-                            ),
-                          ),
-                          duration: Duration(milliseconds: 4000),
-                          backgroundColor:
-                              FlutterFlowTheme.of(context).secondary,
-                        ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Please enter a title',
-                            style: TextStyle(
-                              color: FlutterFlowTheme.of(context).primaryText,
-                            ),
-                          ),
-                          duration: Duration(milliseconds: 4000),
-                          backgroundColor:
-                              FlutterFlowTheme.of(context).secondary,
-                        ),
-                      );
-                    }
-
-                    safeSetState(() {});
-                  },
-                  text: 'Save',
-                  options: FFButtonOptions(
-                    width: MediaQuery.sizeOf(context).width * 0.7,
-                    height: 40.0,
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
-                    iconPadding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    color: FlutterFlowTheme.of(context).primary,
-                    textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                          font: GoogleFonts.interTight(
-                            fontWeight: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .fontWeight,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .fontStyle,
-                          ),
-                          color: Colors.white,
-                          letterSpacing: 0.0,
-                          fontWeight: FlutterFlowTheme.of(context)
-                              .titleSmall
-                              .fontWeight,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).titleSmall.fontStyle,
-                        ),
-                    elevation: 0.0,
-                    borderRadius: BorderRadius.circular(8.0),
+                      safeSetState(() {});
+                    },
+                    text: 'Save',
+                    options: FFButtonOptions(
+                      width: MediaQuery.sizeOf(context).width * 0.7,
+                      height: 40.0,
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                      iconPadding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      color: FlutterFlowTheme.of(context).primary,
+                      textStyle:
+                          FlutterFlowTheme.of(context).titleSmall.override(
+                                font: GoogleFonts.interTight(
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .fontStyle,
+                                ),
+                                color: Colors.white,
+                                letterSpacing: 0.0,
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .fontStyle,
+                              ),
+                      elevation: 0.0,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
                   ),
-                ),
+                if (widget.taskRecord != null)
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 15.0),
+                    child: FFButtonWidget(
+                      onPressed: () async {
+                        if (functions.isNotBlank(
+                            _model.titleFieldTextController.text)!) {
+                          _model.latestVersion = await actions.getLatestVersion(
+                            _model.createdTask?.reference,
+                          );
+                          if (_model.latestVersion == _model.loadedVersion) {
+                            await widget.taskRecord!.reference.update({
+                              ...createTasksRecordData(
+                                title: _model.titleFieldTextController.text,
+                                priority: _model.createdTask?.priority,
+                                effortLevel: _model.createdTask?.effortLevel,
+                                category: _model.createdTask?.category,
+                                dueDate: _model.dueDate,
+                                updatedAt: getCurrentTimestamp,
+                                updatedByDevice: 'web',
+                              ),
+                              ...mapToFirestore(
+                                {
+                                  'version': FieldValue.increment(1),
+                                },
+                              ),
+                            });
+                            Navigator.pop(context);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'This task was changed on another device.',
+                                  style: TextStyle(
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
+                                ),
+                                duration: Duration(milliseconds: 4000),
+                                backgroundColor:
+                                    FlutterFlowTheme.of(context).secondary,
+                              ),
+                            );
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Please enter a task title.',
+                                style: TextStyle(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                ),
+                              ),
+                              duration: Duration(milliseconds: 4000),
+                              backgroundColor:
+                                  FlutterFlowTheme.of(context).secondary,
+                            ),
+                          );
+                        }
+
+                        safeSetState(() {});
+                      },
+                      text: 'Save Edits',
+                      options: FFButtonOptions(
+                        width: MediaQuery.sizeOf(context).width * 0.7,
+                        height: 40.0,
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 0.0, 16.0, 0.0),
+                        iconPadding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        color: Color(0xFF3991EF),
+                        textStyle:
+                            FlutterFlowTheme.of(context).titleSmall.override(
+                                  font: GoogleFonts.interTight(
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .fontStyle,
+                                  ),
+                                  color: Colors.white,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .fontStyle,
+                                ),
+                        elevation: 0.0,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

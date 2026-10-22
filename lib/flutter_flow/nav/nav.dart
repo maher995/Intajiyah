@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
+import '/backend/push_notifications/push_notifications_handler.dart'
+    show PushNotificationsHandler;
 import '/main.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -87,11 +89,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               appStateNotifier.loggedIn ? NavBarPage() : Intro1Widget(),
         ),
         FFRoute(
-          name: SignUpScreenWidget.routeName,
-          path: SignUpScreenWidget.routePath,
-          builder: (context, params) => SignUpScreenWidget(),
-        ),
-        FFRoute(
           name: LoginScreenWidget.routeName,
           path: LoginScreenWidget.routePath,
           builder: (context, params) => LoginScreenWidget(),
@@ -162,12 +159,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : HomePageWidget(),
         ),
         FFRoute(
-          name: TasksWidget.routeName,
-          path: TasksWidget.routePath,
-          builder: (context, params) =>
-              params.isEmpty ? NavBarPage(initialPage: 'Tasks') : TasksWidget(),
-        ),
-        FFRoute(
           name: ToBuildAPageWidget.routeName,
           path: ToBuildAPageWidget.routePath,
           builder: (context, params) => ToBuildAPageWidget(),
@@ -212,6 +203,17 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: MobileNamedEditprofilePageWidget.routeName,
           path: MobileNamedEditprofilePageWidget.routePath,
           builder: (context, params) => MobileNamedEditprofilePageWidget(),
+        ),
+        FFRoute(
+          name: SignUpScreenWidget.routeName,
+          path: SignUpScreenWidget.routePath,
+          builder: (context, params) => SignUpScreenWidget(),
+        ),
+        FFRoute(
+          name: TasksWidget.routeName,
+          path: TasksWidget.routePath,
+          builder: (context, params) =>
+              params.isEmpty ? NavBarPage(initialPage: 'Tasks') : TasksWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -407,7 +409,7 @@ class FFRoute {
                     ),
                   ),
                 )
-              : page;
+              : PushNotificationsHandler(child: page);
 
           final transitionInfo = state.transitionInfo;
           return transitionInfo.hasTransition

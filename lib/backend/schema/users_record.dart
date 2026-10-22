@@ -65,6 +65,21 @@ class UsersRecord extends FirestoreRecord {
   String get phoneNumber => _phoneNumber ?? '';
   bool hasPhoneNumber() => _phoneNumber != null;
 
+  // "updated_at" field.
+  DateTime? _updatedAt;
+  DateTime? get updatedAt => _updatedAt;
+  bool hasUpdatedAt() => _updatedAt != null;
+
+  // "updated_by_device" field.
+  String? _updatedByDevice;
+  String get updatedByDevice => _updatedByDevice ?? '';
+  bool hasUpdatedByDevice() => _updatedByDevice != null;
+
+  // "version" field.
+  int? _version;
+  int get version => _version ?? 0;
+  bool hasVersion() => _version != null;
+
   void _initializeFields() {
     _name = snapshotData['name'] as String?;
     _email = snapshotData['email'] as String?;
@@ -76,6 +91,9 @@ class UsersRecord extends FirestoreRecord {
     _createdTime = snapshotData['created_time'] as DateTime?;
     _uid = snapshotData['uid'] as String?;
     _phoneNumber = snapshotData['phone_number'] as String?;
+    _updatedAt = snapshotData['updated_at'] as DateTime?;
+    _updatedByDevice = snapshotData['updated_by_device'] as String?;
+    _version = castToType<int>(snapshotData['version']);
   }
 
   static CollectionReference get collection =>
@@ -121,6 +139,9 @@ Map<String, dynamic> createUsersRecordData({
   DateTime? createdTime,
   String? uid,
   String? phoneNumber,
+  DateTime? updatedAt,
+  String? updatedByDevice,
+  int? version,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -134,6 +155,9 @@ Map<String, dynamic> createUsersRecordData({
       'created_time': createdTime,
       'uid': uid,
       'phone_number': phoneNumber,
+      'updated_at': updatedAt,
+      'updated_by_device': updatedByDevice,
+      'version': version,
     }.withoutNulls,
   );
 
@@ -154,7 +178,10 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e1?.photoUrl == e2?.photoUrl &&
         e1?.createdTime == e2?.createdTime &&
         e1?.uid == e2?.uid &&
-        e1?.phoneNumber == e2?.phoneNumber;
+        e1?.phoneNumber == e2?.phoneNumber &&
+        e1?.updatedAt == e2?.updatedAt &&
+        e1?.updatedByDevice == e2?.updatedByDevice &&
+        e1?.version == e2?.version;
   }
 
   @override
@@ -168,7 +195,10 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e?.photoUrl,
         e?.createdTime,
         e?.uid,
-        e?.phoneNumber
+        e?.phoneNumber,
+        e?.updatedAt,
+        e?.updatedByDevice,
+        e?.version
       ]);
 
   @override
