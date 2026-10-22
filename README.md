@@ -47,6 +47,8 @@ This section documents what each team member contributed to the FlutterFlow proj
 - Added the `ForgotMyPassword` screen, which resets the password through a dynamically generated email link
 - Added the `ChangePassword` screen
 
+---
+
 ### Abdulmalik
 
 - Added the bottom **navigation bar** (navbar)
@@ -107,20 +109,28 @@ This section documents what each team member contributed to the FlutterFlow proj
 - Restricted the AI output to the same values used by the app's dropdowns (`highFocus`, `mediumEffort`, `lowEffort`; `low`, `medium`, `high`; `work`, `study`, `personal`, `health`), so the selected options always match.
 - Connected the function to the title field in FlutterFlow with an action flow that calls `categorizeTask` and then sets each dropdown from the response. The user can still change the values manually.
 
+---
+
 ### Mishari
 
 **Task completion tracking**
 - Worked on the task completion tracking page
+
+---
 
 ### Ahmed
 
 **Tasks (voice input)**
 - Established voice input on the Tasks screen, so the name of a task can be added by speaking instead of typing.
 
+---
+
 ### Abdulmalik
 
 **Settings**
 - Established the **Delete Account** feature from the Settings page
+
+---
 
 ## Summary Table
 
@@ -150,19 +160,22 @@ This section documents what each team member contributed to the FlutterFlow proj
   - **Mood History** list showing each saved entry's mood and note
   - Line chart visualizing mood over time
 
+---
 
 ### Mishari
 
-
+---
 
 ### Ahmed
 
 **Energy level**
 - Established the energy level presentation and entry
 
+---
+
 ### Abdulmalik
 
-
+---
 
 ## Summary Table
 
