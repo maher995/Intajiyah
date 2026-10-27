@@ -1,4 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
 import '/components/counter_row_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -111,6 +112,13 @@ class _MobileNamedEditprofilePageWidgetState
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _model.newPhotoUrl = currentUserPhoto;
+      _model.tasksPerDay = valueOrDefault(currentUserDocument?.tasksPerDay, 0);
+      _model.dailyFocusTime =
+          valueOrDefault(currentUserDocument?.dailyFocusTime, 0.0);
+      _model.peakEnergyTime =
+          valueOrDefault(currentUserDocument?.peakEnergyTime, '');
+      _model.pomodoroLength =
+          valueOrDefault(currentUserDocument?.pomodoroLength, '');
       safeSetState(() {});
     });
 
@@ -266,35 +274,52 @@ class _MobileNamedEditprofilePageWidgetState
                                           alignment:
                                               AlignmentDirectional(-1.0, -1.0),
                                           children: [
-                                            Container(
-                                              width: 96.0,
-                                              height: 96.0,
-                                              decoration: BoxDecoration(
-                                                color: Color(0xFF6366F1),
-                                                shape: BoxShape.circle,
-                                              ),
-                                              alignment: AlignmentDirectional(
-                                                  0.0, 0.0),
-                                              child: Stack(
-                                                children: [
-                                                  if (_model.newPhotoUrl ==
-                                                          null ||
-                                                      _model.newPhotoUrl == '')
-                                                    Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              0.0, 0.0),
-                                                      child: Text(
-                                                        'M',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        maxLines: 1,
-                                                        style: FlutterFlowTheme
-                                                                .of(context)
-                                                            .labelMedium
-                                                            .override(
-                                                              font: GoogleFonts
-                                                                  .inter(
+                                            if (_model.newPhotoUrl == null ||
+                                                _model.newPhotoUrl == '')
+                                              Container(
+                                                width: 96.0,
+                                                height: 96.0,
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xFF6366F1),
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                alignment: AlignmentDirectional(
+                                                    0.0, 0.0),
+                                                child: Stack(
+                                                  children: [
+                                                    if (_model.newPhotoUrl ==
+                                                            null ||
+                                                        _model.newPhotoUrl ==
+                                                            '')
+                                                      Align(
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                0.0, 0.0),
+                                                        child: Text(
+                                                          'M',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          maxLines: 1,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .labelMedium
+                                                              .override(
+                                                                font:
+                                                                    GoogleFonts
+                                                                        .inter(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelMedium
+                                                                      .fontStyle,
+                                                                ),
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 36.48,
+                                                                letterSpacing:
+                                                                    0.0,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w600,
@@ -302,45 +327,28 @@ class _MobileNamedEditprofilePageWidgetState
                                                                         context)
                                                                     .labelMedium
                                                                     .fontStyle,
+                                                                lineHeight: 1.4,
                                                               ),
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 36.48,
-                                                              letterSpacing:
-                                                                  0.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              fontStyle:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .labelMedium
-                                                                      .fontStyle,
-                                                              lineHeight: 1.4,
-                                                            ),
-                                                        overflow:
-                                                            TextOverflow.clip,
+                                                          overflow:
+                                                              TextOverflow.clip,
+                                                        ),
                                                       ),
-                                                    ),
-                                                  if (_model.newPhotoUrl !=
-                                                          null &&
-                                                      _model.newPhotoUrl != '')
-                                                    Container(
-                                                      width: 200.0,
-                                                      height: 200.0,
-                                                      clipBehavior:
-                                                          Clip.antiAlias,
-                                                      decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                      ),
-                                                      child: Image.network(
-                                                        _model.newPhotoUrl!,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
-                                            ),
+                                            if (_model.newPhotoUrl != null &&
+                                                _model.newPhotoUrl != '')
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        100.0),
+                                                child: Image.network(
+                                                  _model.newPhotoUrl!,
+                                                  width: 96.0,
+                                                  height: 96.0,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
                                             Align(
                                               alignment: AlignmentDirectional(
                                                   1.0, 1.0),
@@ -352,9 +360,12 @@ class _MobileNamedEditprofilePageWidgetState
                                                     Colors.transparent,
                                                 onTap: () async {
                                                   final selectedMedia =
-                                                      await selectMediaWithSourceBottomSheet(
-                                                    context: context,
-                                                    allowPhoto: true,
+                                                      await selectMedia(
+                                                    maxWidth: 600.00,
+                                                    imageQuality: 55,
+                                                    mediaSource: MediaSource
+                                                        .photoGallery,
+                                                    multiImage: false,
                                                   );
                                                   if (selectedMedia != null &&
                                                       selectedMedia.every((m) =>
@@ -431,9 +442,12 @@ class _MobileNamedEditprofilePageWidgetState
                                                     }
                                                   }
 
-                                                  _model.newPhotoUrl = _model
-                                                      .uploadedFileUrl_uploadDataQro;
-                                                  safeSetState(() {});
+                                                  if (_model.uploadedFileUrl_uploadDataQro !=
+                                                          '') {
+                                                    _model.newPhotoUrl = _model
+                                                        .uploadedFileUrl_uploadDataQro;
+                                                    safeSetState(() {});
+                                                  }
                                                 },
                                                 child: Container(
                                                   width: 30.0,
@@ -747,10 +761,13 @@ class _MobileNamedEditprofilePageWidgetState
                                                   safeSetState(() {});
                                                 },
                                                 onDecrement: () async {
-                                                  _model.dailyFocusTime =
-                                                      _model.dailyFocusTime! +
-                                                          -0.5;
-                                                  safeSetState(() {});
+                                                  if (_model.dailyFocusTime! >
+                                                      0.0) {
+                                                    _model.dailyFocusTime =
+                                                        _model.dailyFocusTime! +
+                                                            -0.5;
+                                                    safeSetState(() {});
+                                                  }
                                                 },
                                               ),
                                             ),
@@ -772,9 +789,13 @@ class _MobileNamedEditprofilePageWidgetState
                                                   safeSetState(() {});
                                                 },
                                                 onDecrement: () async {
-                                                  _model.tasksPerDay =
-                                                      _model.tasksPerDay! + -1;
-                                                  safeSetState(() {});
+                                                  if (_model.tasksPerDay! >=
+                                                      1) {
+                                                    _model.tasksPerDay =
+                                                        _model.tasksPerDay! +
+                                                            -1;
+                                                    safeSetState(() {});
+                                                  }
                                                 },
                                               ),
                                             ),
@@ -836,7 +857,7 @@ class _MobileNamedEditprofilePageWidgetState
                                                     children: [
                                                       FFButtonWidget(
                                                         onPressed: () async {
-                                                          _model.peakEnergy =
+                                                          _model.peakEnergyTime =
                                                               'Morning';
                                                           safeSetState(() {});
                                                         },
@@ -859,7 +880,7 @@ class _MobileNamedEditprofilePageWidgetState
                                                                       0.0,
                                                                       0.0),
                                                           color: _model
-                                                                      .peakEnergy ==
+                                                                      .peakEnergyTime ==
                                                                   'Morning'
                                                               ? FlutterFlowTheme
                                                                       .of(
@@ -884,7 +905,7 @@ class _MobileNamedEditprofilePageWidgetState
                                                                           .titleSmall
                                                                           .fontStyle,
                                                                     ),
-                                                                    color: _model.peakEnergy ==
+                                                                    color: _model.peakEnergyTime ==
                                                                             'Morning'
                                                                         ? FlutterFlowTheme.of(context)
                                                                             .secondaryBackground
@@ -907,7 +928,7 @@ class _MobileNamedEditprofilePageWidgetState
                                                           borderSide:
                                                               BorderSide(
                                                             color: _model
-                                                                        .peakEnergy ==
+                                                                        .peakEnergyTime ==
                                                                     'Morning'
                                                                 ? FlutterFlowTheme.of(
                                                                         context)
@@ -924,7 +945,7 @@ class _MobileNamedEditprofilePageWidgetState
                                                       ),
                                                       FFButtonWidget(
                                                         onPressed: () async {
-                                                          _model.peakEnergy =
+                                                          _model.peakEnergyTime =
                                                               'Afternoon';
                                                           safeSetState(() {});
                                                         },
@@ -947,7 +968,7 @@ class _MobileNamedEditprofilePageWidgetState
                                                                       0.0,
                                                                       0.0),
                                                           color: _model
-                                                                      .peakEnergy ==
+                                                                      .peakEnergyTime ==
                                                                   'Afternoon'
                                                               ? FlutterFlowTheme
                                                                       .of(
@@ -972,7 +993,7 @@ class _MobileNamedEditprofilePageWidgetState
                                                                           .titleSmall
                                                                           .fontStyle,
                                                                     ),
-                                                                    color: _model.peakEnergy ==
+                                                                    color: _model.peakEnergyTime ==
                                                                             'Afternoon'
                                                                         ? FlutterFlowTheme.of(context)
                                                                             .secondaryBackground
@@ -995,7 +1016,7 @@ class _MobileNamedEditprofilePageWidgetState
                                                           borderSide:
                                                               BorderSide(
                                                             color: _model
-                                                                        .peakEnergy ==
+                                                                        .peakEnergyTime ==
                                                                     'Afternoon'
                                                                 ? FlutterFlowTheme.of(
                                                                         context)
@@ -1012,7 +1033,7 @@ class _MobileNamedEditprofilePageWidgetState
                                                       ),
                                                       FFButtonWidget(
                                                         onPressed: () async {
-                                                          _model.peakEnergy =
+                                                          _model.peakEnergyTime =
                                                               'Evening';
                                                           safeSetState(() {});
                                                         },
@@ -1035,7 +1056,7 @@ class _MobileNamedEditprofilePageWidgetState
                                                                       0.0,
                                                                       0.0),
                                                           color: _model
-                                                                      .peakEnergy ==
+                                                                      .peakEnergyTime ==
                                                                   'Evening'
                                                               ? FlutterFlowTheme
                                                                       .of(
@@ -1060,7 +1081,7 @@ class _MobileNamedEditprofilePageWidgetState
                                                                           .titleSmall
                                                                           .fontStyle,
                                                                     ),
-                                                                    color: _model.peakEnergy ==
+                                                                    color: _model.peakEnergyTime ==
                                                                             'Evening'
                                                                         ? FlutterFlowTheme.of(context)
                                                                             .secondaryBackground
@@ -1083,7 +1104,7 @@ class _MobileNamedEditprofilePageWidgetState
                                                           borderSide:
                                                               BorderSide(
                                                             color: _model
-                                                                        .peakEnergy ==
+                                                                        .peakEnergyTime ==
                                                                     'Evening'
                                                                 ? FlutterFlowTheme.of(
                                                                         context)
@@ -1609,8 +1630,51 @@ class _MobileNamedEditprofilePageWidgetState
                                   Opacity(
                                     opacity: 0.9,
                                     child: FFButtonWidget(
-                                      onPressed: () {
-                                        print('Button pressed ...');
+                                      onPressed: () async {
+                                        if (_model.newPhotoUrl != null &&
+                                            _model.newPhotoUrl != '') {
+                                          await currentUserReference!
+                                              .update(createUsersRecordData(
+                                            photoUrl: _model.newPhotoUrl,
+                                            dailyFocusTime:
+                                                _model.tasksPerDay?.toDouble(),
+                                            peakEnergyTime:
+                                                _model.peakEnergyTime,
+                                            pomodoroLength:
+                                                _model.pomodoroLength,
+                                            tasksPerDay: _model.tasksPerDay,
+                                          ));
+                                        } else {
+                                          await currentUserReference!
+                                              .update(createUsersRecordData(
+                                            dailyFocusTime:
+                                                _model.dailyFocusTime,
+                                            tasksPerDay: _model.tasksPerDay,
+                                            peakEnergyTime:
+                                                _model.peakEnergyTime,
+                                            pomodoroLength:
+                                                _model.pomodoroLength,
+                                          ));
+                                        }
+
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Changes saved',
+                                              style: TextStyle(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                              ),
+                                            ),
+                                            duration:
+                                                Duration(milliseconds: 4000),
+                                            backgroundColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .secondary,
+                                          ),
+                                        );
                                       },
                                       text: 'Save Change',
                                       options: FFButtonOptions(

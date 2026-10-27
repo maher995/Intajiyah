@@ -15,13 +15,6 @@ service cloud.firestore {
       allow delete: if request.auth.uid == resource.data.user_id;
     }
 
-    match /journal_entries/{document} {
-      allow create: if request.auth != null;
-      allow read: if request.auth.uid == resource.data.user_id;
-      allow write: if request.auth.uid == resource.data.user_id;
-      allow delete: if request.auth.uid == resource.data.user_id;
-    }
-
     match /notifications/{document} {
       allow create: if request.auth != null;
       allow read: if request.auth.uid == resource.data.user_id;
@@ -88,18 +81,25 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    match /users/{document} {
-      allow create: if request.auth != null;
-      allow read: if request.auth != null;
-      allow write: if request.auth != null;
-      allow delete: if false;
-    }
-
     match /tasks/{document} {
       allow create: if request.auth != null;
       allow read: if request.auth.uid == resource.data.user_id;
       allow write: if request.auth.uid == resource.data.user_id;
       allow delete: if request.auth.uid == resource.data.user_id;
+    }
+
+    match /journal_entries/{document} {
+      allow create: if request.auth != null;
+      allow read: if request.auth.uid == resource.data.user_id;
+      allow write: if request.auth.uid == resource.data.user_id;
+      allow delete: if request.auth.uid == resource.data.user_id;
+    }
+
+    match /users/{document} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+      allow delete: if false;
     }
   }
 }

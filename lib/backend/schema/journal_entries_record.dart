@@ -30,10 +30,16 @@ class JournalEntriesRecord extends FirestoreRecord {
   DateTime? get entryDate => _entryDate;
   bool hasEntryDate() => _entryDate != null;
 
+  // "prompt" field.
+  String? _prompt;
+  String get prompt => _prompt ?? '';
+  bool hasPrompt() => _prompt != null;
+
   void _initializeFields() {
     _userId = snapshotData['user_id'] as String?;
     _content = snapshotData['content'] as String?;
     _entryDate = snapshotData['entry_date'] as DateTime?;
+    _prompt = snapshotData['prompt'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -73,12 +79,14 @@ Map<String, dynamic> createJournalEntriesRecordData({
   String? userId,
   String? content,
   DateTime? entryDate,
+  String? prompt,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
       'user_id': userId,
       'content': content,
       'entry_date': entryDate,
+      'prompt': prompt,
     }.withoutNulls,
   );
 
@@ -93,12 +101,13 @@ class JournalEntriesRecordDocumentEquality
   bool equals(JournalEntriesRecord? e1, JournalEntriesRecord? e2) {
     return e1?.userId == e2?.userId &&
         e1?.content == e2?.content &&
-        e1?.entryDate == e2?.entryDate;
+        e1?.entryDate == e2?.entryDate &&
+        e1?.prompt == e2?.prompt;
   }
 
   @override
-  int hash(JournalEntriesRecord? e) =>
-      const ListEquality().hash([e?.userId, e?.content, e?.entryDate]);
+  int hash(JournalEntriesRecord? e) => const ListEquality()
+      .hash([e?.userId, e?.content, e?.entryDate, e?.prompt]);
 
   @override
   bool isValidKey(Object? o) => o is JournalEntriesRecord;

@@ -133,23 +133,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => Intro3Widget(),
         ),
         FFRoute(
-          name: SettingsWidget.routeName,
-          path: SettingsWidget.routePath,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'Settings')
-              : SettingsWidget(),
-        ),
-        FFRoute(
           name: TaskCompletionWidget.routeName,
           path: TaskCompletionWidget.routePath,
           builder: (context, params) => TaskCompletionWidget(),
-        ),
-        FFRoute(
-          name: JournalWidget.routeName,
-          path: JournalWidget.routePath,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'Journal')
-              : JournalWidget(),
         ),
         FFRoute(
           name: HomePageWidget.routeName,
@@ -200,11 +186,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: MobileNamedEditprofilePageWidget.routeName,
-          path: MobileNamedEditprofilePageWidget.routePath,
-          builder: (context, params) => MobileNamedEditprofilePageWidget(),
-        ),
-        FFRoute(
           name: SignUpScreenWidget.routeName,
           path: SignUpScreenWidget.routePath,
           builder: (context, params) => SignUpScreenWidget(),
@@ -214,6 +195,30 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           path: TasksWidget.routePath,
           builder: (context, params) =>
               params.isEmpty ? NavBarPage(initialPage: 'Tasks') : TasksWidget(),
+        ),
+        FFRoute(
+          name: SettingsWidget.routeName,
+          path: SettingsWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Settings')
+              : SettingsWidget(),
+        ),
+        FFRoute(
+          name: JournalWidget.routeName,
+          path: JournalWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Journal')
+              : JournalWidget(),
+        ),
+        FFRoute(
+          name: MobileNamedEditprofilePageWidget.routeName,
+          path: MobileNamedEditprofilePageWidget.routePath,
+          builder: (context, params) => MobileNamedEditprofilePageWidget(),
+        ),
+        FFRoute(
+          name: JournalArchiveWidget.routeName,
+          path: JournalArchiveWidget.routePath,
+          builder: (context, params) => JournalArchiveWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

@@ -128,9 +128,7 @@ final parametersBuilderMap =
   'intro1': ParameterData.none(),
   'intro2': ParameterData.none(),
   'intro3': ParameterData.none(),
-  'Settings': ParameterData.none(),
   'TaskCompletion': ParameterData.none(),
-  'Journal': ParameterData.none(),
   'HomePage': ParameterData.none(),
   'ToBuildAPage': ParameterData.none(),
   'FocusSession': ParameterData.none(),
@@ -142,9 +140,12 @@ final parametersBuilderMap =
           'filePath': getParameter<String>(data, 'filePath'),
         },
       ),
-  'MobileNamedEditprofilePage': ParameterData.none(),
   'SignUpScreen': ParameterData.none(),
   'Tasks': ParameterData.none(),
+  'Settings': ParameterData.none(),
+  'Journal': ParameterData.none(),
+  'MobileNamedEditprofilePage': ParameterData.none(),
+  'journalArchive': ParameterData.none(),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

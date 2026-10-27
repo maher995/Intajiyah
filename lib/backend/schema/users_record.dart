@@ -80,6 +80,26 @@ class UsersRecord extends FirestoreRecord {
   int get version => _version ?? 0;
   bool hasVersion() => _version != null;
 
+  // "dailyFocusTime" field.
+  double? _dailyFocusTime;
+  double get dailyFocusTime => _dailyFocusTime ?? 0.0;
+  bool hasDailyFocusTime() => _dailyFocusTime != null;
+
+  // "tasksPerDay" field.
+  int? _tasksPerDay;
+  int get tasksPerDay => _tasksPerDay ?? 0;
+  bool hasTasksPerDay() => _tasksPerDay != null;
+
+  // "peakEnergyTime" field.
+  String? _peakEnergyTime;
+  String get peakEnergyTime => _peakEnergyTime ?? '';
+  bool hasPeakEnergyTime() => _peakEnergyTime != null;
+
+  // "pomodoroLength" field.
+  String? _pomodoroLength;
+  String get pomodoroLength => _pomodoroLength ?? '';
+  bool hasPomodoroLength() => _pomodoroLength != null;
+
   void _initializeFields() {
     _name = snapshotData['name'] as String?;
     _email = snapshotData['email'] as String?;
@@ -94,6 +114,10 @@ class UsersRecord extends FirestoreRecord {
     _updatedAt = snapshotData['updated_at'] as DateTime?;
     _updatedByDevice = snapshotData['updated_by_device'] as String?;
     _version = castToType<int>(snapshotData['version']);
+    _dailyFocusTime = castToType<double>(snapshotData['dailyFocusTime']);
+    _tasksPerDay = castToType<int>(snapshotData['tasksPerDay']);
+    _peakEnergyTime = snapshotData['peakEnergyTime'] as String?;
+    _pomodoroLength = snapshotData['pomodoroLength'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -142,6 +166,10 @@ Map<String, dynamic> createUsersRecordData({
   DateTime? updatedAt,
   String? updatedByDevice,
   int? version,
+  double? dailyFocusTime,
+  int? tasksPerDay,
+  String? peakEnergyTime,
+  String? pomodoroLength,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -158,6 +186,10 @@ Map<String, dynamic> createUsersRecordData({
       'updated_at': updatedAt,
       'updated_by_device': updatedByDevice,
       'version': version,
+      'dailyFocusTime': dailyFocusTime,
+      'tasksPerDay': tasksPerDay,
+      'peakEnergyTime': peakEnergyTime,
+      'pomodoroLength': pomodoroLength,
     }.withoutNulls,
   );
 
@@ -181,7 +213,11 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e1?.phoneNumber == e2?.phoneNumber &&
         e1?.updatedAt == e2?.updatedAt &&
         e1?.updatedByDevice == e2?.updatedByDevice &&
-        e1?.version == e2?.version;
+        e1?.version == e2?.version &&
+        e1?.dailyFocusTime == e2?.dailyFocusTime &&
+        e1?.tasksPerDay == e2?.tasksPerDay &&
+        e1?.peakEnergyTime == e2?.peakEnergyTime &&
+        e1?.pomodoroLength == e2?.pomodoroLength;
   }
 
   @override
@@ -198,7 +234,11 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e?.phoneNumber,
         e?.updatedAt,
         e?.updatedByDevice,
-        e?.version
+        e?.version,
+        e?.dailyFocusTime,
+        e?.tasksPerDay,
+        e?.peakEnergyTime,
+        e?.pomodoroLength
       ]);
 
   @override

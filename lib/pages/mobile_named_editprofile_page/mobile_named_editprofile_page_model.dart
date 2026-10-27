@@ -11,9 +11,9 @@ class MobileNamedEditprofilePageModel
 
   double? dailyFocusTime = 4.0;
 
-  String peakEnergy = 'Morning';
+  String peakEnergyTime = 'Morning';
 
-  String pomodoroLength = '25 min';
+  String? pomodoroLength = '';
 
   int? tasksPerDay = 5;
 

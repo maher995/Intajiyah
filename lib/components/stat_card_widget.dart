@@ -117,6 +117,7 @@ class _StatCardWidgetState extends State<StatCardWidget> {
                             .fontStyle,
                       ),
                       color: FlutterFlowTheme.of(context).primaryText,
+                      fontSize: 28.0,
                       letterSpacing: 0.0,
                       fontWeight: FontWeight.bold,
                       fontStyle:
