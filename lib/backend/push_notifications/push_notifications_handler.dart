@@ -123,7 +123,6 @@ final parametersBuilderMap =
   'LoginScreen': ParameterData.none(),
   'ForgotMyPassword': ParameterData.none(),
   'CHangepassword': ParameterData.none(),
-  'AnalyticsMonthlyReport': ParameterData.none(),
   'Habits': ParameterData.none(),
   'intro1': ParameterData.none(),
   'intro2': ParameterData.none(),
@@ -143,8 +142,9 @@ final parametersBuilderMap =
   'SignUpScreen': ParameterData.none(),
   'Tasks': ParameterData.none(),
   'Settings': ParameterData.none(),
-  'Journal': ParameterData.none(),
   'MobileNamedEditprofilePage': ParameterData.none(),
+  'AnalyticsMonthlyReport': ParameterData.none(),
+  'Journal': ParameterData.none(),
   'journalArchive': ParameterData.none(),
 };
 

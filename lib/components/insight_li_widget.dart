@@ -72,23 +72,28 @@ class _InsightLiWidgetState extends State<InsightLiWidget> {
         ),
         Expanded(
           flex: 1,
-          child: Text(
-            valueOrDefault<String>(
-              widget.content,
-              'Consistent morning routine with 95% completion rate',
-            ),
-            style: FlutterFlowTheme.of(context).bodySmall.override(
-                  font: GoogleFonts.inter(
+          child: Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+            child: Text(
+              valueOrDefault<String>(
+                widget.content,
+                'Consistent morning routine with 95% completion rate',
+              ),
+              style: FlutterFlowTheme.of(context).bodySmall.override(
+                    font: GoogleFonts.inter(
+                      fontWeight:
+                          FlutterFlowTheme.of(context).bodySmall.fontWeight,
+                      fontStyle:
+                          FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                    ),
+                    color: FlutterFlowTheme.of(context).secondaryText,
+                    letterSpacing: 0.0,
                     fontWeight:
                         FlutterFlowTheme.of(context).bodySmall.fontWeight,
                     fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                    lineHeight: 1.4,
                   ),
-                  color: FlutterFlowTheme.of(context).secondaryText,
-                  letterSpacing: 0.0,
-                  fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
-                  fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
-                  lineHeight: 1.4,
-                ),
+            ),
           ),
         ),
       ].divide(SizedBox(width: 8.0)),

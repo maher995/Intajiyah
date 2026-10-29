@@ -106,7 +106,6 @@ class _HistoryItemWidgetState extends State<HistoryItemWidget> {
                   widget.snippet,
                   'Had a really productive morning session. Completed 3 major tasks...',
                 ),
-                maxLines: 2,
                 style: FlutterFlowTheme.of(context).bodySmall.override(
                       font: GoogleFonts.inter(
                         fontWeight:
@@ -122,7 +121,7 @@ class _HistoryItemWidgetState extends State<HistoryItemWidget> {
                           FlutterFlowTheme.of(context).bodySmall.fontStyle,
                       lineHeight: 1.4,
                     ),
-                overflow: TextOverflow.ellipsis,
+                overflow: TextOverflow.clip,
               ),
             ].divide(SizedBox(height: 4.0)),
           ),

@@ -104,13 +104,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => CHangepasswordWidget(),
         ),
         FFRoute(
-            name: AnalyticsMonthlyReportWidget.routeName,
-            path: AnalyticsMonthlyReportWidget.routePath,
-            builder: (context, params) => NavBarPage(
-                  initialPage: '',
-                  page: AnalyticsMonthlyReportWidget(),
-                )),
-        FFRoute(
             name: HabitsWidget.routeName,
             path: HabitsWidget.routePath,
             builder: (context, params) => NavBarPage(
@@ -204,16 +197,23 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : SettingsWidget(),
         ),
         FFRoute(
+          name: MobileNamedEditprofilePageWidget.routeName,
+          path: MobileNamedEditprofilePageWidget.routePath,
+          builder: (context, params) => MobileNamedEditprofilePageWidget(),
+        ),
+        FFRoute(
+            name: AnalyticsMonthlyReportWidget.routeName,
+            path: AnalyticsMonthlyReportWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: AnalyticsMonthlyReportWidget(),
+                )),
+        FFRoute(
           name: JournalWidget.routeName,
           path: JournalWidget.routePath,
           builder: (context, params) => params.isEmpty
               ? NavBarPage(initialPage: 'Journal')
               : JournalWidget(),
-        ),
-        FFRoute(
-          name: MobileNamedEditprofilePageWidget.routeName,
-          path: MobileNamedEditprofilePageWidget.routePath,
-          builder: (context, params) => MobileNamedEditprofilePageWidget(),
         ),
         FFRoute(
           name: JournalArchiveWidget.routeName,

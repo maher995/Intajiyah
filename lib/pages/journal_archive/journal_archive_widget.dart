@@ -164,13 +164,13 @@ class _JournalArchiveWidgetState extends State<JournalArchiveWidget> {
                       final listViewJournalEntriesRecord =
                           listViewJournalEntriesRecordList[listViewIndex];
                       return Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            10.0, 0.0, 10.0, 10.0),
                         child: HistoryItemWidget(
                           key: Key(
                               'Keyicp_${listViewIndex}_of_${listViewJournalEntriesRecordList.length}'),
-                          date: dateTimeFormat(
-                              "MMMEd", listViewJournalEntriesRecord.entryDate),
+                          date: dateTimeFormat("EEE MMM d, h:mm a",
+                              listViewJournalEntriesRecord.entryDate),
                           snippet: listViewJournalEntriesRecord.content,
                         ),
                       );

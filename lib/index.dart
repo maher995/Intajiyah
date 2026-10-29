@@ -3,8 +3,6 @@ export '/pages/login_screen/login_screen_widget.dart' show LoginScreenWidget;
 export '/forgot_my_password/forgot_my_password_widget.dart'
     show ForgotMyPasswordWidget;
 export '/c_hangepassword/c_hangepassword_widget.dart' show CHangepasswordWidget;
-export '/pages/analytics_monthly_report/analytics_monthly_report_widget.dart'
-    show AnalyticsMonthlyReportWidget;
 export '/pages/habits/habits_widget.dart' show HabitsWidget;
 export '/pages/intro1/intro1_widget.dart' show Intro1Widget;
 export '/pages/intro2/intro2_widget.dart' show Intro2Widget;
@@ -23,8 +21,10 @@ export '/pages/sign_up_screen/sign_up_screen_widget.dart'
     show SignUpScreenWidget;
 export '/pages/tasks/tasks_widget.dart' show TasksWidget;
 export '/pages/settings/settings_widget.dart' show SettingsWidget;
-export '/pages/journal/journal_widget.dart' show JournalWidget;
 export '/pages/mobile_named_editprofile_page/mobile_named_editprofile_page_widget.dart'
     show MobileNamedEditprofilePageWidget;
+export '/pages/analytics_monthly_report/analytics_monthly_report_widget.dart'
+    show AnalyticsMonthlyReportWidget;
+export '/pages/journal/journal_widget.dart' show JournalWidget;
 export '/pages/journal_archive/journal_archive_widget.dart'
     show JournalArchiveWidget;

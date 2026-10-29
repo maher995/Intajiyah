@@ -97,6 +97,59 @@ class TranscribeAudioCall {
       ));
 }
 
+class GenerateInsightsCall {
+  static Future<ApiCallResponse> call({
+    String? stats = '',
+  }) async {
+    final ffApiRequestBody = '''
+{
+  "contents": [{
+    "parts": [{
+      "text": "You are a friendly productivity coach. Based on these monthly stats: ${escapeStringForJson(stats)}. Return exactly 3 short strengths, 3 short improvement suggestions, a tone of great if the user did well or needs_work if they did poorly, and a 2 sentence encouraging message that is honest about the results."
+    }]
+  }],
+  "generationConfig": {
+    "responseMimeType": "application/json",
+    "responseSchema": {
+      "type": "OBJECT",
+      "properties": {
+        "strengths": {"type": "ARRAY", "items": {"type": "STRING"}},
+        "improvements": {"type": "ARRAY", "items": {"type": "STRING"}},
+        "tone": {"type": "STRING", "enum": ["great", "needs_work"]},
+        "message": {"type": "STRING"}
+      },
+      "required": ["strengths", "improvements", "tone", "message"]
+    }
+  }
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'generateInsights',
+      apiUrl:
+          'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent',
+      callType: ApiCallType.POST,
+      headers: {
+        'x-goog-api-key':
+            'AQ.Ab8RN6LKdaaGjc5H-z9l9emk0zWpMO_X48PN51Lm2CCpbxNWVg',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  static String? resultText(dynamic response) =>
+      castToType<String>(getJsonField(
+        response,
+        r'''$.candidates[0].content.parts[0].text''',
+      ));
+}
+
 class ApiPagingParams {
   int nextPageNumber = 0;
   int numItems = 0;

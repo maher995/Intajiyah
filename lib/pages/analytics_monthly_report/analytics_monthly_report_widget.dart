@@ -1,11 +1,16 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
+import '/backend/backend.dart';
 import '/components/achievement_item_widget.dart';
 import '/components/insight_li_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'analytics_monthly_report_model.dart';
 export 'analytics_monthly_report_model.dart';
@@ -222,6 +227,155 @@ class _AnalyticsMonthlyReportWidgetState
   void initState() {
     super.initState();
     _model = createModel(context, () => AnalyticsMonthlyReportModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.insights = functions.emptyInsights();
+      safeSetState(() {});
+      _model.selectedMonth = getCurrentTimestamp;
+      safeSetState(() {});
+      _model.thisMonthResult = await queryTasksRecordOnce(
+        queryBuilder: (tasksRecord) => tasksRecord
+            .where(
+              'user_id',
+              isEqualTo: currentUserUid,
+            )
+            .where(
+              'completed_at',
+              isGreaterThanOrEqualTo:
+                  functions.monthStart(_model.selectedMonth),
+            )
+            .where(
+              'completed_at',
+              isLessThanOrEqualTo: functions.monthEnd(_model.selectedMonth),
+            ),
+      );
+      _model.thisMonthTasks =
+          _model.thisMonthResult!.toList().cast<TasksRecord>();
+      safeSetState(() {});
+      _model.lastMonthResult = await queryTasksRecordOnce(
+        queryBuilder: (tasksRecord) => tasksRecord
+            .where(
+              'user_id',
+              isEqualTo: currentUserUid,
+            )
+            .where(
+              'completed_at',
+              isGreaterThanOrEqualTo: functions
+                  .monthStart(functions.previousMonth(_model.selectedMonth)),
+            )
+            .where(
+              'completed_at',
+              isLessThanOrEqualTo: functions
+                  .monthEnd(functions.previousMonth(_model.selectedMonth)),
+            ),
+      );
+      _model.lastMonthTasks =
+          _model.lastMonthResult!.toList().cast<TasksRecord>();
+      safeSetState(() {});
+      _model.dueThisMonthResult = await queryTasksRecordOnce(
+        queryBuilder: (tasksRecord) => tasksRecord
+            .where(
+              'user_id',
+              isEqualTo: currentUserUid,
+            )
+            .where(
+              'due_date',
+              isGreaterThanOrEqualTo:
+                  functions.monthStart(_model.selectedMonth),
+            )
+            .where(
+              'due_date',
+              isLessThanOrEqualTo: functions.monthEnd(_model.selectedMonth),
+            ),
+      );
+      _model.dueThisMonthTasks =
+          _model.dueThisMonthResult!.toList().cast<TasksRecord>();
+      safeSetState(() {});
+      _model.dueLastMonthResult = await queryTasksRecordOnce(
+        queryBuilder: (tasksRecord) => tasksRecord
+            .where(
+              'user_id',
+              isEqualTo: currentUserUid,
+            )
+            .where(
+              'due_date',
+              isGreaterThanOrEqualTo: functions
+                  .monthStart(functions.previousMonth(_model.selectedMonth)),
+            )
+            .where(
+              'due_date',
+              isLessThanOrEqualTo: functions
+                  .monthEnd(functions.previousMonth(_model.selectedMonth)),
+            ),
+      );
+      _model.dueLastMonthTasks =
+          _model.dueLastMonthResult!.toList().cast<TasksRecord>();
+      safeSetState(() {});
+      _model.thisMonthHabitsResult = await queryHabitsRecordOnce(
+        queryBuilder: (habitsRecord) => habitsRecord
+            .where(
+              'user_id',
+              isEqualTo: currentUserUid,
+            )
+            .where(
+              'created_at',
+              isGreaterThanOrEqualTo:
+                  functions.monthStart(_model.selectedMonth),
+            )
+            .where(
+              'created_at',
+              isLessThanOrEqualTo: functions.monthEnd(_model.selectedMonth),
+            ),
+      );
+      _model.thisMonthJournalsResult = await queryJournalEntriesRecordOnce(
+        queryBuilder: (journalEntriesRecord) => journalEntriesRecord.where(
+          'user_id',
+          isEqualTo: currentUserUid,
+        ),
+      );
+      _model.thisMonthJournals =
+          _model.thisMonthJournalsResult!.toList().cast<JournalEntriesRecord>();
+      safeSetState(() {});
+      _model.thisMonthHabits =
+          _model.thisMonthHabitsResult!.toList().cast<HabitsRecord>();
+      safeSetState(() {});
+      _model.insightsResponse = await GenerateInsightsCall.call(
+        stats: functions.buildStatsText(
+            _model.dueThisMonthTasks.toList(),
+            _model.dueLastMonthTasks.toList(),
+            _model.thisMonthTasks.toList(),
+            _model.lastMonthTasks.toList(),
+            _model.thisMonthHabits.toList(),
+            _model.thisMonthJournals.toList(),
+            _model.selectedMonth),
+      );
+
+      if ((_model.insightsResponse?.succeeded ?? true)) {
+        _model.insights = functions.parseInsights(getJsonField(
+          (_model.insightsResponse?.jsonBody ?? ''),
+          r'''$.candidates[0].content.parts[0].text''',
+        ).toString());
+        safeSetState(() {});
+        _model.isLoading = false;
+        safeSetState(() {});
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Gemini failed: ${(_model.insightsResponse?.statusCode ?? 200).toString()}${(_model.insightsResponse?.exceptionMessage ?? '')}',
+              style: TextStyle(
+                color: FlutterFlowTheme.of(context).primaryText,
+              ),
+            ),
+            duration: Duration(milliseconds: 10000),
+            backgroundColor: FlutterFlowTheme.of(context).secondary,
+          ),
+        );
+        _model.isLoading = false;
+        safeSetState(() {});
+      }
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -484,7 +638,13 @@ class _AnalyticsMonthlyReportWidgetState
                                         ].divide(SizedBox(width: 8.0)),
                                       ),
                                       Text(
-                                        '87',
+                                        valueOrDefault<String>(
+                                          functions.scoreText(
+                                              functions.productivityScore(_model
+                                                  .dueThisMonthTasks
+                                                  .toList())!),
+                                          '87',
+                                        ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -507,7 +667,15 @@ class _AnalyticsMonthlyReportWidgetState
                                             ),
                                       ),
                                       Text(
-                                        '+12 more than last month',
+                                        valueOrDefault<String>(
+                                          functions.scoreChangeText(
+                                              functions.scoreDifference(
+                                                  _model.dueThisMonthTasks
+                                                      .toList(),
+                                                  _model.dueLastMonthTasks
+                                                      .toList())!),
+                                          '+12 more than last month',
+                                        ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodySmall
                                             .override(
@@ -560,7 +728,11 @@ class _AnalyticsMonthlyReportWidgetState
                                         CrossAxisAlignment.stretch,
                                     children: [
                                       Text(
-                                        'Key Achievements - September 2026',
+                                        valueOrDefault<String>(
+                                          functions.achievementsTitle(
+                                              _model.selectedMonth),
+                                          'Key Achievements - October 2026',
+                                        ),
                                         style: FlutterFlowTheme.of(context)
                                             .titleMedium
                                             .override(
@@ -599,9 +771,17 @@ class _AnalyticsMonthlyReportWidgetState
                                                 size: 20.0,
                                               ),
                                               iconColor: Color(0xFF16A34A),
-                                              title: '268 Tasks Completed',
-                                              subtitle:
-                                                  '+45 more than last month',
+                                              title: valueOrDefault<String>(
+                                                functions.tasksCompletedText(
+                                                    _model.thisMonthTasks
+                                                        .toList()),
+                                                '268 Tasks Completed',
+                                              ),
+                                              subtitle: functions.tasksDiffText(
+                                                  _model.thisMonthTasks
+                                                      .toList(),
+                                                  _model.lastMonthTasks
+                                                      .toList()),
                                             ),
                                           ),
                                           wrapWithModel(
@@ -616,7 +796,12 @@ class _AnalyticsMonthlyReportWidgetState
                                                 size: 20.0,
                                               ),
                                               iconColor: Color(0xFFEA580C),
-                                              title: '12-Best Streak',
+                                              title: valueOrDefault<String>(
+                                                functions.bestStreakText(_model
+                                                    .thisMonthTasks
+                                                    .toList()),
+                                                '12-Best Streak',
+                                              ),
                                               subtitle: 'Your best streak yet!',
                                             ),
                                           ),
@@ -632,7 +817,12 @@ class _AnalyticsMonthlyReportWidgetState
                                                 size: 20.0,
                                               ),
                                               iconColor: Color(0xFF2563EB),
-                                              title: '4 New Habits',
+                                              title: valueOrDefault<String>(
+                                                functions.newHabitsText(_model
+                                                    .thisMonthHabits
+                                                    .toList()),
+                                                '4 habits established',
+                                              ),
                                               subtitle: 'Successfully built',
                                             ),
                                           ),
@@ -684,6 +874,63 @@ class _AnalyticsMonthlyReportWidgetState
                                               lineHeight: 1.4,
                                             ),
                                       ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 0.0, 180.0, 0.0),
+                                        child: Text(
+                                          '💪 Strengths',
+                                          style: FlutterFlowTheme.of(context)
+                                              .labelLarge
+                                              .override(
+                                                font: GoogleFonts.inter(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .labelLarge
+                                                          .fontStyle,
+                                                ),
+                                                letterSpacing: 0.0,
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelLarge
+                                                        .fontStyle,
+                                                lineHeight: 1.4,
+                                              ),
+                                        ),
+                                      ),
+                                      Builder(
+                                        builder: (context) {
+                                          final strengthItem = functions
+                                              .getInsightList(
+                                                  _model.insights, 'strengths')
+                                              .toList();
+
+                                          return Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: List.generate(
+                                                strengthItem.length,
+                                                (strengthItemIndex) {
+                                              final strengthItemItem =
+                                                  strengthItem[
+                                                      strengthItemIndex];
+                                              return InsightLiWidget(
+                                                key: Key(
+                                                    'Keyfs3_${strengthItemIndex}_of_${strengthItem.length}'),
+                                                dotColor:
+                                                    FlutterFlowTheme.of(context)
+                                                        .success,
+                                                content: strengthItemItem,
+                                              );
+                                            }).divide(SizedBox(height: 8.0)),
+                                          );
+                                        },
+                                      ),
                                       Column(
                                         mainAxisSize: MainAxisSize.min,
                                         mainAxisAlignment:
@@ -694,9 +941,9 @@ class _AnalyticsMonthlyReportWidgetState
                                           Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 180.0, 0.0),
+                                                    0.0, 0.0, 70.0, 0.0),
                                             child: Text(
-                                              '💪 Strengths',
+                                              '🎯 Improvement Suggestions',
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .labelLarge
@@ -722,109 +969,35 @@ class _AnalyticsMonthlyReportWidgetState
                                                       ),
                                             ),
                                           ),
-                                          wrapWithModel(
-                                            model: _model.insightLiModel1,
-                                            updateCallback: () =>
-                                                safeSetState(() {}),
-                                            child: InsightLiWidget(
-                                              dotColor:
-                                                  FlutterFlowTheme.of(context)
-                                                      .success,
-                                              content:
-                                                  'Consistent morning routine with 95% completion rate',
-                                            ),
-                                          ),
-                                          wrapWithModel(
-                                            model: _model.insightLiModel2,
-                                            updateCallback: () =>
-                                                safeSetState(() {}),
-                                            child: InsightLiWidget(
-                                              dotColor:
-                                                  FlutterFlowTheme.of(context)
-                                                      .success,
-                                              content:
-                                                  'Peak productivity between 10 AM - 2 PM',
-                                            ),
-                                          ),
-                                          wrapWithModel(
-                                            model: _model.insightLiModel3,
-                                            updateCallback: () =>
-                                                safeSetState(() {}),
-                                            child: InsightLiWidget(
-                                              dotColor:
-                                                  FlutterFlowTheme.of(context)
-                                                      .success,
-                                              content:
-                                                  'High energy levels maintained throughout the week',
-                                            ),
-                                          ),
-                                        ].divide(SizedBox(height: 8.0)),
-                                      ),
-                                      Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            '🎯 Improvement Suggestions',
-                                            style: FlutterFlowTheme.of(context)
-                                                .labelLarge
-                                                .override(
-                                                  font: GoogleFonts.inter(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontStyle:
+                                          Builder(
+                                            builder: (context) {
+                                              final improvementItem = functions
+                                                  .getInsightList(
+                                                      _model.insights,
+                                                      'improvements')
+                                                  .toList();
+
+                                              return Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: List.generate(
+                                                    improvementItem.length,
+                                                    (improvementItemIndex) {
+                                                  final improvementItemItem =
+                                                      improvementItem[
+                                                          improvementItemIndex];
+                                                  return InsightLiWidget(
+                                                    key: Key(
+                                                        'Keymzh_${improvementItemIndex}_of_${improvementItem.length}'),
+                                                    dotColor:
                                                         FlutterFlowTheme.of(
                                                                 context)
-                                                            .labelLarge
-                                                            .fontStyle,
-                                                  ),
-                                                  letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .labelLarge
-                                                          .fontStyle,
-                                                  lineHeight: 1.4,
-                                                ),
-                                          ),
-                                          wrapWithModel(
-                                            model: _model.insightLiModel4,
-                                            updateCallback: () =>
-                                                safeSetState(() {}),
-                                            child: InsightLiWidget(
-                                              dotColor:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primary,
-                                              content:
-                                                  'Try scheduling deep work earlier in the day',
-                                            ),
-                                          ),
-                                          wrapWithModel(
-                                            model: _model.insightLiModel5,
-                                            updateCallback: () =>
-                                                safeSetState(() {}),
-                                            child: InsightLiWidget(
-                                              dotColor:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primary,
-                                              content:
-                                                  'Add more breaks between focus sessions',
-                                            ),
-                                          ),
-                                          wrapWithModel(
-                                            model: _model.insightLiModel6,
-                                            updateCallback: () =>
-                                                safeSetState(() {}),
-                                            child: InsightLiWidget(
-                                              dotColor:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primary,
-                                              content:
-                                                  'Consider adding a wind-down routine for evenings',
-                                            ),
+                                                            .primary,
+                                                    content:
+                                                        improvementItemItem,
+                                                  );
+                                                }),
+                                              );
+                                            },
                                           ),
                                         ].divide(SizedBox(height: 8.0)),
                                       ),
@@ -833,54 +1006,83 @@ class _AnalyticsMonthlyReportWidgetState
                                 ),
                               ),
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Color(0x26EE8B60),
-                                borderRadius: BorderRadius.circular(24.0),
-                                shape: BoxShape.rectangle,
-                                border: Border.all(
-                                  color: Color(0x4DEE8B60),
-                                  width: 1.0,
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 50.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: functions.isGreatTone(_model.insights)!
+                                      ? Color(0x4DEE8B60)
+                                      : Color(0xFFFFF4E5),
+                                  borderRadius: BorderRadius.circular(24.0),
+                                  shape: BoxShape.rectangle,
+                                  border: Border.all(
+                                    color: Color(0x4DEE8B60),
+                                    width: 1.0,
+                                  ),
                                 ),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(24.0),
-                                child: Container(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '🎉 You\'re doing great!',
-                                        style: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .override(
-                                              font: GoogleFonts.interTight(
+                                child: Padding(
+                                  padding: EdgeInsets.all(24.0),
+                                  child: Container(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          functions
+                                                  .isGreatTone(_model.insights)!
+                                              ? '🎉 You\'re doing great!'
+                                              : '💪 Let\'s get back on track',
+                                          style: FlutterFlowTheme.of(context)
+                                              .titleSmall
+                                              .override(
+                                                font: GoogleFonts.interTight(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .titleSmall
+                                                          .fontStyle,
+                                                ),
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                letterSpacing: 0.0,
                                                 fontWeight: FontWeight.bold,
                                                 fontStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .titleSmall
                                                         .fontStyle,
                                               ),
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              letterSpacing: 0.0,
-                                              fontWeight: FontWeight.bold,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleSmall
-                                                      .fontStyle,
-                                            ),
-                                      ),
-                                      Text(
-                                        'Your productivity has improved significantly this month. Keep up the excellent work and maintain your energy levels!',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodySmall
-                                            .override(
-                                              font: GoogleFonts.inter(
+                                        ),
+                                        Text(
+                                          valueOrDefault<String>(
+                                            functions.getInsightText(
+                                                _model.insights, 'message'),
+                                            'message',
+                                          ),
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodySmall
+                                              .override(
+                                                font: GoogleFonts.inter(
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodySmall
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodySmall
+                                                          .fontStyle,
+                                                ),
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                letterSpacing: 0.0,
                                                 fontWeight:
                                                     FlutterFlowTheme.of(context)
                                                         .bodySmall
@@ -889,23 +1091,11 @@ class _AnalyticsMonthlyReportWidgetState
                                                     FlutterFlowTheme.of(context)
                                                         .bodySmall
                                                         .fontStyle,
+                                                lineHeight: 1.4,
                                               ),
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              letterSpacing: 0.0,
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodySmall
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodySmall
-                                                      .fontStyle,
-                                              lineHeight: 1.4,
-                                            ),
-                                      ),
-                                    ].divide(SizedBox(height: 4.0)),
+                                        ),
+                                      ].divide(SizedBox(height: 4.0)),
+                                    ),
                                   ),
                                 ),
                               ),
