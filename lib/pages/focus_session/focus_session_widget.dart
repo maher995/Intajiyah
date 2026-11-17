@@ -1,9 +1,14 @@
+import '/components/timer_settings_sheet_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/pages/timer_display/timer_display_widget.dart';
+import '/flutter_flow/instant_timer.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:provider/provider.dart';
 import 'focus_session_model.dart';
 export 'focus_session_model.dart';
 
@@ -212,6 +217,17 @@ class _FocusSessionWidgetState extends State<FocusSessionWidget> {
     super.initState();
     _model = createModel(context, () => FocusSessionModel());
 
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.focusTick?.cancel();
+      _model.isRunning = false;
+      safeSetState(() {});
+      _model.isBreak = false;
+      safeSetState(() {});
+      _model.secondsLeft = functions.minutesToSeconds(FFAppState().workMinutes);
+      safeSetState(() {});
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
@@ -224,6 +240,8 @@ class _FocusSessionWidgetState extends State<FocusSessionWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -268,21 +286,58 @@ class _FocusSessionWidgetState extends State<FocusSessionWidget> {
                               lineHeight: 1.4,
                             ),
                       ),
-                      FlutterFlowIconButton(
-                        borderColor: FlutterFlowTheme.of(context).alternate,
-                        borderRadius: 9999.0,
-                        borderWidth: 1.0,
-                        buttonSize: 40.0,
-                        fillColor:
-                            FlutterFlowTheme.of(context).secondaryBackground,
-                        icon: Icon(
-                          Icons.settings_rounded,
-                          color: FlutterFlowTheme.of(context).secondaryText,
-                          size: 20.0,
+                      Builder(
+                        builder: (context) => FlutterFlowIconButton(
+                          borderColor: FlutterFlowTheme.of(context).alternate,
+                          borderRadius: 9999.0,
+                          borderWidth: 1.0,
+                          buttonSize: 40.0,
+                          fillColor:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          icon: Icon(
+                            Icons.settings_rounded,
+                            color: FlutterFlowTheme.of(context).secondaryText,
+                            size: 20.0,
+                          ),
+                          onPressed: () async {
+                            await showDialog(
+                              context: context,
+                              builder: (dialogContext) {
+                                return Dialog(
+                                  elevation: 0,
+                                  insetPadding: EdgeInsets.zero,
+                                  backgroundColor: Colors.transparent,
+                                  alignment: AlignmentDirectional(0.0, 0.0)
+                                      .resolve(Directionality.of(context)),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      FocusScope.of(dialogContext).unfocus();
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                    },
+                                    child: TimerSettingsSheetWidget(
+                                      initialWork: FFAppState().workMinutes,
+                                      initialBreak: FFAppState().breakMinutes,
+                                      onSave: (work, rest) async {
+                                        FFAppState().workMinutes = work;
+                                        safeSetState(() {});
+                                        FFAppState().breakMinutes = rest;
+                                        safeSetState(() {});
+                                        _model.isBreak = false;
+                                        safeSetState(() {});
+                                        _model.isRunning = false;
+                                        safeSetState(() {});
+                                        _model.secondsLeft =
+                                            functions.minutesToSeconds(work);
+                                        safeSetState(() {});
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         ),
-                        onPressed: () {
-                          print('IconButton pressed ...');
-                        },
                       ),
                     ],
                   ),
@@ -299,6 +354,66 @@ class _FocusSessionWidgetState extends State<FocusSessionWidget> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      Stack(
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional(0.0, 0.0),
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 200.0, 0.0, 0.0),
+                              child: Text(
+                                valueOrDefault<String>(
+                                  functions.formatTime(_model.secondsLeft),
+                                  '0',
+                                ),
+                                style: FlutterFlowTheme.of(context)
+                                    .displayMedium
+                                    .override(
+                                      font: GoogleFonts.interTight(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .displayMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .displayMedium
+                                            .fontStyle,
+                                      ),
+                                      letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .displayMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .displayMedium
+                                          .fontStyle,
+                                    ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Align(
+                        alignment: AlignmentDirectional(0.0, 0.0),
+                        child: Text(
+                          _model.isBreak ? 'Break Time' : 'Focus Time',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    font: GoogleFonts.inter(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                        ),
+                      ),
                       Padding(
                         padding: EdgeInsets.all(32.0),
                         child: Container(
@@ -307,57 +422,151 @@ class _FocusSessionWidgetState extends State<FocusSessionWidget> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              wrapWithModel(
-                                model: _model.timerDisplayModel,
-                                updateCallback: () => safeSetState(() {}),
-                                child: TimerDisplayWidget(
-                                  progress: 0.0,
-                                  time: '25:00',
-                                ),
-                              ),
                               Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    width: 64.0,
-                                    height: 64.0,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          FlutterFlowTheme.of(context).primary,
-                                      borderRadius:
-                                          BorderRadius.circular(9999.0),
-                                      shape: BoxShape.rectangle,
-                                    ),
-                                    alignment: AlignmentDirectional(0.0, 0.0),
-                                    child: Icon(
-                                      Icons.play_arrow_rounded,
-                                      color: Colors.white,
-                                      size: 32.0,
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 64.0,
-                                    height: 64.0,
-                                    decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      borderRadius:
-                                          BorderRadius.circular(9999.0),
-                                      shape: BoxShape.rectangle,
-                                      border: Border.all(
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      if (_model.isRunning == true) {
+                                        _model.focusTick?.cancel();
+                                        _model.isRunning = false;
+                                        safeSetState(() {});
+                                      } else {
+                                        _model.isRunning = true;
+                                        safeSetState(() {});
+                                        _model.focusTick =
+                                            InstantTimer.periodic(
+                                          duration:
+                                              Duration(milliseconds: 1000),
+                                          callback: (timer) async {
+                                            if (_model.secondsLeft! > 0) {
+                                              if (_model.secondsLeft == 1) {
+                                                _model.soundPlayer ??=
+                                                    AudioPlayer();
+                                                if (_model
+                                                    .soundPlayer!.playing) {
+                                                  await _model.soundPlayer!
+                                                      .stop();
+                                                }
+                                                _model.soundPlayer!
+                                                    .setVolume(1.0);
+                                                _model.soundPlayer!
+                                                    .setAsset(
+                                                        'assets/audios/alarm_sound.mp3')
+                                                    .then((_) => _model
+                                                        .soundPlayer!
+                                                        .play());
+                                              }
+                                              _model.secondsLeft =
+                                                  _model.secondsLeft! + -1;
+                                              safeSetState(() {});
+                                            } else {
+                                              if (_model.isBreak == true) {
+                                                _model.isBreak = false;
+                                                safeSetState(() {});
+                                                _model.secondsLeft =
+                                                    functions.minutesToSeconds(
+                                                        FFAppState()
+                                                            .workMinutes);
+                                                safeSetState(() {});
+                                              } else {
+                                                _model.isBreak = true;
+                                                safeSetState(() {});
+                                                _model.secondsLeft =
+                                                    functions.minutesToSeconds(
+                                                        FFAppState()
+                                                            .breakMinutes);
+                                                safeSetState(() {});
+                                              }
+                                            }
+                                          },
+                                          startImmediately: true,
+                                        );
+                                      }
+                                    },
+                                    child: Container(
+                                      width: 64.0,
+                                      height: 64.0,
+                                      decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
-                                            .alternate,
-                                        width: 1.0,
+                                            .primary,
+                                        borderRadius:
+                                            BorderRadius.circular(9999.0),
+                                        shape: BoxShape.rectangle,
+                                      ),
+                                      alignment: AlignmentDirectional(0.0, 0.0),
+                                      child: Stack(
+                                        children: [
+                                          if (_model.isRunning == false)
+                                            Align(
+                                              alignment: AlignmentDirectional(
+                                                  0.0, 0.0),
+                                              child: Icon(
+                                                Icons.play_arrow_rounded,
+                                                color: Colors.white,
+                                                size: 32.0,
+                                              ),
+                                            ),
+                                          if (_model.isRunning == true)
+                                            Align(
+                                              alignment: AlignmentDirectional(
+                                                  0.0, 0.0),
+                                              child: Icon(
+                                                Icons.pause,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryBackground,
+                                                size: 24.0,
+                                              ),
+                                            ),
+                                        ],
                                       ),
                                     ),
-                                    alignment: AlignmentDirectional(0.0, 0.0),
-                                    child: Icon(
-                                      Icons.rotate_left_rounded,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      size: 24.0,
+                                  ),
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      _model.focusTick?.cancel();
+                                      _model.isRunning = false;
+                                      safeSetState(() {});
+                                      _model.secondsLeft = _model.isBreak
+                                          ? functions.minutesToSeconds(
+                                              FFAppState().breakMinutes)
+                                          : functions.minutesToSeconds(
+                                              FFAppState().workMinutes);
+                                      safeSetState(() {});
+                                    },
+                                    child: Container(
+                                      width: 64.0,
+                                      height: 64.0,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                        borderRadius:
+                                            BorderRadius.circular(9999.0),
+                                        shape: BoxShape.rectangle,
+                                        border: Border.all(
+                                          color: FlutterFlowTheme.of(context)
+                                              .alternate,
+                                          width: 1.0,
+                                        ),
+                                      ),
+                                      alignment: AlignmentDirectional(0.0, 0.0),
+                                      child: Icon(
+                                        Icons.rotate_left_rounded,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        size: 24.0,
+                                      ),
                                     ),
                                   ),
                                 ].divide(SizedBox(width: 24.0)),
@@ -367,23 +576,62 @@ class _FocusSessionWidgetState extends State<FocusSessionWidget> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    width: 70.0,
-                                    height: 70.0,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          FlutterFlowTheme.of(context).primary,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          10.0, 25.0, 0.0, 0.0),
-                                      child: Text(
-                                        '25 min',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              font: GoogleFonts.inter(
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      _model.focusTick?.cancel();
+                                      _model.isBreak = false;
+                                      safeSetState(() {});
+                                      _model.isRunning = false;
+                                      safeSetState(() {});
+                                      _model.secondsLeft =
+                                          functions.minutesToSeconds(
+                                              FFAppState().workMinutes);
+                                      safeSetState(() {});
+                                    },
+                                    child: Container(
+                                      width: 70.0,
+                                      height: 70.0,
+                                      decoration: BoxDecoration(
+                                        color: _model.isBreak == false
+                                            ? FlutterFlowTheme.of(context)
+                                                .primary
+                                            : FlutterFlowTheme.of(context)
+                                                .secondaryBackground,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            10.0, 25.0, 0.0, 0.0),
+                                        child: Text(
+                                          '${FFAppState().workMinutes.toString()} min',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                font: GoogleFonts.inter(
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                                color: _model.isBreak == false
+                                                    ? FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondaryBackground
+                                                    : FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                fontSize: 16.0,
+                                                letterSpacing: 0.0,
                                                 fontWeight:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -393,37 +641,66 @@ class _FocusSessionWidgetState extends State<FocusSessionWidget> {
                                                         .bodyMedium
                                                         .fontStyle,
                                               ),
-                                              color: Colors.white,
-                                              fontSize: 16.0,
-                                              letterSpacing: 0.0,
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                  Container(
-                                    width: 70.0,
-                                    height: 70.0,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          12.0, 25.0, 0.0, 0.0),
-                                      child: Text(
-                                        '5 min',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              font: GoogleFonts.inter(
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      _model.focusTick?.cancel();
+                                      _model.isBreak = true;
+                                      safeSetState(() {});
+                                      _model.isRunning = false;
+                                      safeSetState(() {});
+                                      _model.secondsLeft =
+                                          functions.minutesToSeconds(
+                                              FFAppState().breakMinutes);
+                                      safeSetState(() {});
+                                    },
+                                    child: Container(
+                                      width: 70.0,
+                                      height: 70.0,
+                                      decoration: BoxDecoration(
+                                        color: _model.isBreak == true
+                                            ? FlutterFlowTheme.of(context)
+                                                .primary
+                                            : FlutterFlowTheme.of(context)
+                                                .secondaryBackground,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            12.0, 25.0, 0.0, 0.0),
+                                        child: Text(
+                                          '${FFAppState().breakMinutes.toString()} min',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                font: GoogleFonts.inter(
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                                color: _model.isBreak == true
+                                                    ? FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondaryBackground
+                                                    : FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                fontSize: 16.0,
+                                                letterSpacing: 0.0,
                                                 fontWeight:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -433,18 +710,7 @@ class _FocusSessionWidgetState extends State<FocusSessionWidget> {
                                                         .bodyMedium
                                                         .fontStyle,
                                               ),
-                                              color: Colors.black,
-                                              fontSize: 16.0,
-                                              letterSpacing: 0.0,
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
+                                        ),
                                       ),
                                     ),
                                   ),

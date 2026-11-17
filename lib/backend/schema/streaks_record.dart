@@ -40,12 +40,24 @@ class StreaksRecord extends FirestoreRecord {
   DateTime? get lastUpdated => _lastUpdated;
   bool hasLastUpdated() => _lastUpdated != null;
 
+  // "reward_level" field.
+  String? _rewardLevel;
+  String get rewardLevel => _rewardLevel ?? '';
+  bool hasRewardLevel() => _rewardLevel != null;
+
+  // "habit_ref" field.
+  DocumentReference? _habitRef;
+  DocumentReference? get habitRef => _habitRef;
+  bool hasHabitRef() => _habitRef != null;
+
   void _initializeFields() {
     _userId = snapshotData['user_id'] as String?;
     _habitId = snapshotData['habit_id'] as String?;
     _currentCount = castToType<int>(snapshotData['current_count']);
     _longestCount = castToType<int>(snapshotData['longest_count']);
     _lastUpdated = snapshotData['last_updated'] as DateTime?;
+    _rewardLevel = snapshotData['reward_level'] as String?;
+    _habitRef = snapshotData['habit_ref'] as DocumentReference?;
   }
 
   static CollectionReference get collection =>
@@ -87,6 +99,8 @@ Map<String, dynamic> createStreaksRecordData({
   int? currentCount,
   int? longestCount,
   DateTime? lastUpdated,
+  String? rewardLevel,
+  DocumentReference? habitRef,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -95,6 +109,8 @@ Map<String, dynamic> createStreaksRecordData({
       'current_count': currentCount,
       'longest_count': longestCount,
       'last_updated': lastUpdated,
+      'reward_level': rewardLevel,
+      'habit_ref': habitRef,
     }.withoutNulls,
   );
 
@@ -110,7 +126,9 @@ class StreaksRecordDocumentEquality implements Equality<StreaksRecord> {
         e1?.habitId == e2?.habitId &&
         e1?.currentCount == e2?.currentCount &&
         e1?.longestCount == e2?.longestCount &&
-        e1?.lastUpdated == e2?.lastUpdated;
+        e1?.lastUpdated == e2?.lastUpdated &&
+        e1?.rewardLevel == e2?.rewardLevel &&
+        e1?.habitRef == e2?.habitRef;
   }
 
   @override
@@ -119,7 +137,9 @@ class StreaksRecordDocumentEquality implements Equality<StreaksRecord> {
         e?.habitId,
         e?.currentCount,
         e?.longestCount,
-        e?.lastUpdated
+        e?.lastUpdated,
+        e?.rewardLevel,
+        e?.habitRef
       ]);
 
   @override

@@ -1,5 +1,5 @@
-import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
+import '/backend/custom_cloud_functions/custom_cloud_function_response_manager.dart';
 import '/components/achievement_item_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
@@ -101,8 +101,8 @@ class AnalyticsMonthlyReportModel
   List<HabitsRecord>? thisMonthHabitsResult;
   // Stores action output result for [Firestore Query - Query a collection] action in AnalyticsMonthlyReport widget.
   List<JournalEntriesRecord>? thisMonthJournalsResult;
-  // Stores action output result for [Backend Call - API (generateInsights)] action in AnalyticsMonthlyReport widget.
-  ApiCallResponse? insightsResponse;
+  // Stores action output result for [Cloud Function - generateInsights] action in AnalyticsMonthlyReport widget.
+  GenerateInsightsCloudFunctionCallResponse? insightsResponse;
   // Model for AchievementItem.
   late AchievementItemModel achievementItemModel1;
   // Model for AchievementItem.

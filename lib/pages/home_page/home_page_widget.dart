@@ -1,6 +1,7 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/schema/enums/enums.dart';
+import '/components/daily_habit_row_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -89,24 +90,45 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: Color(0xFFF8F9FE),
-            floatingActionButton: Container(
-              width: 40.0,
-              height: 40.0,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF5B21B6), Color(0xFF7C3AED)],
-                  stops: [0.0, 1.0],
-                  begin: AlignmentDirectional(1.0, 0.0),
-                  end: AlignmentDirectional(-1.0, 0),
-                ),
-                shape: BoxShape.circle,
-              ),
-              child: Align(
-                alignment: AlignmentDirectional(0.0, 0.0),
-                child: Icon(
-                  Icons.mic,
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                  size: 24.0,
+            floatingActionButton: Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 88.0),
+              child: InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () async {
+                  context.pushNamed(AiAssistantWidget.routeName);
+                },
+                child: Container(
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF5B21B6), Color(0xFF7C3AED)],
+                      stops: [0.0, 1.0],
+                      begin: AlignmentDirectional(1.0, 0.0),
+                      end: AlignmentDirectional(-1.0, 0),
+                    ),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Align(
+                    alignment: AlignmentDirectional(0.0, 0.0),
+                    child: InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        context.pushNamed(AiAssistantWidget.routeName);
+                      },
+                      child: Icon(
+                        Icons.mic,
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        size: 24.0,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -460,47 +482,57 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 16.0, 0.0, 16.0, 0.0),
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Color(0xFFDDD6FE),
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(14.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Icon(
-                                      Icons.auto_awesome,
-                                      color: Color(0xFF5B21B6),
-                                      size: 20.0,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        'You\'re at peak energy! Start a high-focus task now.',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              font: GoogleFonts.inter(
+                            child: InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                context.pushNamed(AiAssistantWidget.routeName);
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFDDD6FE),
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(14.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Icon(
+                                        Icons.auto_awesome,
+                                        color: Color(0xFF5B21B6),
+                                        size: 20.0,
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          'You\'re at peak energy! Start a high-focus task now.',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                font: GoogleFonts.inter(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                                color: Color(0xFF5B21B6),
+                                                fontSize: 14.0,
+                                                letterSpacing: 0.0,
                                                 fontWeight: FontWeight.normal,
                                                 fontStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
                                                         .fontStyle,
                                               ),
-                                              color: Color(0xFF5B21B6),
-                                              fontSize: 14.0,
-                                              letterSpacing: 0.0,
-                                              fontWeight: FontWeight.normal,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
+                                        ),
                                       ),
-                                    ),
-                                  ].divide(SizedBox(width: 12.0)),
+                                    ].divide(SizedBox(width: 12.0)),
+                                  ),
                                 ),
                               ),
                             ),
@@ -783,299 +815,330 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Today\'s Habits',
-                                style: FlutterFlowTheme.of(context)
-                                    .titleMedium
-                                    .override(
-                                      font: GoogleFonts.interTight(
-                                        fontWeight: FontWeight.w500,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .titleMedium
-                                            .fontStyle,
-                                      ),
-                                      color: Color(0xFF1A1D2E),
-                                      fontSize: 18.0,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleMedium
-                                          .fontStyle,
-                                    ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    16.0, 0.0, 16.0, 0.0),
-                                child: InkWell(
-                                  splashColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () async {
-                                    context.pushNamed(HabitsWidget.routeName);
-                                  },
-                                  child: Container(
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      borderRadius: BorderRadius.circular(12.0),
-                                      border: Border.all(
-                                        color: Color(0xFFE2E8F0),
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(14.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Icon(
-                                                Icons.check_circle,
-                                                color: Color(0xFF6366F1),
-                                                size: 22.0,
-                                              ),
-                                              Icon(
-                                                Icons.fitness_center,
-                                                color: Color(0xFF64748B),
-                                                size: 22.0,
-                                              ),
-                                              Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Morning Exercise',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          font:
-                                                              GoogleFonts.inter(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                          ),
-                                                          color:
-                                                              Color(0xFF1A1D2E),
-                                                          fontSize: 14.0,
-                                                          letterSpacing: 0.0,
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                  ),
-                                                  Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    children: [
-                                                      Icon(
-                                                        Icons
-                                                            .local_fire_department,
-                                                        color:
-                                                            Color(0xFFF97316),
-                                                        size: 14.0,
-                                                      ),
-                                                      Text(
-                                                        '7  •  daily',
-                                                        style: FlutterFlowTheme
-                                                                .of(context)
-                                                            .bodySmall
-                                                            .override(
-                                                              font: GoogleFonts
-                                                                  .inter(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodySmall
-                                                                    .fontStyle,
-                                                              ),
-                                                              color: Color(
-                                                                  0xFF64748B),
-                                                              fontSize: 12.0,
-                                                              letterSpacing:
-                                                                  0.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal,
-                                                              fontStyle:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodySmall
-                                                                      .fontStyle,
-                                                            ),
-                                                      ),
-                                                    ].divide(
-                                                        SizedBox(width: 4.0)),
-                                                  ),
-                                                ].divide(SizedBox(height: 2.0)),
-                                              ),
-                                            ].divide(SizedBox(width: 12.0)),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Text(
+                                    'Today\'s Habits',
+                                    style: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .override(
+                                          font: GoogleFonts.interTight(
+                                            fontWeight: FontWeight.w500,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleMedium
+                                                    .fontStyle,
                                           ),
-                                          Icon(
-                                            Icons.chevron_right,
-                                            color: Color(0xFF94A3B8),
-                                            size: 18.0,
-                                          ),
-                                        ],
+                                          color: Color(0xFF1A1D2E),
+                                          fontSize: 18.0,
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.w500,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleMedium
+                                                  .fontStyle,
+                                        ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        12.0, 0.0, 0.0, 0.0),
+                                    child: InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        context
+                                            .pushNamed(HabitsWidget.routeName);
+                                      },
+                                      child: Text(
+                                        'View all',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyLarge
+                                            .override(
+                                              font: GoogleFonts.inter(
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyLarge
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyLarge
+                                                        .fontStyle,
+                                              ),
+                                              color: Color(0xFF000BFF),
+                                              letterSpacing: 0.0,
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyLarge
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyLarge
+                                                      .fontStyle,
+                                            ),
                                       ),
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    16.0, 0.0, 16.0, 0.0),
-                                child: InkWell(
-                                  splashColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () async {
-                                    context.pushNamed(HabitsWidget.routeName);
-                                  },
-                                  child: Container(
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      borderRadius: BorderRadius.circular(12.0),
-                                      border: Border.all(
-                                        color: Color(0xFFE2E8F0),
-                                        width: 1.0,
+                              StreamBuilder<List<HabitsRecord>>(
+                                stream: queryHabitsRecord(
+                                  queryBuilder: (habitsRecord) => habitsRecord
+                                      .where(
+                                        'user_id',
+                                        isEqualTo: currentUserUid,
+                                      )
+                                      .where(
+                                        'selected_days',
+                                        arrayContains: dateTimeFormat(
+                                            "EEE", getCurrentTimestamp),
                                       ),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(14.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Icon(
-                                                Icons.check_circle,
-                                                color: Color(0xFF6366F1),
-                                                size: 22.0,
-                                              ),
-                                              Icon(
-                                                Icons.track_changes,
-                                                color: Color(0xFF64748B),
-                                                size: 22.0,
-                                              ),
-                                              Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Deep Work',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          font:
-                                                              GoogleFonts.inter(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                          ),
-                                                          color:
-                                                              Color(0xFF1A1D2E),
-                                                          fontSize: 14.0,
-                                                          letterSpacing: 0.0,
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                  ),
-                                                  Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    children: [
-                                                      Icon(
-                                                        Icons
-                                                            .local_fire_department,
-                                                        color:
-                                                            Color(0xFFF97316),
-                                                        size: 14.0,
-                                                      ),
-                                                      Text(
-                                                        '12  •  daily',
-                                                        style: FlutterFlowTheme
-                                                                .of(context)
-                                                            .bodySmall
-                                                            .override(
-                                                              font: GoogleFonts
-                                                                  .inter(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodySmall
-                                                                    .fontStyle,
-                                                              ),
-                                                              color: Color(
-                                                                  0xFF64748B),
-                                                              fontSize: 12.0,
-                                                              letterSpacing:
-                                                                  0.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal,
-                                                              fontStyle:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodySmall
-                                                                      .fontStyle,
-                                                            ),
-                                                      ),
-                                                    ].divide(
-                                                        SizedBox(width: 4.0)),
-                                                  ),
-                                                ].divide(SizedBox(height: 2.0)),
-                                              ),
-                                            ].divide(SizedBox(width: 12.0)),
-                                          ),
-                                          Icon(
-                                            Icons.chevron_right,
-                                            color: Color(0xFF94A3B8),
-                                            size: 18.0,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
                                 ),
+                                builder: (context, snapshot) {
+                                  // Customize what your widget looks like when it's loading.
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 50.0,
+                                        height: 50.0,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  List<HabitsRecord> containerHabitsRecordList =
+                                      snapshot.data!;
+
+                                  return Container(
+                                    child: StreamBuilder<List<HabitsRecord>>(
+                                      stream: queryHabitsRecord(
+                                        queryBuilder: (habitsRecord) =>
+                                            habitsRecord
+                                                .where(
+                                                  'user_id',
+                                                  isEqualTo: currentUserUid,
+                                                )
+                                                .where(
+                                                  'selected_days',
+                                                  arrayContains: dateTimeFormat(
+                                                      "EEE",
+                                                      getCurrentTimestamp),
+                                                ),
+                                      ),
+                                      builder: (context, snapshot) {
+                                        // Customize what your widget looks like when it's loading.
+                                        if (!snapshot.hasData) {
+                                          return Center(
+                                            child: SizedBox(
+                                              width: 50.0,
+                                              height: 50.0,
+                                              child: CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                        List<HabitsRecord>
+                                            listViewHabitsRecordList =
+                                            snapshot.data!;
+
+                                        return Builder(
+                                          builder: (context) {
+                                            final habitItem =
+                                                listViewHabitsRecordList
+                                                    .toList();
+
+                                            return ListView.builder(
+                                              padding: EdgeInsets.zero,
+                                              primary: false,
+                                              shrinkWrap: true,
+                                              scrollDirection: Axis.vertical,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemCount: habitItem.length,
+                                              itemBuilder:
+                                                  (context, habitItemIndex) {
+                                                final habitItemItem =
+                                                    habitItem[habitItemIndex];
+                                                return wrapWithModel(
+                                                  model: _model
+                                                      .dailyHabitRowModels1
+                                                      .getModel(
+                                                    habitItemIndex.toString(),
+                                                    habitItemIndex,
+                                                  ),
+                                                  updateCallback: () =>
+                                                      safeSetState(() {}),
+                                                  child: DailyHabitRowWidget(
+                                                    key: Key(
+                                                      'Key2g8_${habitItemIndex.toString()}',
+                                                    ),
+                                                    habitRef:
+                                                        habitItemItem.reference,
+                                                    title: habitItemItem.name,
+                                                    completed: false,
+                                                    showRow: !functions
+                                                        .isHabitCompletedToday(
+                                                            habitItemItem
+                                                                .completionDate),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                              StreamBuilder<List<HabitsRecord>>(
+                                stream: queryHabitsRecord(
+                                  queryBuilder: (habitsRecord) => habitsRecord
+                                      .where(
+                                        'user_id',
+                                        isEqualTo: currentUserUid,
+                                      )
+                                      .where(
+                                        'selected_days',
+                                        arrayContains: dateTimeFormat(
+                                            "EEE", getCurrentTimestamp),
+                                      )
+                                      .where(
+                                        'completion_date',
+                                        isGreaterThanOrEqualTo:
+                                            functions.startOfToday(),
+                                      )
+                                      .where(
+                                        'completion_date',
+                                        isLessThan: functions.startOfTomorrow(),
+                                      ),
+                                ),
+                                builder: (context, snapshot) {
+                                  // Customize what your widget looks like when it's loading.
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 50.0,
+                                        height: 50.0,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  List<HabitsRecord> containerHabitsRecordList =
+                                      snapshot.data!;
+
+                                  return Container(
+                                    child: StreamBuilder<List<HabitsRecord>>(
+                                      stream: queryHabitsRecord(
+                                        queryBuilder: (habitsRecord) =>
+                                            habitsRecord
+                                                .where(
+                                                  'user_id',
+                                                  isEqualTo: currentUserUid,
+                                                )
+                                                .where(
+                                                  'selected_days',
+                                                  arrayContains: dateTimeFormat(
+                                                      "EEE",
+                                                      getCurrentTimestamp),
+                                                )
+                                                .where(
+                                                  'completion_date',
+                                                  isGreaterThanOrEqualTo:
+                                                      functions.startOfToday(),
+                                                )
+                                                .where(
+                                                  'completion_date',
+                                                  isLessThan: functions
+                                                      .startOfTomorrow(),
+                                                ),
+                                      ),
+                                      builder: (context, snapshot) {
+                                        // Customize what your widget looks like when it's loading.
+                                        if (!snapshot.hasData) {
+                                          return Center(
+                                            child: SizedBox(
+                                              width: 50.0,
+                                              height: 50.0,
+                                              child: CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                        List<HabitsRecord>
+                                            listViewHabitsRecordList =
+                                            snapshot.data!;
+
+                                        return Builder(
+                                          builder: (context) {
+                                            final listItem =
+                                                listViewHabitsRecordList
+                                                    .toList();
+
+                                            return ListView.builder(
+                                              padding: EdgeInsets.zero,
+                                              primary: false,
+                                              shrinkWrap: true,
+                                              scrollDirection: Axis.vertical,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemCount: listItem.length,
+                                              itemBuilder:
+                                                  (context, listItemIndex) {
+                                                final listItemItem =
+                                                    listItem[listItemIndex];
+                                                return wrapWithModel(
+                                                  model: _model
+                                                      .dailyHabitRowModels2
+                                                      .getModel(
+                                                    listItemIndex.toString(),
+                                                    listItemIndex,
+                                                  ),
+                                                  updateCallback: () =>
+                                                      safeSetState(() {}),
+                                                  child: DailyHabitRowWidget(
+                                                    key: Key(
+                                                      'Keydq9_${listItemIndex.toString()}',
+                                                    ),
+                                                    habitRef:
+                                                        listItemItem.reference,
+                                                    title: listItemItem.name,
+                                                    completed: true,
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
                               ),
                             ].divide(SizedBox(height: 12.0)),
                           ),

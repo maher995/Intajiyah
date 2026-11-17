@@ -155,6 +155,11 @@ class _Intro2WidgetState extends State<Intro2Widget> {
                           ),
                         ].divide(SizedBox(height: 12.0)),
                       ),
+                      Icon(
+                        Icons.arrow_back,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 24.0,
+                      ),
                     ].divide(SizedBox(height: 24.0)),
                   ),
                 ),

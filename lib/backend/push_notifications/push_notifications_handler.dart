@@ -120,19 +120,12 @@ class ParameterData {
 
 final parametersBuilderMap =
     <String, Future<ParameterData> Function(Map<String, dynamic>)>{
-  'LoginScreen': ParameterData.none(),
   'ForgotMyPassword': ParameterData.none(),
   'CHangepassword': ParameterData.none(),
-  'Habits': ParameterData.none(),
   'intro1': ParameterData.none(),
-  'intro2': ParameterData.none(),
   'intro3': ParameterData.none(),
   'TaskCompletion': ParameterData.none(),
-  'HomePage': ParameterData.none(),
   'ToBuildAPage': ParameterData.none(),
-  'FocusSession': ParameterData.none(),
-  'AnalyticsStatics': ParameterData.none(),
-  'MoodTracking': ParameterData.none(),
   'Library': ParameterData.none(),
   'PDFViewer': (data) async => ParameterData(
         allParams: {
@@ -140,12 +133,25 @@ final parametersBuilderMap =
         },
       ),
   'SignUpScreen': ParameterData.none(),
-  'Tasks': ParameterData.none(),
+  'LoginScreen': ParameterData.none(),
   'Settings': ParameterData.none(),
+  'Tasks': ParameterData.none(),
   'MobileNamedEditprofilePage': ParameterData.none(),
-  'AnalyticsMonthlyReport': ParameterData.none(),
-  'Journal': ParameterData.none(),
   'journalArchive': ParameterData.none(),
+  'AchievementsPage': ParameterData.none(),
+  'intro2': ParameterData.none(),
+  'AnalyticsMonthlyReport': ParameterData.none(),
+  'HomePage': ParameterData.none(),
+  'AnalyticsStatics': ParameterData.none(),
+  'Habits': ParameterData.none(),
+  'AiAssistant': (data) async => ParameterData(
+        allParams: {
+          'initialMessage': getParameter<String>(data, 'initialMessage'),
+        },
+      ),
+  'Journal': ParameterData.none(),
+  'FocusSession': ParameterData.none(),
+  'MoodTracking': ParameterData.none(),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

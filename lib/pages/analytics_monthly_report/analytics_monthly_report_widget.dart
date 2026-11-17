@@ -1,6 +1,6 @@
 import '/auth/firebase_auth/auth_util.dart';
-import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
+import '/backend/custom_cloud_functions/custom_cloud_function_response_manager.dart';
 import '/components/achievement_item_widget.dart';
 import '/components/insight_li_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
@@ -9,6 +9,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -340,38 +341,38 @@ class _AnalyticsMonthlyReportWidgetState
       _model.thisMonthHabits =
           _model.thisMonthHabitsResult!.toList().cast<HabitsRecord>();
       safeSetState(() {});
-      _model.insightsResponse = await GenerateInsightsCall.call(
-        stats: functions.buildStatsText(
-            _model.dueThisMonthTasks.toList(),
-            _model.dueLastMonthTasks.toList(),
-            _model.thisMonthTasks.toList(),
-            _model.lastMonthTasks.toList(),
-            _model.thisMonthHabits.toList(),
-            _model.thisMonthJournals.toList(),
-            _model.selectedMonth),
-      );
+      try {
+        final result = await FirebaseFunctions.instance
+            .httpsCallable('generateInsights')
+            .call({
+          "stats": functions.buildStatsText(
+              _model.dueThisMonthTasks.toList(),
+              _model.dueLastMonthTasks.toList(),
+              _model.thisMonthTasks.toList(),
+              _model.lastMonthTasks.toList(),
+              _model.thisMonthHabits.toList(),
+              _model.thisMonthJournals.toList(),
+              _model.selectedMonth),
+        });
+        _model.insightsResponse = GenerateInsightsCloudFunctionCallResponse(
+          data: result.data,
+          succeeded: true,
+          resultAsString: result.data.toString(),
+          jsonBody: result.data,
+        );
+      } on FirebaseFunctionsException catch (error) {
+        _model.insightsResponse = GenerateInsightsCloudFunctionCallResponse(
+          errorCode: error.code,
+          succeeded: false,
+        );
+      }
 
-      if ((_model.insightsResponse?.succeeded ?? true)) {
-        _model.insights = functions.parseInsights(getJsonField(
-          (_model.insightsResponse?.jsonBody ?? ''),
-          r'''$.candidates[0].content.parts[0].text''',
-        ).toString());
+      if (_model.insightsResponse!.succeeded!) {
+        _model.insights = _model.insightsResponse?.jsonBody;
         safeSetState(() {});
         _model.isLoading = false;
         safeSetState(() {});
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Gemini failed: ${(_model.insightsResponse?.statusCode ?? 200).toString()}${(_model.insightsResponse?.exceptionMessage ?? '')}',
-              style: TextStyle(
-                color: FlutterFlowTheme.of(context).primaryText,
-              ),
-            ),
-            duration: Duration(milliseconds: 10000),
-            backgroundColor: FlutterFlowTheme.of(context).secondary,
-          ),
-        );
         _model.isLoading = false;
         safeSetState(() {});
       }
@@ -752,81 +753,136 @@ class _AnalyticsMonthlyReportWidgetState
                                               lineHeight: 1.4,
                                             ),
                                       ),
-                                      Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          wrapWithModel(
-                                            model: _model.achievementItemModel1,
-                                            updateCallback: () =>
-                                                safeSetState(() {}),
-                                            child: AchievementItemWidget(
-                                              iconBg: Color(0xFFDCFCE7),
-                                              icon: Icon(
-                                                Icons.help,
-                                                color: Color(0xFF16A34A),
-                                                size: 20.0,
+                                      StreamBuilder<List<StreaksRecord>>(
+                                        stream: queryStreaksRecord(
+                                          queryBuilder: (streaksRecord) =>
+                                              streaksRecord
+                                                  .where(
+                                                    'user_id',
+                                                    isEqualTo: currentUserUid,
+                                                  )
+                                                  .orderBy('longest_count',
+                                                      descending: true),
+                                          singleRecord: true,
+                                        ),
+                                        builder: (context, snapshot) {
+                                          // Customize what your widget looks like when it's loading.
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 50.0,
+                                                height: 50.0,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  valueColor:
+                                                      AlwaysStoppedAnimation<
+                                                          Color>(
+                                                    FlutterFlowTheme.of(context)
+                                                        .primary,
+                                                  ),
+                                                ),
                                               ),
-                                              iconColor: Color(0xFF16A34A),
-                                              title: valueOrDefault<String>(
-                                                functions.tasksCompletedText(
-                                                    _model.thisMonthTasks
-                                                        .toList()),
-                                                '268 Tasks Completed',
+                                            );
+                                          }
+                                          List<StreaksRecord>
+                                              columnStreaksRecordList =
+                                              snapshot.data!;
+                                          // Return an empty Container when the item does not exist.
+                                          if (snapshot.data!.isEmpty) {
+                                            return Container();
+                                          }
+                                          final columnStreaksRecord =
+                                              columnStreaksRecordList.isNotEmpty
+                                                  ? columnStreaksRecordList
+                                                      .first
+                                                  : null;
+
+                                          return Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              wrapWithModel(
+                                                model: _model
+                                                    .achievementItemModel1,
+                                                updateCallback: () =>
+                                                    safeSetState(() {}),
+                                                child: AchievementItemWidget(
+                                                  iconBg: Color(0xFFDCFCE7),
+                                                  icon: Icon(
+                                                    Icons.help,
+                                                    color: Color(0xFF16A34A),
+                                                    size: 20.0,
+                                                  ),
+                                                  iconColor: Color(0xFF16A34A),
+                                                  title: valueOrDefault<String>(
+                                                    functions
+                                                        .tasksCompletedText(
+                                                            _model
+                                                                .thisMonthTasks
+                                                                .toList()),
+                                                    '268 Tasks Completed',
+                                                  ),
+                                                  subtitle: functions
+                                                      .tasksDiffText(
+                                                          _model.thisMonthTasks
+                                                              .toList(),
+                                                          _model.lastMonthTasks
+                                                              .toList()),
+                                                ),
                                               ),
-                                              subtitle: functions.tasksDiffText(
-                                                  _model.thisMonthTasks
-                                                      .toList(),
-                                                  _model.lastMonthTasks
-                                                      .toList()),
-                                            ),
-                                          ),
-                                          wrapWithModel(
-                                            model: _model.achievementItemModel2,
-                                            updateCallback: () =>
-                                                safeSetState(() {}),
-                                            child: AchievementItemWidget(
-                                              iconBg: Color(0xFFFFEDD5),
-                                              icon: Icon(
-                                                Icons.trending_up_rounded,
-                                                color: Color(0xFFEA580C),
-                                                size: 20.0,
+                                              wrapWithModel(
+                                                model: _model
+                                                    .achievementItemModel2,
+                                                updateCallback: () =>
+                                                    safeSetState(() {}),
+                                                child: AchievementItemWidget(
+                                                  iconBg: Color(0xFFFFEDD5),
+                                                  icon: Icon(
+                                                    Icons.trending_up_rounded,
+                                                    color: Color(0xFFEA580C),
+                                                    size: 20.0,
+                                                  ),
+                                                  iconColor: Color(0xFFEA580C),
+                                                  title:
+                                                      '${valueOrDefault<String>(
+                                                    columnStreaksRecord
+                                                        ?.longestCount
+                                                        .toString(),
+                                                    '0',
+                                                  )}-day best streak',
+                                                  subtitle:
+                                                      'Personal best across your habits',
+                                                ),
                                               ),
-                                              iconColor: Color(0xFFEA580C),
-                                              title: valueOrDefault<String>(
-                                                functions.bestStreakText(_model
-                                                    .thisMonthTasks
-                                                    .toList()),
-                                                '12-Best Streak',
+                                              wrapWithModel(
+                                                model: _model
+                                                    .achievementItemModel3,
+                                                updateCallback: () =>
+                                                    safeSetState(() {}),
+                                                child: AchievementItemWidget(
+                                                  iconBg: Color(0xFFDBEAFE),
+                                                  icon: Icon(
+                                                    Icons.auto_awesome_rounded,
+                                                    color: Color(0xFF2563EB),
+                                                    size: 20.0,
+                                                  ),
+                                                  iconColor: Color(0xFF2563EB),
+                                                  title: valueOrDefault<String>(
+                                                    functions.newHabitsText(
+                                                        _model.thisMonthHabits
+                                                            .toList()),
+                                                    '4 habits established',
+                                                  ),
+                                                  subtitle:
+                                                      'Successfully built',
+                                                ),
                                               ),
-                                              subtitle: 'Your best streak yet!',
-                                            ),
-                                          ),
-                                          wrapWithModel(
-                                            model: _model.achievementItemModel3,
-                                            updateCallback: () =>
-                                                safeSetState(() {}),
-                                            child: AchievementItemWidget(
-                                              iconBg: Color(0xFFDBEAFE),
-                                              icon: Icon(
-                                                Icons.auto_awesome_rounded,
-                                                color: Color(0xFF2563EB),
-                                                size: 20.0,
-                                              ),
-                                              iconColor: Color(0xFF2563EB),
-                                              title: valueOrDefault<String>(
-                                                functions.newHabitsText(_model
-                                                    .thisMonthHabits
-                                                    .toList()),
-                                                '4 habits established',
-                                              ),
-                                              subtitle: 'Successfully built',
-                                            ),
-                                          ),
-                                        ].divide(SizedBox(height: 16.0)),
+                                            ].divide(SizedBox(height: 16.0)),
+                                          );
+                                        },
                                       ),
                                     ].divide(SizedBox(height: 16.0)),
                                   ),

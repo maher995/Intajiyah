@@ -9,6 +9,70 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "priority",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "is_deleted",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "due_date",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "journal_entries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user_id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "entry_date",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "achievements",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user_id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "unlocked_at",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "streaks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user_id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "longest_count",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "tasks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user_id",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "due_date",
           "order": "ASCENDING"
         }
@@ -43,6 +107,38 @@
       ]
     },
     {
+      "collectionGroup": "habits",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user_id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "selected_days",
+          "arrayConfig": "CONTAINS"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "habits",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user_id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "selected_days",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "completion_date",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
       "collectionGroup": "tasks",
       "queryScope": "COLLECTION",
       "fields": [
@@ -51,7 +147,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "priority",
+          "fieldPath": "status",
           "order": "ASCENDING"
         },
         {
@@ -59,7 +155,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "due_date",
+          "fieldPath": "completed_at",
           "order": "ASCENDING"
         }
       ]
@@ -79,16 +175,20 @@
       ]
     },
     {
-      "collectionGroup": "journal_entries",
-      "queryScope": "COLLECTION",
+      "collectionGroup": "habit_logs",
+      "queryScope": "COLLECTION_GROUP",
       "fields": [
         {
           "fieldPath": "user_id",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "entry_date",
-          "order": "DESCENDING"
+          "fieldPath": "completed",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "log_date",
+          "order": "ASCENDING"
         }
       ]
     },

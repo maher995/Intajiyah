@@ -1,8 +1,15 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/components/add_habit_sheet_widget.dart';
 import '/components/habit_card_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/custom_functions.dart' as functions;
+import '/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'habits_model.dart';
 export 'habits_model.dart';
@@ -465,6 +472,13 @@ class _HabitsWidgetState extends State<HabitsWidget> {
     super.initState();
     _model = createModel(context, () => HabitsModel());
 
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      await actions.refreshStreaks(
+        currentUserUid,
+      );
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
@@ -485,6 +499,38 @@ class _HabitsWidgetState extends State<HabitsWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        floatingActionButton: Builder(
+          builder: (context) => FloatingActionButton(
+            onPressed: () async {
+              await showDialog(
+                context: context,
+                builder: (dialogContext) {
+                  return Dialog(
+                    elevation: 0,
+                    insetPadding: EdgeInsets.zero,
+                    backgroundColor: Colors.transparent,
+                    alignment: AlignmentDirectional(0.0, 0.0)
+                        .resolve(Directionality.of(context)),
+                    child: GestureDetector(
+                      onTap: () {
+                        FocusScope.of(dialogContext).unfocus();
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
+                      child: AddHabitSheetWidget(),
+                    ),
+                  );
+                },
+              );
+            },
+            backgroundColor: FlutterFlowTheme.of(context).primary,
+            elevation: 6.0,
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 24.0,
+            ),
+          ),
+        ),
         body: Stack(
           alignment: AlignmentDirectional(-1.0, -1.0),
           children: [
@@ -591,52 +637,79 @@ class _HabitsWidgetState extends State<HabitsWidget> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          Color(0xFFF97316),
-                                          Color(0xFFEF4444)
-                                        ],
-                                        stops: [0.0, 1.0],
-                                        begin: AlignmentDirectional(0.0, -1.0),
-                                        end: AlignmentDirectional(0, 1.0),
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      context.pushNamed(
+                                          AchievementsPageWidget.routeName);
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Color(0xFFF97316),
+                                            Color(0xFFEF4444)
+                                          ],
+                                          stops: [0.0, 1.0],
+                                          begin:
+                                              AlignmentDirectional(0.0, -1.0),
+                                          end: AlignmentDirectional(0, 1.0),
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(24.0),
+                                        shape: BoxShape.rectangle,
                                       ),
-                                      borderRadius: BorderRadius.circular(24.0),
-                                      shape: BoxShape.rectangle,
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(24.0),
-                                      child: Container(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              (FFCrossAxisAlignment.start)
-                                                  .flutterValue,
-                                          textBaseline: TextBaseline.alphabetic,
-                                          children: [
-                                            Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons
-                                                      .local_fire_department_outlined,
-                                                  color: Colors.white,
-                                                  size: 24.0,
-                                                ),
-                                                Text(
-                                                  'Total Streak',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .labelMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(24.0),
+                                        child: Container(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                (FFCrossAxisAlignment.start)
+                                                    .flutterValue,
+                                            textBaseline:
+                                                TextBaseline.alphabetic,
+                                            children: [
+                                              Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons
+                                                        .local_fire_department_outlined,
+                                                    color: Colors.white,
+                                                    size: 24.0,
+                                                  ),
+                                                  Text(
+                                                    'Total Streak',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .labelMedium
+                                                        .override(
+                                                          font:
+                                                              GoogleFonts.inter(
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelMedium
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          color:
+                                                              Color(0xE6FFFFFF),
+                                                          letterSpacing: 0.0,
                                                           fontWeight:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -647,74 +720,202 @@ class _HabitsWidgetState extends State<HabitsWidget> {
                                                                       context)
                                                                   .labelMedium
                                                                   .fontStyle,
+                                                          lineHeight: 1.4,
                                                         ),
-                                                        color:
-                                                            Color(0xE6FFFFFF),
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .labelMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .labelMedium
-                                                                .fontStyle,
-                                                        lineHeight: 1.4,
-                                                      ),
+                                                  ),
+                                                ].divide(SizedBox(width: 4.0)),
+                                              ),
+                                              StreamBuilder<
+                                                  List<StreaksRecord>>(
+                                                stream: queryStreaksRecord(
+                                                  queryBuilder:
+                                                      (streaksRecord) =>
+                                                          streaksRecord.where(
+                                                    'user_id',
+                                                    isEqualTo: currentUserUid,
+                                                  ),
                                                 ),
-                                              ].divide(SizedBox(width: 4.0)),
-                                            ),
-                                            Text(
-                                              '27',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color: Colors.white,
-                                                        fontSize: 48.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontStyle:
+                                                builder: (context, snapshot) {
+                                                  // Customize what your widget looks like when it's loading.
+                                                  if (!snapshot.hasData) {
+                                                    return Center(
+                                                      child: SizedBox(
+                                                        width: 50.0,
+                                                        height: 50.0,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          valueColor:
+                                                              AlwaysStoppedAnimation<
+                                                                  Color>(
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                        lineHeight: 1.4,
-                                                      ),
-                                            ),
-                                            Text(
-                                              'days of consistency',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodySmall
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodySmall
-                                                                  .fontWeight,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodySmall
-                                                                  .fontStyle,
+                                                                .primary,
+                                                          ),
                                                         ),
-                                                        color:
-                                                            Color(0xE6FFFFFF),
-                                                        letterSpacing: 0.0,
+                                                      ),
+                                                    );
+                                                  }
+                                                  List<StreaksRecord>
+                                                      containerStreaksRecordList =
+                                                      snapshot.data!;
+
+                                                  return Container(
+                                                    child: StreamBuilder<
+                                                        List<HabitsRecord>>(
+                                                      stream: queryHabitsRecord(
+                                                        queryBuilder:
+                                                            (habitsRecord) =>
+                                                                habitsRecord
+                                                                    .where(
+                                                          'user_id',
+                                                          isEqualTo:
+                                                              currentUserUid,
+                                                        ),
+                                                      ),
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        // Customize what your widget looks like when it's loading.
+                                                        if (!snapshot.hasData) {
+                                                          return Center(
+                                                            child: SizedBox(
+                                                              width: 50.0,
+                                                              height: 50.0,
+                                                              child:
+                                                                  CircularProgressIndicator(
+                                                                valueColor:
+                                                                    AlwaysStoppedAnimation<
+                                                                        Color>(
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primary,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
+                                                        }
+                                                        List<HabitsRecord>
+                                                            containerHabitsRecordList =
+                                                            snapshot.data!;
+
+                                                        return Container(
+                                                          child: FutureBuilder<
+                                                              List<
+                                                                  StreaksRecord>>(
+                                                            future:
+                                                                queryStreaksRecordOnce(
+                                                              queryBuilder:
+                                                                  (streaksRecord) =>
+                                                                      streaksRecord
+                                                                          .where(
+                                                                'user_id',
+                                                                isEqualTo:
+                                                                    currentUserUid,
+                                                              ),
+                                                              singleRecord:
+                                                                  true,
+                                                            ),
+                                                            builder: (context,
+                                                                snapshot) {
+                                                              // Customize what your widget looks like when it's loading.
+                                                              if (!snapshot
+                                                                  .hasData) {
+                                                                return Center(
+                                                                  child:
+                                                                      SizedBox(
+                                                                    width: 50.0,
+                                                                    height:
+                                                                        50.0,
+                                                                    child:
+                                                                        CircularProgressIndicator(
+                                                                      valueColor:
+                                                                          AlwaysStoppedAnimation<
+                                                                              Color>(
+                                                                        FlutterFlowTheme.of(context)
+                                                                            .primary,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              }
+                                                              List<StreaksRecord>
+                                                                  textStreaksRecordList =
+                                                                  snapshot
+                                                                      .data!;
+                                                              // Return an empty Container when the item does not exist.
+                                                              if (snapshot.data!
+                                                                  .isEmpty) {
+                                                                return Container();
+                                                              }
+                                                              final textStreaksRecord =
+                                                                  textStreaksRecordList
+                                                                          .isNotEmpty
+                                                                      ? textStreaksRecordList
+                                                                          .first
+                                                                      : null;
+
+                                                              return Text(
+                                                                valueOrDefault<
+                                                                    String>(
+                                                                  functions
+                                                                      .totalCurrentStreaks(
+                                                                          containerStreaksRecordList
+                                                                              .map((e) => e
+                                                                                  .currentCount)
+                                                                              .toList(),
+                                                                          containerStreaksRecordList
+                                                                              .map((e) => e
+                                                                                  .habitId)
+                                                                              .toList(),
+                                                                          containerHabitsRecordList
+                                                                              .map((e) => e.reference.id)
+                                                                              .toList())
+                                                                      ?.toString(),
+                                                                  '0',
+                                                                ),
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .override(
+                                                                      font: GoogleFonts
+                                                                          .inter(
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontStyle: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontStyle,
+                                                                      ),
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          48.0,
+                                                                      letterSpacing:
+                                                                          0.0,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontStyle: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .fontStyle,
+                                                                      lineHeight:
+                                                                          1.4,
+                                                                    ),
+                                                              );
+                                                            },
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                              Text(
+                                                'days of consistency',
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .bodySmall
+                                                    .override(
+                                                      font: GoogleFonts.inter(
                                                         fontWeight:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -725,10 +926,83 @@ class _HabitsWidgetState extends State<HabitsWidget> {
                                                                     context)
                                                                 .bodySmall
                                                                 .fontStyle,
-                                                        lineHeight: 1.4,
                                                       ),
-                                            ),
-                                          ].divide(SizedBox(height: 8.0)),
+                                                      color: Color(0xE6FFFFFF),
+                                                      letterSpacing: 0.0,
+                                                      fontWeight:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodySmall
+                                                              .fontWeight,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodySmall
+                                                              .fontStyle,
+                                                      lineHeight: 1.4,
+                                                    ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        0.0, 4.0, 0.0, 0.0),
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      (FFMainAxisAlignment.end)
+                                                          .flutterValue,
+                                                  crossAxisAlignment:
+                                                      (FFCrossAxisAlignment
+                                                              .center)
+                                                          .flutterValue,
+                                                  textBaseline:
+                                                      TextBaseline.alphabetic,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.emoji_events,
+                                                      color: Colors.white,
+                                                      size: 16.0,
+                                                    ),
+                                                    Text(
+                                                      'View achievements',
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .labelSmall
+                                                          .override(
+                                                            font: GoogleFonts
+                                                                .inter(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelSmall
+                                                                      .fontStyle,
+                                                            ),
+                                                            color: Colors.white,
+                                                            letterSpacing: 0.0,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelSmall
+                                                                    .fontStyle,
+                                                          ),
+                                                    ),
+                                                    Icon(
+                                                      Icons.chevron_right,
+                                                      color: Colors.white,
+                                                      size: 16.0,
+                                                    ),
+                                                  ].divide(
+                                                      SizedBox(width: 8.0)),
+                                                ),
+                                              ),
+                                            ].divide(SizedBox(height: 8.0)),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -761,35 +1035,274 @@ class _HabitsWidgetState extends State<HabitsWidget> {
                                               lineHeight: 1.4,
                                             ),
                                       ),
-                                      Text(
-                                        '2/4',
-                                        style: FlutterFlowTheme.of(context)
-                                            .labelLarge
-                                            .override(
-                                              font: GoogleFonts.inter(
-                                                fontWeight:
-                                                    FlutterFlowTheme.of(context)
+                                      Container(
+                                        child:
+                                            StreamBuilder<List<HabitsRecord>>(
+                                          stream: queryHabitsRecord(
+                                            queryBuilder: (habitsRecord) =>
+                                                habitsRecord
+                                                    .where(
+                                                      'user_id',
+                                                      isEqualTo: currentUserUid,
+                                                    )
+                                                    .where(
+                                                      'selected_days',
+                                                      arrayContains:
+                                                          dateTimeFormat("EEE",
+                                                              getCurrentTimestamp),
+                                                    ),
+                                          ),
+                                          builder: (context, snapshot) {
+                                            // Customize what your widget looks like when it's loading.
+                                            if (!snapshot.hasData) {
+                                              return Center(
+                                                child: SizedBox(
+                                                  width: 50.0,
+                                                  height: 50.0,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                            Color>(
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .primary,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            List<HabitsRecord>
+                                                containerHabitsRecordList =
+                                                snapshot.data!;
+
+                                            return Container(
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    (FFMainAxisAlignment.start)
+                                                        .flutterValue,
+                                                crossAxisAlignment:
+                                                    (FFCrossAxisAlignment
+                                                            .center)
+                                                        .flutterValue,
+                                                textBaseline:
+                                                    TextBaseline.alphabetic,
+                                                children: [
+                                                  StreamBuilder<
+                                                      List<HabitsRecord>>(
+                                                    stream: queryHabitsRecord(
+                                                      queryBuilder:
+                                                          (habitsRecord) =>
+                                                              habitsRecord
+                                                                  .where(
+                                                                    'user_id',
+                                                                    isEqualTo:
+                                                                        currentUserUid,
+                                                                  )
+                                                                  .where(
+                                                                    'selected_days',
+                                                                    arrayContains:
+                                                                        dateTimeFormat(
+                                                                            "EEE",
+                                                                            getCurrentTimestamp),
+                                                                  )
+                                                                  .where(
+                                                                    'completion_date',
+                                                                    isGreaterThanOrEqualTo:
+                                                                        functions
+                                                                            .startOfToday(),
+                                                                  )
+                                                                  .where(
+                                                                    'completion_date',
+                                                                    isLessThan:
+                                                                        functions
+                                                                            .startOfTomorrow(),
+                                                                  ),
+                                                    ),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      // Customize what your widget looks like when it's loading.
+                                                      if (!snapshot.hasData) {
+                                                        return Center(
+                                                          child: SizedBox(
+                                                            width: 50.0,
+                                                            height: 50.0,
+                                                            child:
+                                                                CircularProgressIndicator(
+                                                              valueColor:
+                                                                  AlwaysStoppedAnimation<
+                                                                      Color>(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primary,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }
+                                                      List<HabitsRecord>
+                                                          containerHabitsRecordList =
+                                                          snapshot.data!;
+
+                                                      return Container(
+                                                        child: Text(
+                                                          '${containerHabitsRecordList.length.toString()}',
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .labelLarge
+                                                              .override(
+                                                                font:
+                                                                    GoogleFonts
+                                                                        .inter(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontStyle,
+                                                                ),
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryText,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontStyle,
+                                                              ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                  Text(
+                                                    '/',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
                                                         .labelLarge
-                                                        .fontWeight,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .labelLarge
-                                                        .fontStyle,
+                                                        .override(
+                                                          font:
+                                                              GoogleFonts.inter(
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontStyle,
+                                                          ),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .secondaryText,
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .labelLarge
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .labelLarge
+                                                                  .fontStyle,
+                                                        ),
+                                                  ),
+                                                  StreamBuilder<
+                                                      List<HabitsRecord>>(
+                                                    stream: queryHabitsRecord(
+                                                      queryBuilder:
+                                                          (habitsRecord) =>
+                                                              habitsRecord
+                                                                  .where(
+                                                                    'user_id',
+                                                                    isEqualTo:
+                                                                        currentUserUid,
+                                                                  )
+                                                                  .where(
+                                                                    'selected_days',
+                                                                    arrayContains:
+                                                                        dateTimeFormat(
+                                                                            "EEE",
+                                                                            getCurrentTimestamp),
+                                                                  ),
+                                                    ),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      // Customize what your widget looks like when it's loading.
+                                                      if (!snapshot.hasData) {
+                                                        return Center(
+                                                          child: SizedBox(
+                                                            width: 50.0,
+                                                            height: 50.0,
+                                                            child:
+                                                                CircularProgressIndicator(
+                                                              valueColor:
+                                                                  AlwaysStoppedAnimation<
+                                                                      Color>(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primary,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }
+                                                      List<HabitsRecord>
+                                                          containerHabitsRecordList =
+                                                          snapshot.data!;
+
+                                                      return Container(
+                                                        child: Text(
+                                                          '${containerHabitsRecordList.length.toString()}',
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .labelLarge
+                                                              .override(
+                                                                font:
+                                                                    GoogleFonts
+                                                                        .inter(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontStyle,
+                                                                ),
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryText,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontStyle,
+                                                              ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ].divide(SizedBox(width: 0.0)),
                                               ),
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              letterSpacing: 0.0,
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .labelLarge
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .labelLarge
-                                                      .fontStyle,
-                                              lineHeight: 1.4,
-                                            ),
+                                            );
+                                          },
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -799,56 +1312,136 @@ class _HabitsWidgetState extends State<HabitsWidget> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      wrapWithModel(
-                                        model: _model.habitCardModel1,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: HabitCardWidget(
-                                          completed: true,
-                                          emoji: '💪',
-                                          title: 'Morning Exercise',
-                                          streak: '7 day streak',
-                                          schedule:
-                                              'daily • Mon, Tue, Wed, Thu, Fri, Sat, Sun',
+                                      StreamBuilder<List<HabitsRecord>>(
+                                        stream: queryHabitsRecord(
+                                          queryBuilder: (habitsRecord) =>
+                                              habitsRecord.where(
+                                            'user_id',
+                                            isEqualTo: currentUserUid,
+                                          ),
                                         ),
-                                      ),
-                                      wrapWithModel(
-                                        model: _model.habitCardModel2,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: HabitCardWidget(
-                                          completed: true,
-                                          emoji: '🎯',
-                                          title: 'Deep Work',
-                                          streak: '12 day streak',
-                                          schedule:
-                                              'daily • Mon, Tue, Wed, Thu, Fri',
-                                        ),
-                                      ),
-                                      wrapWithModel(
-                                        model: _model.habitCardModel3,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: HabitCardWidget(
-                                          completed: false,
-                                          emoji: '📚',
-                                          title: 'Read for 30min',
-                                          streak: '5 day streak',
-                                          schedule:
-                                              '5x/week • Mon, Tue, Wed, Fri, Sat',
-                                        ),
-                                      ),
-                                      wrapWithModel(
-                                        model: _model.habitCardModel4,
-                                        updateCallback: () =>
-                                            safeSetState(() {}),
-                                        child: HabitCardWidget(
-                                          completed: false,
-                                          emoji: '🧘',
-                                          title: 'Meditation',
-                                          streak: '3 day streak',
-                                          schedule: '3x/week • Tue, Wed, Thu',
-                                        ),
+                                        builder: (context, snapshot) {
+                                          // Customize what your widget looks like when it's loading.
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 50.0,
+                                                height: 50.0,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  valueColor:
+                                                      AlwaysStoppedAnimation<
+                                                          Color>(
+                                                    FlutterFlowTheme.of(context)
+                                                        .primary,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          List<HabitsRecord>
+                                              containerHabitsRecordList =
+                                              snapshot.data!;
+
+                                          return Container(
+                                            child: Builder(
+                                              builder: (context) {
+                                                final habitItem =
+                                                    containerHabitsRecordList
+                                                        .sortedList(
+                                                            keyOf: (e) => () {
+                                                                  if (!e
+                                                                      .selectedDays
+                                                                      .contains(dateTimeFormat(
+                                                                          "EEE",
+                                                                          getCurrentTimestamp))) {
+                                                                    return 2;
+                                                                  } else if ((e.completionDate !=
+                                                                          null) &&
+                                                                      (e.completionDate! >=
+                                                                          functions
+                                                                              .startOfToday()!) &&
+                                                                      (e.completionDate! <
+                                                                          functions
+                                                                              .startOfTomorrow()!)) {
+                                                                    return 1;
+                                                                  } else {
+                                                                    return 0;
+                                                                  }
+                                                                }(),
+                                                            desc: false)
+                                                        .toList();
+
+                                                return ListView.builder(
+                                                  padding: EdgeInsets.zero,
+                                                  primary: false,
+                                                  shrinkWrap: true,
+                                                  scrollDirection:
+                                                      Axis.vertical,
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  itemCount: habitItem.length,
+                                                  itemBuilder: (context,
+                                                      habitItemIndex) {
+                                                    final habitItemItem =
+                                                        habitItem[
+                                                            habitItemIndex];
+                                                    return wrapWithModel(
+                                                      model: _model
+                                                          .habitCardModels
+                                                          .getModel(
+                                                        habitItemIndex
+                                                            .toString(),
+                                                        habitItemIndex,
+                                                      ),
+                                                      updateCallback: () =>
+                                                          safeSetState(() {}),
+                                                      child: HabitCardWidget(
+                                                        key: Key(
+                                                          'Keym53_${habitItemIndex.toString()}',
+                                                        ),
+                                                        completed: (habitItemItem
+                                                                    .completionDate !=
+                                                                null) &&
+                                                            (habitItemItem
+                                                                    .completionDate! >=
+                                                                functions
+                                                                    .startOfToday()!) &&
+                                                            (habitItemItem
+                                                                    .completionDate! <
+                                                                functions
+                                                                    .startOfTomorrow()!),
+                                                        selectedDays:
+                                                            habitItemItem
+                                                                .selectedDays,
+                                                        title:
+                                                            habitItemItem.name,
+                                                        schedule: functions
+                                                            .formatHabitDays(
+                                                                habitItemItem
+                                                                    .selectedDays
+                                                                    .toList()),
+                                                        habitRef: habitItemItem
+                                                            .reference,
+                                                        completionToday: (habitItemItem
+                                                                    .completionDate !=
+                                                                null) &&
+                                                            (habitItemItem
+                                                                    .completionDate! >=
+                                                                functions
+                                                                    .startOfToday()!) &&
+                                                            (habitItemItem
+                                                                    .completionDate! <
+                                                                functions
+                                                                    .startOfTomorrow()!),
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ].divide(SizedBox(height: 16.0)),
                                   ),
@@ -894,39 +1487,6 @@ class _HabitsWidgetState extends State<HabitsWidget> {
                   ),
                 ),
               ],
-            ),
-            Align(
-              alignment: AlignmentDirectional(1.0, 1.0),
-              child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 16.0, 16.0),
-                child: Container(
-                  child: Container(
-                    width: 35.0,
-                    height: 35.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).primary,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 10.0,
-                          color: Color(0x33000000),
-                          offset: Offset(
-                            0.0,
-                            4.0,
-                          ),
-                          spreadRadius: 0.0,
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(9999.0),
-                    ),
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Icon(
-                      Icons.add_rounded,
-                      color: Colors.white,
-                      size: 24.0,
-                    ),
-                  ),
-                ),
-              ),
             ),
           ],
         ),

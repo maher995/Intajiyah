@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 
 import '/backend/schema/util/firestore_util.dart';
+import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -35,11 +36,23 @@ class HabitsRecord extends FirestoreRecord {
   DateTime? get createdAt => _createdAt;
   bool hasCreatedAt() => _createdAt != null;
 
+  // "selected_days" field.
+  List<String>? _selectedDays;
+  List<String> get selectedDays => _selectedDays ?? const [];
+  bool hasSelectedDays() => _selectedDays != null;
+
+  // "completion_date" field.
+  DateTime? _completionDate;
+  DateTime? get completionDate => _completionDate;
+  bool hasCompletionDate() => _completionDate != null;
+
   void _initializeFields() {
     _userId = snapshotData['user_id'] as String?;
     _name = snapshotData['name'] as String?;
     _frequency = snapshotData['frequency'] as String?;
     _createdAt = snapshotData['created_at'] as DateTime?;
+    _selectedDays = getDataList(snapshotData['selected_days']);
+    _completionDate = snapshotData['completion_date'] as DateTime?;
   }
 
   static CollectionReference get collection =>
@@ -79,6 +92,7 @@ Map<String, dynamic> createHabitsRecordData({
   String? name,
   String? frequency,
   DateTime? createdAt,
+  DateTime? completionDate,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -86,6 +100,7 @@ Map<String, dynamic> createHabitsRecordData({
       'name': name,
       'frequency': frequency,
       'created_at': createdAt,
+      'completion_date': completionDate,
     }.withoutNulls,
   );
 
@@ -97,15 +112,24 @@ class HabitsRecordDocumentEquality implements Equality<HabitsRecord> {
 
   @override
   bool equals(HabitsRecord? e1, HabitsRecord? e2) {
+    const listEquality = ListEquality();
     return e1?.userId == e2?.userId &&
         e1?.name == e2?.name &&
         e1?.frequency == e2?.frequency &&
-        e1?.createdAt == e2?.createdAt;
+        e1?.createdAt == e2?.createdAt &&
+        listEquality.equals(e1?.selectedDays, e2?.selectedDays) &&
+        e1?.completionDate == e2?.completionDate;
   }
 
   @override
-  int hash(HabitsRecord? e) => const ListEquality()
-      .hash([e?.userId, e?.name, e?.frequency, e?.createdAt]);
+  int hash(HabitsRecord? e) => const ListEquality().hash([
+        e?.userId,
+        e?.name,
+        e?.frequency,
+        e?.createdAt,
+        const ListEquality().hash(e?.selectedDays),
+        e?.completionDate
+      ]);
 
   @override
   bool isValidKey(Object? o) => o is HabitsRecord;

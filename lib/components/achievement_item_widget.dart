@@ -54,77 +54,82 @@ class _AchievementItemWidgetState extends State<AchievementItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 40.0,
-          height: 40.0,
-          decoration: BoxDecoration(
-            color: valueOrDefault<Color>(
-              widget.iconBg,
-              Color(0xFFDCFCE7),
+    return Padding(
+      padding: EdgeInsets.all(12.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 40.0,
+            height: 40.0,
+            decoration: BoxDecoration(
+              color: valueOrDefault<Color>(
+                widget.iconBg,
+                Color(0xFFDCFCE7),
+              ),
+              borderRadius: BorderRadius.circular(9999.0),
+              shape: BoxShape.rectangle,
             ),
-            borderRadius: BorderRadius.circular(9999.0),
-            shape: BoxShape.rectangle,
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: widget.icon!,
           ),
-          alignment: AlignmentDirectional(0.0, 0.0),
-          child: widget.icon!,
-        ),
-        Expanded(
-          flex: 1,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                valueOrDefault<String>(
-                  widget.title,
-                  '268 Tasks Completed',
-                ),
-                style: FlutterFlowTheme.of(context).titleSmall.override(
-                      font: GoogleFonts.interTight(
+          Expanded(
+            flex: 1,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  valueOrDefault<String>(
+                    widget.title,
+                    '268 Tasks Completed',
+                  ),
+                  style: FlutterFlowTheme.of(context).titleSmall.override(
+                        font: GoogleFonts.interTight(
+                          fontWeight: FlutterFlowTheme.of(context)
+                              .titleSmall
+                              .fontWeight,
+                          fontStyle:
+                              FlutterFlowTheme.of(context).titleSmall.fontStyle,
+                        ),
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        letterSpacing: 0.0,
                         fontWeight:
                             FlutterFlowTheme.of(context).titleSmall.fontWeight,
                         fontStyle:
                             FlutterFlowTheme.of(context).titleSmall.fontStyle,
                       ),
-                      color: FlutterFlowTheme.of(context).primaryText,
-                      letterSpacing: 0.0,
-                      fontWeight:
-                          FlutterFlowTheme.of(context).titleSmall.fontWeight,
-                      fontStyle:
-                          FlutterFlowTheme.of(context).titleSmall.fontStyle,
-                    ),
-              ),
-              Text(
-                valueOrDefault<String>(
-                  widget.subtitle,
-                  '+45 more than last month',
                 ),
-                style: FlutterFlowTheme.of(context).bodySmall.override(
-                      font: GoogleFonts.inter(
+                Text(
+                  valueOrDefault<String>(
+                    widget.subtitle,
+                    '+45 more than last month',
+                  ),
+                  style: FlutterFlowTheme.of(context).labelSmall.override(
+                        font: GoogleFonts.inter(
+                          fontWeight: FlutterFlowTheme.of(context)
+                              .labelSmall
+                              .fontWeight,
+                          fontStyle:
+                              FlutterFlowTheme.of(context).labelSmall.fontStyle,
+                        ),
+                        color: FlutterFlowTheme.of(context).secondaryText,
+                        letterSpacing: 0.0,
                         fontWeight:
-                            FlutterFlowTheme.of(context).bodySmall.fontWeight,
+                            FlutterFlowTheme.of(context).labelSmall.fontWeight,
                         fontStyle:
-                            FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                            FlutterFlowTheme.of(context).labelSmall.fontStyle,
+                        lineHeight: 1.4,
                       ),
-                      color: FlutterFlowTheme.of(context).secondaryText,
-                      letterSpacing: 0.0,
-                      fontWeight:
-                          FlutterFlowTheme.of(context).bodySmall.fontWeight,
-                      fontStyle:
-                          FlutterFlowTheme.of(context).bodySmall.fontStyle,
-                      lineHeight: 1.4,
-                    ),
-              ),
-            ].divide(SizedBox(height: 4.0)),
+                ),
+              ].divide(SizedBox(height: 4.0)),
+            ),
           ),
-        ),
-      ].divide(SizedBox(width: 16.0)),
+        ].divide(SizedBox(width: 16.0)),
+      ),
     );
   }
 }

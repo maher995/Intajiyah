@@ -324,71 +324,102 @@ class _ResourceCardWidgetState extends State<ResourceCardWidget> {
                       ].divide(SizedBox(height: 4.0)),
                     ),
                   ),
-                  Stack(
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
                     children: [
-                      if (FFAppState()
-                              .downloadedResourceIds
-                              .contains(widget.resourceId)
-                          ? true
-                          : false)
-                        FlutterFlowIconButton(
-                          borderRadius: 9999.0,
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                        child: FlutterFlowIconButton(
+                          borderRadius: 100.0,
                           buttonSize: 40.0,
-                          fillColor: Color(0x1A4B39EF),
+                          fillColor: Color(0xFF6C2BD9),
                           icon: Icon(
-                            Icons.play_arrow,
-                            color: FlutterFlowTheme.of(context).primary,
-                            size: 20.0,
+                            Icons.auto_awesome,
+                            color: FlutterFlowTheme.of(context).info,
+                            size: 18.0,
                           ),
                           onPressed: () async {
-                            _model.localPath = await actions.getLocalFilePath(
-                              widget.resourceId!,
-                              widget.fileUrl!,
-                            );
-
                             context.pushNamed(
-                              PDFViewerWidget.routeName,
+                              AiAssistantWidget.routeName,
                               queryParameters: {
-                                'filePath': serializeParam(
-                                  _model.localPath,
+                                'initialMessage': serializeParam(
+                                  'Help me understand the book: ${widget.title}',
                                   ParamType.String,
                                 ),
                               }.withoutNulls,
                             );
+                          },
+                        ),
+                      ),
+                      Stack(
+                        children: [
+                          if (FFAppState()
+                                  .downloadedResourceIds
+                                  .contains(widget.resourceId)
+                              ? true
+                              : false)
+                            FlutterFlowIconButton(
+                              borderRadius: 9999.0,
+                              buttonSize: 40.0,
+                              fillColor: Color(0x1A4B39EF),
+                              icon: Icon(
+                                Icons.play_arrow,
+                                color: FlutterFlowTheme.of(context).primary,
+                                size: 20.0,
+                              ),
+                              onPressed: () async {
+                                _model.localPath =
+                                    await actions.getLocalFilePath(
+                                  widget.resourceId!,
+                                  widget.fileUrl!,
+                                );
 
-                            safeSetState(() {});
-                          },
-                        ),
-                      if (FFAppState()
-                              .downloadedResourceIds
-                              .contains(widget.resourceId)
-                          ? false
-                          : true)
-                        FlutterFlowIconButton(
-                          borderRadius: 9999.0,
-                          buttonSize: 40.0,
-                          fillColor: Color(0x1A4B39EF),
-                          icon: Icon(
-                            Icons.download_rounded,
-                            color: FlutterFlowTheme.of(context).primary,
-                            size: 20.0,
-                          ),
-                          onPressed: () async {
-                            FFAppState().addToDownloadedResourceIds(
-                                widget.resourceId!);
-                            safeSetState(() {});
-                            await downloadFile(
-                              filename: valueOrDefault<String>(
-                                widget.resourceId,
-                                'resourceId',
+                                context.pushNamed(
+                                  PDFViewerWidget.routeName,
+                                  queryParameters: {
+                                    'filePath': serializeParam(
+                                      _model.localPath,
+                                      ParamType.String,
+                                    ),
+                                  }.withoutNulls,
+                                );
+
+                                safeSetState(() {});
+                              },
+                            ),
+                          if (FFAppState()
+                                  .downloadedResourceIds
+                                  .contains(widget.resourceId)
+                              ? false
+                              : true)
+                            FlutterFlowIconButton(
+                              borderRadius: 9999.0,
+                              buttonSize: 40.0,
+                              fillColor: Color(0x1A4B39EF),
+                              icon: Icon(
+                                Icons.download_rounded,
+                                color: FlutterFlowTheme.of(context).primary,
+                                size: 20.0,
                               ),
-                              url: valueOrDefault<String>(
-                                widget.fileUrl,
-                                'fileUrl',
-                              ),
-                            );
-                          },
-                        ),
+                              onPressed: () async {
+                                FFAppState().addToDownloadedResourceIds(
+                                    widget.resourceId!);
+                                safeSetState(() {});
+                                await downloadFile(
+                                  filename: valueOrDefault<String>(
+                                    widget.resourceId,
+                                    'resourceId',
+                                  ),
+                                  url: valueOrDefault<String>(
+                                    widget.fileUrl,
+                                    'fileUrl',
+                                  ),
+                                );
+                              },
+                            ),
+                        ],
+                      ),
                     ],
                   ),
                 ].divide(SizedBox(width: 16.0)),

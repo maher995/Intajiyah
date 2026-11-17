@@ -15,20 +15,14 @@ import '/backend/schema/enums/enums.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/auth/firebase_auth/auth_util.dart';
 
-dynamic parseInsights(String? text) {
-  try {
-    dynamic result = jsonDecode(text ?? '{}');
-    if (result is String) {
-      result = jsonDecode(result);
-    }
-    if (result is Map) {
-      return result;
-    }
-  } catch (e) {}
-  return {
-    'strengths': [],
-    'improvements': [],
-    'tone': 'great',
-    'message': '',
-  };
+DateTime startOfWeek() {
+  final now = DateTime.now();
+
+  final start = DateTime(
+    now.year,
+    now.month,
+    now.day,
+  ).subtract(Duration(days: now.weekday - DateTime.monday));
+
+  return start;
 }

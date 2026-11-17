@@ -22,6 +22,12 @@ class FFAppState extends ChangeNotifier {
           prefs.getStringList('ff_downloadedResourceIds') ??
               _downloadedResourceIds;
     });
+    _safeInit(() {
+      _workMinutes = prefs.getInt('ff_workMinutes') ?? _workMinutes;
+    });
+    _safeInit(() {
+      _breakMinutes = prefs.getInt('ff_breakMinutes') ?? _breakMinutes;
+    });
   }
 
   void update(VoidCallback callback) {
@@ -64,6 +70,20 @@ class FFAppState extends ChangeNotifier {
   void insertAtIndexInDownloadedResourceIds(int index, String value) {
     downloadedResourceIds.insert(index, value);
     prefs.setStringList('ff_downloadedResourceIds', _downloadedResourceIds);
+  }
+
+  int _workMinutes = 25;
+  int get workMinutes => _workMinutes;
+  set workMinutes(int value) {
+    _workMinutes = value;
+    prefs.setInt('ff_workMinutes', value);
+  }
+
+  int _breakMinutes = 5;
+  int get breakMinutes => _breakMinutes;
+  set breakMinutes(int value) {
+    _breakMinutes = value;
+    prefs.setInt('ff_breakMinutes', value);
   }
 }
 

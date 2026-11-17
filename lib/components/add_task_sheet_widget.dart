@@ -607,7 +607,8 @@ class _AddTaskSheetWidgetState extends State<AddTaskSheetWidget> {
                               functions.toTaskCategory(_model.categoryValue),
                           status: TaskStatus.pending,
                           isDeleted: false,
-                          priority: TaskPriority.highFocus,
+                          priority:
+                              functions.toTaskPriority(_model.priorityValue),
                           updatedAt: getCurrentTimestamp,
                           updatedByDevice: 'web',
                           version: 1,
@@ -623,7 +624,8 @@ class _AddTaskSheetWidgetState extends State<AddTaskSheetWidget> {
                                   .toTaskCategory(_model.categoryValue),
                               status: TaskStatus.pending,
                               isDeleted: false,
-                              priority: TaskPriority.highFocus,
+                              priority: functions
+                                  .toTaskPriority(_model.priorityValue),
                               updatedAt: getCurrentTimestamp,
                               updatedByDevice: 'web',
                               version: 1,

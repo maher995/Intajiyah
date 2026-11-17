@@ -27,3 +27,18 @@ class TranscribeAudioCloudFunctionCallResponse {
   String? resultAsString;
   dynamic data;
 }
+
+class GenerateInsightsCloudFunctionCallResponse {
+  GenerateInsightsCloudFunctionCallResponse({
+    this.errorCode,
+    this.succeeded,
+    this.jsonBody,
+    this.resultAsString,
+    this.data,
+  });
+  String? errorCode;
+  bool? succeeded;
+  dynamic jsonBody;
+  String? resultAsString;
+  dynamic data;
+}

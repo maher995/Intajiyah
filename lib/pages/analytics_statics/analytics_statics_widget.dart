@@ -1,11 +1,16 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/backend/schema/enums/enums.dart';
 import '/components/stat_card_widget.dart';
 import '/flutter_flow/ff_builtin_enums.dart';
 import '/flutter_flow/flutter_flow_charts.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'analytics_statics_model.dart';
 export 'analytics_statics_model.dart';
@@ -575,6 +580,28 @@ class _AnalyticsStaticsWidgetState extends State<AnalyticsStaticsWidget> {
     super.initState();
     _model = createModel(context, () => AnalyticsStaticsModel());
 
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.lastWeekEnergyResult = await queryEnergyLogsRecordOnce(
+        queryBuilder: (energyLogsRecord) => energyLogsRecord
+            .where(
+              'user_id',
+              isEqualTo: currentUserUid,
+            )
+            .where(
+              'log_date',
+              isGreaterThanOrEqualTo: functions.startOfPreviousWeek(),
+            )
+            .where(
+              'log_date',
+              isLessThan: functions.startOfWeek(),
+            ),
+      );
+      _model.lastWeekEnergyLogs =
+          _model.lastWeekEnergyResult!.toList().cast<EnergyLogsRecord>();
+      safeSetState(() {});
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
@@ -587,627 +614,1029 @@ class _AnalyticsStaticsWidgetState extends State<AnalyticsStaticsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      child: Scaffold(
-        key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        body: SingleChildScrollView(
-          primary: false,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(24.0),
-                      child: Container(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Align(
-                              alignment: AlignmentDirectional(-1.0, 0.0),
-                              child: Text(
-                                'Analytics',
-                                textAlign: TextAlign.start,
-                                style: FlutterFlowTheme.of(context)
-                                    .headlineMedium
-                                    .override(
-                                      font: GoogleFonts.interTight(
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .headlineMedium
-                                            .fontStyle,
-                                      ),
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .headlineMedium
-                                          .fontStyle,
-                                      lineHeight: 1.4,
-                                    ),
-                              ),
-                            ),
-                          ].divide(SizedBox(height: 24.0)),
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment:
-                          (FFMainAxisAlignment.center).flutterValue,
-                      crossAxisAlignment:
-                          (FFCrossAxisAlignment.center).flutterValue,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              30.0, 0.0, 20.0, 0.0),
-                          child: FFButtonWidget(
-                            onPressed: () {
-                              print('Button pressed ...');
-                            },
-                            text: 'Statistics',
-                            options: FFButtonOptions(
-                              height: 30.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  30.0, 0.0, 30.0, 0.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: FlutterFlowTheme.of(context).primary,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
-                                    font: GoogleFonts.interTight(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontStyle,
-                                    ),
-                                    color: Colors.white,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .fontStyle,
-                                  ),
-                              elevation: 0.0,
-                              borderRadius: BorderRadius.circular(22.0),
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 20.0, 0.0),
-                            child: FFButtonWidget(
-                              onPressed: () async {
-                                context.pushNamed(
-                                    AnalyticsMonthlyReportWidget.routeName);
-                              },
-                              text: 'Monthly Report',
-                              options: FFButtonOptions(
-                                height: 30.0,
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    30.0, 0.0, 30.0, 0.0),
-                                iconAlignment: IconAlignment.start,
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                color: Color(0xFFDCDCDC),
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .override(
-                                      font: GoogleFonts.interTight(
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .fontStyle,
-                                      ),
-                                      color: Color(0xFF8B8B8B),
-                                      letterSpacing: 0.0,
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontStyle,
-                                    ),
-                                elevation: 0.0,
-                                borderRadius: BorderRadius.circular(22.0),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      height: 1.0,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).alternate,
-                        shape: BoxShape.rectangle,
-                      ),
-                    ),
-                  ],
+    return FutureBuilder<int>(
+      future: queryTasksRecordCount(
+        queryBuilder: (tasksRecord) => tasksRecord
+            .where(
+              'user_id',
+              isEqualTo: currentUserUid,
+            )
+            .where(
+              'status',
+              isEqualTo: TaskStatus.completed.serialize(),
+            )
+            .where(
+              'is_deleted',
+              isEqualTo: false,
+            )
+            .where(
+              'completed_at',
+              isGreaterThanOrEqualTo: functions.startOfWeek(),
+            )
+            .where(
+              'completed_at',
+              isLessThan: functions.startOfNextWeek(),
+            ),
+      ),
+      builder: (context, snapshot) {
+        // Customize what your widget looks like when it's loading.
+        if (!snapshot.hasData) {
+          return Scaffold(
+            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+            body: Center(
+              child: SizedBox(
+                width: 50.0,
+                height: 50.0,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    FlutterFlowTheme.of(context).primary,
+                  ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.all(24.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    GridView(
-                      padding: EdgeInsets.zero,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 16.0,
-                        mainAxisSpacing: 16.0,
-                        childAspectRatio: 1.0,
-                      ),
-                      primary: false,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
+            ),
+          );
+        }
+        int analyticsStaticsCount = snapshot.data!;
+
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: Scaffold(
+            key: scaffoldKey,
+            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+            body: SingleChildScrollView(
+              primary: false,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        wrapWithModel(
-                          model: _model.statCardModel1,
-                          updateCallback: () => safeSetState(() {}),
-                          child: StatCardWidget(
-                            icon: Icon(
-                              Icons.help,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 16.0,
-                            ),
-                            label: 'Tasks Done',
-                            value: '66',
-                            trend: '+12% this week',
-                            positive: true,
-                          ),
-                        ),
-                        wrapWithModel(
-                          model: _model.statCardModel2,
-                          updateCallback: () => safeSetState(() {}),
-                          child: StatCardWidget(
-                            icon: Icon(
-                              Icons.help,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 16.0,
-                            ),
-                            label: 'Avg Energy',
-                            value: '77%',
-                            trend: '+5% from last week',
-                            positive: true,
-                          ),
-                        ),
-                        wrapWithModel(
-                          model: _model.statCardModel3,
-                          updateCallback: () => safeSetState(() {}),
-                          child: StatCardWidget(
-                            icon: Icon(
-                              Icons.calendar_today,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 16.0,
-                            ),
-                            label: 'Focus Hours',
-                            value: '28',
-                            trend: 'This week',
-                            positive: false,
-                          ),
-                        ),
-                        wrapWithModel(
-                          model: _model.statCardModel4,
-                          updateCallback: () => safeSetState(() {}),
-                          child: StatCardWidget(
-                            icon: Icon(
-                              Icons.trending_up,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 16.0,
-                            ),
-                            label: 'Best Streak',
-                            value: '12',
-                            trend: 'days',
-                            positive: false,
-                          ),
-                        ),
-                        InkWell(
-                          splashColor: Colors.transparent,
-                          focusColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onTap: () async {
-                            context.pushNamed(MoodTrackingWidget.routeName);
-                          },
-                          child: wrapWithModel(
-                            model: _model.statCardModel5,
-                            updateCallback: () => safeSetState(() {}),
-                            child: StatCardWidget(
-                              icon: Icon(
-                                Icons.sentiment_very_satisfied,
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                size: 16.0,
-                              ),
-                              label: 'Mood Tracking',
-                              value: 'Track Mood',
-                              trend: 'View Insights',
-                              positive: true,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(24.0),
-                        shape: BoxShape.rectangle,
-                        border: Border.all(
-                          color: FlutterFlowTheme.of(context).alternate,
-                          width: 1.0,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(24.0),
-                        child: Container(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                'Productivity Trend',
-                                style: FlutterFlowTheme.of(context)
-                                    .titleMedium
-                                    .override(
-                                      font: GoogleFonts.interTight(
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .titleMedium
-                                            .fontStyle,
-                                      ),
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleMedium
-                                          .fontStyle,
-                                      lineHeight: 1.4,
-                                    ),
-                              ),
-                              Container(
-                                height: 200.0,
-                                child: Container(
-                                  height: 200.0,
-                                  child: FlutterFlowLineChart(
-                                    data: [
-                                      FFLineChartData(
-                                        xData: ([
-                                          0.0,
-                                          1.0,
-                                          2.0,
-                                          3.0,
-                                          4.0,
-                                          5.0,
-                                          6.0
-                                        ]),
-                                        yData: ([
-                                          8.0,
-                                          12.0,
-                                          10.0,
-                                          16.0,
-                                          13.0,
-                                          9.0,
-                                          8.0
-                                        ]),
-                                        settings: LineChartBarData(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
-                                          barWidth: 2.0,
-                                          isCurved: true,
-                                        ),
-                                      )
-                                    ],
-                                    chartStylingInfo: ChartStylingInfo(
-                                      backgroundColor: Colors.transparent,
-                                      showBorder: false,
-                                    ),
-                                    axisBounds: AxisBounds(
-                                      minX: 0.0,
-                                      minY: 0.0,
-                                      maxX: 6.0,
-                                      maxY: 19.2,
-                                    ),
-                                    xLabels: ([
-                                      'Mon',
-                                      'Tue',
-                                      'Wed',
-                                      'Thu',
-                                      'Fri',
-                                      'Sat',
-                                      'Sun'
-                                    ]),
-                                    xAxisLabelInfo: AxisLabelInfo(
-                                      showLabels: true,
-                                      labelTextStyle: FlutterFlowTheme.of(
-                                              context)
-                                          .bodySmall
-                                          .override(
-                                            font: GoogleFonts.inter(
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodySmall
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodySmall
-                                                      .fontStyle,
-                                            ),
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                            fontSize: 10.0,
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodySmall
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodySmall
-                                                    .fontStyle,
-                                            lineHeight: 1.0,
-                                          ),
-                                      reservedSize: 28.0,
-                                    ),
-                                    yAxisLabelInfo: AxisLabelInfo(
-                                      reservedSize: 0.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ].divide(SizedBox(height: 16.0)),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(24.0),
-                        shape: BoxShape.rectangle,
-                        border: Border.all(
-                          color: FlutterFlowTheme.of(context).alternate,
-                          width: 1.0,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(24.0),
-                        child: Container(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                'Habit Consistency',
-                                style: FlutterFlowTheme.of(context)
-                                    .titleMedium
-                                    .override(
-                                      font: GoogleFonts.interTight(
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .titleMedium
-                                            .fontStyle,
-                                      ),
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleMedium
-                                          .fontStyle,
-                                      lineHeight: 1.4,
-                                    ),
-                              ),
-                              Container(
-                                height: 200.0,
-                                child: Container(
-                                  height: 200.0,
-                                  child: FlutterFlowBarChart(
-                                    barData: [
-                                      FFBarChartData(
-                                        yData: ([85.0, 95.0, 70.0, 60.0]),
-                                        color: FlutterFlowTheme.of(context)
-                                            .primary,
-                                      )
-                                    ],
-                                    xLabels: ([
-                                      'Exercise',
-                                      'Deep Work',
-                                      'Reading',
-                                      'Meditation'
-                                    ]),
-                                    barWidth: 20.0,
-                                    barBorderRadius: BorderRadius.circular(8.0),
-                                    groupSpace: 12.0,
-                                    alignment: BarChartAlignment.spaceEvenly,
-                                    chartStylingInfo: ChartStylingInfo(
-                                      backgroundColor: Colors.transparent,
-                                      showBorder: false,
-                                    ),
-                                    axisBounds: AxisBounds(
-                                      minY: 0.0,
-                                      maxX: 3.0,
-                                      maxY: 114.0,
-                                    ),
-                                    xAxisLabelInfo: AxisLabelInfo(
-                                      showLabels: true,
-                                      labelTextStyle: FlutterFlowTheme.of(
-                                              context)
-                                          .bodySmall
-                                          .override(
-                                            font: GoogleFonts.inter(
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodySmall
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodySmall
-                                                      .fontStyle,
-                                            ),
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                            fontSize: 10.0,
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodySmall
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodySmall
-                                                    .fontStyle,
-                                            lineHeight: 1.0,
-                                          ),
-                                      reservedSize: 20.0,
-                                    ),
-                                    yAxisLabelInfo: AxisLabelInfo(
-                                      reservedSize: 0.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ].divide(SizedBox(height: 16.0)),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            FlutterFlowTheme.of(context).primary,
-                            Color(0xFF9333EA)
-                          ],
-                          stops: [0.0, 1.0],
-                          begin: AlignmentDirectional(0.0, -1.0),
-                          end: AlignmentDirectional(0, 1.0),
-                        ),
-                        borderRadius: BorderRadius.circular(24.0),
-                        shape: BoxShape.rectangle,
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(24.0),
-                        child: Container(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '✨ Weekly Insight',
+                        Padding(
+                          padding: EdgeInsets.all(24.0),
+                          child: Container(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Align(
+                                  alignment: AlignmentDirectional(-1.0, 0.0),
+                                  child: Text(
+                                    'Analytics',
+                                    textAlign: TextAlign.start,
                                     style: FlutterFlowTheme.of(context)
-                                        .titleSmall
+                                        .headlineMedium
                                         .override(
                                           font: GoogleFonts.interTight(
                                             fontWeight: FontWeight.bold,
                                             fontStyle:
                                                 FlutterFlowTheme.of(context)
-                                                    .titleSmall
+                                                    .headlineMedium
                                                     .fontStyle,
                                           ),
-                                          color: Colors.white,
                                           letterSpacing: 0.0,
                                           fontWeight: FontWeight.bold,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .headlineMedium
+                                                  .fontStyle,
+                                          lineHeight: 1.4,
+                                        ),
+                                  ),
+                                ),
+                              ].divide(SizedBox(height: 24.0)),
+                            ),
+                          ),
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment:
+                              (FFMainAxisAlignment.center).flutterValue,
+                          crossAxisAlignment:
+                              (FFCrossAxisAlignment.center).flutterValue,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  30.0, 0.0, 20.0, 0.0),
+                              child: FFButtonWidget(
+                                onPressed: () {
+                                  print('Button pressed ...');
+                                },
+                                text: 'Statistics',
+                                options: FFButtonOptions(
+                                  height: 30.0,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      30.0, 0.0, 30.0, 0.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        font: GoogleFonts.interTight(
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmall
+                                                  .fontWeight,
                                           fontStyle:
                                               FlutterFlowTheme.of(context)
                                                   .titleSmall
                                                   .fontStyle,
                                         ),
-                                  ),
-                                ].divide(SizedBox(width: 4.0)),
-                              ),
-                              Text(
-                                'You\'re most productive on Thursdays! Your energy and task completion both peak mid-week.',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodySmall
-                                    .override(
-                                      font: GoogleFonts.inter(
+                                        color: Colors.white,
+                                        letterSpacing: 0.0,
                                         fontWeight: FlutterFlowTheme.of(context)
-                                            .bodySmall
+                                            .titleSmall
                                             .fontWeight,
                                         fontStyle: FlutterFlowTheme.of(context)
-                                            .bodySmall
+                                            .titleSmall
                                             .fontStyle,
                                       ),
-                                      color: Color(0xE6FFFFFF),
-                                      letterSpacing: 0.0,
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodySmall
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodySmall
-                                          .fontStyle,
-                                      lineHeight: 1.4,
-                                    ),
+                                  elevation: 0.0,
+                                  borderRadius: BorderRadius.circular(22.0),
+                                ),
                               ),
-                              Text(
-                                '💡 Tip: Schedule your most important tasks for Thursday mornings.',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodySmall
-                                    .override(
-                                      font: GoogleFonts.inter(
-                                        fontWeight: FontWeight.w600,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodySmall
-                                            .fontStyle,
-                                      ),
-                                      color: Color(0xE6FFFFFF),
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w600,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodySmall
-                                          .fontStyle,
-                                      lineHeight: 1.4,
-                                    ),
+                            ),
+                            Align(
+                              alignment: AlignmentDirectional(0.0, 0.0),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 20.0, 0.0),
+                                child: FFButtonWidget(
+                                  onPressed: () async {
+                                    context.pushNamed(
+                                        AnalyticsMonthlyReportWidget.routeName);
+                                  },
+                                  text: 'Monthly Report',
+                                  options: FFButtonOptions(
+                                    height: 30.0,
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        30.0, 0.0, 30.0, 0.0),
+                                    iconAlignment: IconAlignment.start,
+                                    iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 0.0),
+                                    color: Color(0xFFDCDCDC),
+                                    textStyle: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .override(
+                                          font: GoogleFonts.interTight(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleSmall
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleSmall
+                                                    .fontStyle,
+                                          ),
+                                          color: Color(0xFF8B8B8B),
+                                          letterSpacing: 0.0,
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmall
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmall
+                                                  .fontStyle,
+                                        ),
+                                    elevation: 0.0,
+                                    borderRadius: BorderRadius.circular(22.0),
+                                  ),
+                                ),
                               ),
-                            ].divide(SizedBox(height: 8.0)),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          height: 1.0,
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context).alternate,
+                            shape: BoxShape.rectangle,
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ].divide(SizedBox(height: 24.0)),
-                ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(24.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        FutureBuilder<int>(
+                          future: queryTasksRecordCount(
+                            queryBuilder: (tasksRecord) => tasksRecord
+                                .where(
+                                  'user_id',
+                                  isEqualTo: currentUserUid,
+                                )
+                                .where(
+                                  'status',
+                                  isEqualTo: TaskStatus.completed.serialize(),
+                                )
+                                .where(
+                                  'is_deleted',
+                                  isEqualTo: false,
+                                )
+                                .where(
+                                  'completed_at',
+                                  isGreaterThanOrEqualTo:
+                                      functions.startOfPreviousWeek(),
+                                )
+                                .where(
+                                  'completed_at',
+                                  isLessThan: functions.startOfWeek(),
+                                ),
+                          ),
+                          builder: (context, snapshot) {
+                            // Customize what your widget looks like when it's loading.
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: SizedBox(
+                                  width: 50.0,
+                                  height: 50.0,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      FlutterFlowTheme.of(context).primary,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                            int gridCount = snapshot.data!;
+
+                            return GridView(
+                              padding: EdgeInsets.zero,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 16.0,
+                                mainAxisSpacing: 16.0,
+                                childAspectRatio: 1.0,
+                              ),
+                              primary: false,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              children: [
+                                InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    context.pushNamed(TasksWidget.routeName);
+                                  },
+                                  child: wrapWithModel(
+                                    model: _model.statCardModel1,
+                                    updateCallback: () => safeSetState(() {}),
+                                    child: StatCardWidget(
+                                      icon: Icon(
+                                        Icons.help,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                        size: 16.0,
+                                      ),
+                                      label: 'Tasks Done',
+                                      value: analyticsStaticsCount.toString(),
+                                      trend: functions.tasksWeeklyTrend(
+                                          analyticsStaticsCount,
+                                          analyticsStaticsCount),
+                                      positive: true,
+                                    ),
+                                  ),
+                                ),
+                                StreamBuilder<List<EnergyLogsRecord>>(
+                                  stream: queryEnergyLogsRecord(
+                                    queryBuilder: (energyLogsRecord) =>
+                                        energyLogsRecord
+                                            .where(
+                                              'user_id',
+                                              isEqualTo: currentUserUid,
+                                            )
+                                            .where(
+                                              'log_date',
+                                              isGreaterThanOrEqualTo:
+                                                  functions.startOfWeek(),
+                                            )
+                                            .where(
+                                              'log_date',
+                                              isLessThan:
+                                                  functions.startOfNextWeek(),
+                                            ),
+                                  ),
+                                  builder: (context, snapshot) {
+                                    // Customize what your widget looks like when it's loading.
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: SizedBox(
+                                          width: 50.0,
+                                          height: 50.0,
+                                          child: CircularProgressIndicator(
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                              FlutterFlowTheme.of(context)
+                                                  .primary,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    List<EnergyLogsRecord>
+                                        statCardEnergyLogsRecordList =
+                                        snapshot.data!;
+
+                                    return InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        context
+                                            .pushNamed(JournalWidget.routeName);
+                                      },
+                                      child: wrapWithModel(
+                                        model: _model.statCardModel2,
+                                        updateCallback: () =>
+                                            safeSetState(() {}),
+                                        child: StatCardWidget(
+                                          icon: Icon(
+                                            Icons.help,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                            size: 16.0,
+                                          ),
+                                          label: 'Avg Energy',
+                                          value:
+                                              functions.calculateAverageEnergy(
+                                                  statCardEnergyLogsRecordList
+                                                      .map((e) =>
+                                                          e.energyLevelValue)
+                                                      .toList()),
+                                          trend: functions.energyWeeklyTrend(
+                                              statCardEnergyLogsRecordList
+                                                  .map(
+                                                      (e) => e.energyLevelValue)
+                                                  .toList(),
+                                              _model.lastWeekEnergyLogs
+                                                  .map(
+                                                      (e) => e.energyLevelValue)
+                                                  .toList()),
+                                          positive:
+                                              functions.energyTrendPositive(
+                                                  statCardEnergyLogsRecordList
+                                                      .map((e) =>
+                                                          e.energyLevelValue)
+                                                      .toList(),
+                                                  _model.lastWeekEnergyLogs
+                                                      .map((e) =>
+                                                          e.energyLevelValue)
+                                                      .toList()),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                wrapWithModel(
+                                  model: _model.statCardModel3,
+                                  updateCallback: () => safeSetState(() {}),
+                                  child: StatCardWidget(
+                                    icon: Icon(
+                                      Icons.calendar_today,
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryText,
+                                      size: 16.0,
+                                    ),
+                                    label: 'Focus Hours',
+                                    value: '28',
+                                    trend: 'This week',
+                                    positive: false,
+                                  ),
+                                ),
+                                StreamBuilder<List<StreaksRecord>>(
+                                  stream: queryStreaksRecord(
+                                    queryBuilder: (streaksRecord) =>
+                                        streaksRecord
+                                            .where(
+                                              'user_id',
+                                              isEqualTo: currentUserUid,
+                                            )
+                                            .orderBy('longest_count',
+                                                descending: true),
+                                    singleRecord: true,
+                                  ),
+                                  builder: (context, snapshot) {
+                                    // Customize what your widget looks like when it's loading.
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: SizedBox(
+                                          width: 50.0,
+                                          height: 50.0,
+                                          child: CircularProgressIndicator(
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                              FlutterFlowTheme.of(context)
+                                                  .primary,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    List<StreaksRecord>
+                                        statCardStreaksRecordList =
+                                        snapshot.data!;
+                                    // Return an empty Container when the item does not exist.
+                                    if (snapshot.data!.isEmpty) {
+                                      return Container();
+                                    }
+                                    final statCardStreaksRecord =
+                                        statCardStreaksRecordList.isNotEmpty
+                                            ? statCardStreaksRecordList.first
+                                            : null;
+
+                                    return wrapWithModel(
+                                      model: _model.statCardModel4,
+                                      updateCallback: () => safeSetState(() {}),
+                                      child: StatCardWidget(
+                                        icon: Icon(
+                                          Icons.trending_up,
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          size: 16.0,
+                                        ),
+                                        label: 'Best Streak',
+                                        value: valueOrDefault<String>(
+                                          statCardStreaksRecord?.longestCount
+                                              .toString(),
+                                          '0',
+                                        ),
+                                        trend: 'days',
+                                        positive: false,
+                                      ),
+                                    );
+                                  },
+                                ),
+                                InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    context.pushNamed(
+                                        MoodTrackingWidget.routeName);
+                                  },
+                                  child: wrapWithModel(
+                                    model: _model.statCardModel5,
+                                    updateCallback: () => safeSetState(() {}),
+                                    child: StatCardWidget(
+                                      icon: Icon(
+                                        Icons.sentiment_very_satisfied,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                        size: 16.0,
+                                      ),
+                                      label: 'Mood Tracking',
+                                      value: 'Track Mood',
+                                      trend: 'View Insights',
+                                      positive: true,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                            borderRadius: BorderRadius.circular(24.0),
+                            shape: BoxShape.rectangle,
+                            border: Border.all(
+                              color: FlutterFlowTheme.of(context).alternate,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(24.0),
+                            child: Container(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    'Productivity Trend',
+                                    style: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .override(
+                                          font: GoogleFonts.interTight(
+                                            fontWeight: FontWeight.bold,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleMedium
+                                                    .fontStyle,
+                                          ),
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.bold,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleMedium
+                                                  .fontStyle,
+                                          lineHeight: 1.4,
+                                        ),
+                                  ),
+                                  Container(
+                                    height: 200.0,
+                                    child: StreamBuilder<List<TasksRecord>>(
+                                      stream: queryTasksRecord(
+                                        queryBuilder: (tasksRecord) =>
+                                            tasksRecord
+                                                .where(
+                                                  'user_id',
+                                                  isEqualTo: currentUserUid,
+                                                )
+                                                .where(
+                                                  'status',
+                                                  isEqualTo: TaskStatus
+                                                      .completed
+                                                      .serialize(),
+                                                )
+                                                .where(
+                                                  'is_deleted',
+                                                  isEqualTo: false,
+                                                )
+                                                .where(
+                                                  'completed_at',
+                                                  isGreaterThanOrEqualTo:
+                                                      functions.startOfWeek(),
+                                                )
+                                                .where(
+                                                  'completed_at',
+                                                  isLessThan: functions
+                                                      .startOfNextWeek(),
+                                                )
+                                                .orderBy('completed_at'),
+                                      ),
+                                      builder: (context, snapshot) {
+                                        // Customize what your widget looks like when it's loading.
+                                        if (!snapshot.hasData) {
+                                          return Center(
+                                            child: SizedBox(
+                                              width: 50.0,
+                                              height: 50.0,
+                                              child: CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                        List<TasksRecord>
+                                            lineChartTasksRecordList =
+                                            snapshot.data!;
+
+                                        return Container(
+                                          height: 200.0,
+                                          child: FlutterFlowLineChart(
+                                            data: [
+                                              FFLineChartData(
+                                                xData: ([
+                                                  0.0,
+                                                  1.0,
+                                                  2.0,
+                                                  3.0,
+                                                  4.0,
+                                                  5.0,
+                                                  6.0
+                                                ]),
+                                                yData:
+                                                    functions.weeklyTaskCounts(
+                                                        lineChartTasksRecordList
+                                                            .map((e) =>
+                                                                e.completedAt)
+                                                            .withoutNulls
+                                                            .toList()),
+                                                settings: LineChartBarData(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primary,
+                                                  barWidth: 2.0,
+                                                  isCurved: true,
+                                                ),
+                                              )
+                                            ],
+                                            chartStylingInfo: ChartStylingInfo(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              showBorder: false,
+                                            ),
+                                            axisBounds: AxisBounds(
+                                              minX: 0.0,
+                                              minY: 0.0,
+                                              maxX: 6.0,
+                                              maxY: 19.2,
+                                            ),
+                                            xLabels: ([
+                                              'Mon',
+                                              'Tue',
+                                              'Wed',
+                                              'Thu',
+                                              'Fri',
+                                              'Sat',
+                                              'Sun'
+                                            ]),
+                                            xAxisLabelInfo: AxisLabelInfo(
+                                              showLabels: true,
+                                              labelTextStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodySmall
+                                                      .override(
+                                                        font: GoogleFonts.inter(
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodySmall
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodySmall
+                                                                  .fontStyle,
+                                                        ),
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryText,
+                                                        fontSize: 10.0,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodySmall
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodySmall
+                                                                .fontStyle,
+                                                        lineHeight: 1.0,
+                                                      ),
+                                              reservedSize: 28.0,
+                                            ),
+                                            yAxisLabelInfo: AxisLabelInfo(
+                                              reservedSize: 0.0,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ].divide(SizedBox(height: 16.0)),
+                              ),
+                            ),
+                          ),
+                        ),
+                        StreamBuilder<List<HabitLogsRecord>>(
+                          stream: queryHabitLogsRecord(
+                            queryBuilder: (habitLogsRecord) => habitLogsRecord
+                                .where(
+                                  'user_id',
+                                  isEqualTo: currentUserUid,
+                                )
+                                .where(
+                                  'completed',
+                                  isEqualTo: true,
+                                )
+                                .where(
+                                  'log_date',
+                                  isGreaterThanOrEqualTo:
+                                      functions.startOfWeek(),
+                                )
+                                .where(
+                                  'log_date',
+                                  isLessThan: functions.startOfNextWeek(),
+                                ),
+                          ),
+                          builder: (context, snapshot) {
+                            // Customize what your widget looks like when it's loading.
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: SizedBox(
+                                  width: 50.0,
+                                  height: 50.0,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      FlutterFlowTheme.of(context).primary,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                            List<HabitLogsRecord> containerHabitLogsRecordList =
+                                snapshot.data!;
+
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                borderRadius: BorderRadius.circular(24.0),
+                                shape: BoxShape.rectangle,
+                                border: Border.all(
+                                  color: FlutterFlowTheme.of(context).alternate,
+                                  width: 1.0,
+                                ),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(24.0),
+                                child: Container(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        'Habit Consistency',
+                                        style: FlutterFlowTheme.of(context)
+                                            .titleMedium
+                                            .override(
+                                              font: GoogleFonts.interTight(
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleMedium
+                                                        .fontStyle,
+                                              ),
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.bold,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleMedium
+                                                      .fontStyle,
+                                              lineHeight: 1.4,
+                                            ),
+                                      ),
+                                      Container(
+                                        height: 200.0,
+                                        child:
+                                            StreamBuilder<List<HabitsRecord>>(
+                                          stream: queryHabitsRecord(
+                                            queryBuilder: (habitsRecord) =>
+                                                habitsRecord.where(
+                                              'user_id',
+                                              isEqualTo: currentUserUid,
+                                            ),
+                                          ),
+                                          builder: (context, snapshot) {
+                                            // Customize what your widget looks like when it's loading.
+                                            if (!snapshot.hasData) {
+                                              return Center(
+                                                child: SizedBox(
+                                                  width: 50.0,
+                                                  height: 50.0,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                            Color>(
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .primary,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            List<HabitsRecord>
+                                                barChartHabitsRecordList =
+                                                snapshot.data!;
+
+                                            return Container(
+                                              height: 200.0,
+                                              child: FlutterFlowBarChart(
+                                                barData: [
+                                                  FFBarChartData(
+                                                    yData: functions
+                                                        .habitCompletionRates(
+                                                            barChartHabitsRecordList
+                                                                .toList(),
+                                                            containerHabitLogsRecordList
+                                                                .toList()),
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primary,
+                                                  )
+                                                ],
+                                                xLabels:
+                                                    barChartHabitsRecordList
+                                                        .map((e) => e.name)
+                                                        .toList(),
+                                                barWidth: 20.0,
+                                                barBorderRadius:
+                                                    BorderRadius.circular(8.0),
+                                                groupSpace: 12.0,
+                                                alignment: BarChartAlignment
+                                                    .spaceEvenly,
+                                                chartStylingInfo:
+                                                    ChartStylingInfo(
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  showBorder: false,
+                                                ),
+                                                axisBounds: AxisBounds(
+                                                  minY: 0.0,
+                                                  maxX: 3.0,
+                                                  maxY: 114.0,
+                                                ),
+                                                xAxisLabelInfo: AxisLabelInfo(
+                                                  showLabels: true,
+                                                  labelTextStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodySmall
+                                                          .override(
+                                                            font: GoogleFonts
+                                                                .inter(
+                                                              fontWeight:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodySmall
+                                                                      .fontWeight,
+                                                              fontStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodySmall
+                                                                      .fontStyle,
+                                                            ),
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .secondaryText,
+                                                            fontSize: 10.0,
+                                                            letterSpacing: 0.0,
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodySmall
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodySmall
+                                                                    .fontStyle,
+                                                            lineHeight: 1.0,
+                                                          ),
+                                                  reservedSize: 20.0,
+                                                ),
+                                                yAxisLabelInfo: AxisLabelInfo(
+                                                  reservedSize: 0.0,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ].divide(SizedBox(height: 16.0)),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                FlutterFlowTheme.of(context).primary,
+                                Color(0xFF9333EA)
+                              ],
+                              stops: [0.0, 1.0],
+                              begin: AlignmentDirectional(0.0, -1.0),
+                              end: AlignmentDirectional(0, 1.0),
+                            ),
+                            borderRadius: BorderRadius.circular(24.0),
+                            shape: BoxShape.rectangle,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(24.0),
+                            child: Container(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '✨ Weekly Insight',
+                                        style: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .override(
+                                              font: GoogleFonts.interTight(
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontStyle,
+                                              ),
+                                              color: Colors.white,
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.bold,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontStyle,
+                                            ),
+                                      ),
+                                    ].divide(SizedBox(width: 4.0)),
+                                  ),
+                                  Text(
+                                    'You\'re most productive on Thursdays! Your energy and task completion both peak mid-week.',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodySmall
+                                        .override(
+                                          font: GoogleFonts.inter(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodySmall
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodySmall
+                                                    .fontStyle,
+                                          ),
+                                          color: Color(0xE6FFFFFF),
+                                          letterSpacing: 0.0,
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall
+                                                  .fontStyle,
+                                          lineHeight: 1.4,
+                                        ),
+                                  ),
+                                  Text(
+                                    '💡 Tip: Schedule your most important tasks for Thursday mornings.',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodySmall
+                                        .override(
+                                          font: GoogleFonts.inter(
+                                            fontWeight: FontWeight.w600,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodySmall
+                                                    .fontStyle,
+                                          ),
+                                          color: Color(0xE6FFFFFF),
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.w600,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodySmall
+                                                  .fontStyle,
+                                          lineHeight: 1.4,
+                                        ),
+                                  ),
+                                ].divide(SizedBox(height: 8.0)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ].divide(SizedBox(height: 24.0)),
+                    ),
+                  ),
+                  Container(
+                    height: 80.0,
+                  ),
+                ],
               ),
-              Container(
-                height: 80.0,
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

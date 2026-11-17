@@ -1054,10 +1054,15 @@ class _JournalWidgetState extends State<JournalWidget> {
                                                   mainAxisSize:
                                                       MainAxisSize.max,
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                      (FFMainAxisAlignment
+                                                              .spaceAround)
+                                                          .flutterValue,
                                                   crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
+                                                      (FFCrossAxisAlignment
+                                                              .center)
+                                                          .flutterValue,
+                                                  textBaseline:
+                                                      TextBaseline.alphabetic,
                                                   children: [
                                                     Text(
                                                       valueOrDefault<String>(
@@ -1096,6 +1101,45 @@ class _JournalWidgetState extends State<JournalWidget> {
                                                                     .fontStyle,
                                                                 lineHeight: 1.4,
                                                               ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  12.0,
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0),
+                                                      child:
+                                                          FlutterFlowIconButton(
+                                                        borderRadius: 100.0,
+                                                        buttonSize: 40.0,
+                                                        fillColor:
+                                                            Color(0xFF6C2BD9),
+                                                        icon: Icon(
+                                                          Icons.auto_awesome,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .info,
+                                                          size: 24.0,
+                                                        ),
+                                                        onPressed: () async {
+                                                          context.pushNamed(
+                                                            AiAssistantWidget
+                                                                .routeName,
+                                                            queryParameters: {
+                                                              'initialMessage':
+                                                                  serializeParam(
+                                                                _model
+                                                                    .textController
+                                                                    .text,
+                                                                ParamType
+                                                                    .String,
+                                                              ),
+                                                            }.withoutNulls,
+                                                          );
+                                                        },
+                                                      ),
                                                     ),
                                                     InkWell(
                                                       splashColor:
@@ -1251,7 +1295,8 @@ class _JournalWidgetState extends State<JournalWidget> {
                                                         ),
                                                       ),
                                                     ),
-                                                  ],
+                                                  ].divide(
+                                                      SizedBox(width: 1.0)),
                                                 ),
                                                 Container(
                                                   constraints: BoxConstraints(
@@ -2502,6 +2547,27 @@ class _JournalWidgetState extends State<JournalWidget> {
                                                                   .fontStyle,
                                                           lineHeight: 1.4,
                                                         ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        150.0, 0.0, 0.0, 0.0),
+                                                child: FlutterFlowIconButton(
+                                                  borderRadius: 8.0,
+                                                  buttonSize: 40.0,
+                                                  icon: Icon(
+                                                    Icons.keyboard_arrow_right,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                    size: 24.0,
+                                                  ),
+                                                  onPressed: () async {
+                                                    context.pushNamed(
+                                                        JournalArchiveWidget
+                                                            .routeName);
+                                                  },
+                                                ),
                                               ),
                                               Align(
                                                 alignment: AlignmentDirectional(

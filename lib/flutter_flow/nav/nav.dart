@@ -89,11 +89,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               appStateNotifier.loggedIn ? NavBarPage() : Intro1Widget(),
         ),
         FFRoute(
-          name: LoginScreenWidget.routeName,
-          path: LoginScreenWidget.routePath,
-          builder: (context, params) => LoginScreenWidget(),
-        ),
-        FFRoute(
           name: ForgotMyPasswordWidget.routeName,
           path: ForgotMyPasswordWidget.routePath,
           builder: (context, params) => ForgotMyPasswordWidget(),
@@ -104,21 +99,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => CHangepasswordWidget(),
         ),
         FFRoute(
-            name: HabitsWidget.routeName,
-            path: HabitsWidget.routePath,
-            builder: (context, params) => NavBarPage(
-                  initialPage: '',
-                  page: HabitsWidget(),
-                )),
-        FFRoute(
           name: Intro1Widget.routeName,
           path: Intro1Widget.routePath,
           builder: (context, params) => Intro1Widget(),
-        ),
-        FFRoute(
-          name: Intro2Widget.routeName,
-          path: Intro2Widget.routePath,
-          builder: (context, params) => Intro2Widget(),
         ),
         FFRoute(
           name: Intro3Widget.routeName,
@@ -131,35 +114,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => TaskCompletionWidget(),
         ),
         FFRoute(
-          name: HomePageWidget.routeName,
-          path: HomePageWidget.routePath,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'HomePage')
-              : HomePageWidget(),
-        ),
-        FFRoute(
           name: ToBuildAPageWidget.routeName,
           path: ToBuildAPageWidget.routePath,
           builder: (context, params) => ToBuildAPageWidget(),
-        ),
-        FFRoute(
-            name: FocusSessionWidget.routeName,
-            path: FocusSessionWidget.routePath,
-            builder: (context, params) => NavBarPage(
-                  initialPage: '',
-                  page: FocusSessionWidget(),
-                )),
-        FFRoute(
-          name: AnalyticsStaticsWidget.routeName,
-          path: AnalyticsStaticsWidget.routePath,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'AnalyticsStatics')
-              : AnalyticsStaticsWidget(),
-        ),
-        FFRoute(
-          name: MoodTrackingWidget.routeName,
-          path: MoodTrackingWidget.routePath,
-          builder: (context, params) => MoodTrackingWidget(),
         ),
         FFRoute(
             name: LibraryWidget.routeName,
@@ -184,10 +141,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => SignUpScreenWidget(),
         ),
         FFRoute(
-          name: TasksWidget.routeName,
-          path: TasksWidget.routePath,
-          builder: (context, params) =>
-              params.isEmpty ? NavBarPage(initialPage: 'Tasks') : TasksWidget(),
+          name: LoginScreenWidget.routeName,
+          path: LoginScreenWidget.routePath,
+          builder: (context, params) => LoginScreenWidget(),
         ),
         FFRoute(
           name: SettingsWidget.routeName,
@@ -197,9 +153,30 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : SettingsWidget(),
         ),
         FFRoute(
+          name: TasksWidget.routeName,
+          path: TasksWidget.routePath,
+          builder: (context, params) =>
+              params.isEmpty ? NavBarPage(initialPage: 'Tasks') : TasksWidget(),
+        ),
+        FFRoute(
           name: MobileNamedEditprofilePageWidget.routeName,
           path: MobileNamedEditprofilePageWidget.routePath,
           builder: (context, params) => MobileNamedEditprofilePageWidget(),
+        ),
+        FFRoute(
+          name: JournalArchiveWidget.routeName,
+          path: JournalArchiveWidget.routePath,
+          builder: (context, params) => JournalArchiveWidget(),
+        ),
+        FFRoute(
+          name: AchievementsPageWidget.routeName,
+          path: AchievementsPageWidget.routePath,
+          builder: (context, params) => AchievementsPageWidget(),
+        ),
+        FFRoute(
+          name: Intro2Widget.routeName,
+          path: Intro2Widget.routePath,
+          builder: (context, params) => Intro2Widget(),
         ),
         FFRoute(
             name: AnalyticsMonthlyReportWidget.routeName,
@@ -209,6 +186,37 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   page: AnalyticsMonthlyReportWidget(),
                 )),
         FFRoute(
+          name: HomePageWidget.routeName,
+          path: HomePageWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'HomePage')
+              : HomePageWidget(),
+        ),
+        FFRoute(
+          name: AnalyticsStaticsWidget.routeName,
+          path: AnalyticsStaticsWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'AnalyticsStatics')
+              : AnalyticsStaticsWidget(),
+        ),
+        FFRoute(
+            name: HabitsWidget.routeName,
+            path: HabitsWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: HabitsWidget(),
+                )),
+        FFRoute(
+          name: AiAssistantWidget.routeName,
+          path: AiAssistantWidget.routePath,
+          builder: (context, params) => AiAssistantWidget(
+            initialMessage: params.getParam(
+              'initialMessage',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
           name: JournalWidget.routeName,
           path: JournalWidget.routePath,
           builder: (context, params) => params.isEmpty
@@ -216,9 +224,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : JournalWidget(),
         ),
         FFRoute(
-          name: JournalArchiveWidget.routeName,
-          path: JournalArchiveWidget.routePath,
-          builder: (context, params) => JournalArchiveWidget(),
+            name: FocusSessionWidget.routeName,
+            path: FocusSessionWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: FocusSessionWidget(),
+                )),
+        FFRoute(
+          name: MoodTrackingWidget.routeName,
+          path: MoodTrackingWidget.routePath,
+          builder: (context, params) => MoodTrackingWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
